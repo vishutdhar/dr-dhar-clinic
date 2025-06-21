@@ -1,5 +1,7 @@
 # Website Optimization Guide
 
+This guide documents all optimizations made to improve the website's performance, accessibility, and user experience.
+
 ## Completed Improvements ✅
 
 ### 1. **Performance Optimizations**

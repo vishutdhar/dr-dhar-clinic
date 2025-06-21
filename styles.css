@@ -1031,7 +1031,7 @@ footer {
 .floating-actions {
     position: fixed;
     bottom: 20px;
-    right: 20px;
+    left: 20px;
     display: none;
     flex-direction: column;
     gap: 12px;
@@ -1094,7 +1094,7 @@ footer {
 /* Animate FABs on load */
 @keyframes fabSlideIn {
     from {
-        transform: translateX(100px);
+        transform: translateX(-100px);
         opacity: 0;
     }
     to {
@@ -1118,8 +1118,8 @@ footer {
 /* Back to Top Button */
 .back-to-top {
     position: fixed;
-    bottom: 30px;
-    left: 30px;
+    bottom: 20px;
+    left: 20px;
     width: 48px;
     height: 48px;
     background: var(--primary);
@@ -1154,7 +1154,7 @@ footer {
 
 @media (max-width: 768px) {
     .back-to-top {
-        bottom: 80px;
+        bottom: 20px;
         left: 20px;
     }
 }
