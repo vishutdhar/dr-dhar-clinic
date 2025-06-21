@@ -2,6 +2,8 @@
 
 A modern, responsive website for Dr. Anil Kumar Dhar's medical clinic in Jammu, featuring real-time clinic status, optimized performance, and excellent user experience.
 
+🌐 **Live Demo**: [https://vishutdhar.github.io/dr-dhar-clinic/](https://vishutdhar.github.io/dr-dhar-clinic/)
+
 ## Features
 
 - **Real-time Clinic Status**: Live open/closed indicator based on Indian Standard Time
