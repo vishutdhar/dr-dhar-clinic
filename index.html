@@ -22,803 +22,139 @@
     <meta name="twitter:title" content="Dr. Anil Kumar Dhar - Internal Medicine Doctor & Longevity Expert">
     <meta name="twitter:description" content="Book appointment with Dr. Anil Kumar Dhar. 30+ years experience. Call 94191 90388.">
     
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://dranilkumardhar.com">
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="doctor-photo.jpg" as="image">
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MedicalClinic",
+        "name": "Dr. Anil Kumar Dhar's Clinic",
+        "description": "Expert Internal Medicine Doctor & Longevity Specialist in Jammu with 30+ years experience",
+        "url": "https://dranilkumardhar.com",
+        "telephone": "+919419190388",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Behind Shree Chemicals, Amar Singh Chowk",
+            "addressLocality": "Jammu",
+            "addressRegion": "Jammu and Kashmir",
+            "postalCode": "180001",
+            "addressCountry": "IN"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "32.7266",
+            "longitude": "74.8570"
+        },
+        "openingHoursSpecification": [
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                "opens": "10:00",
+                "closes": "14:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "17:00",
+                "closes": "20:00"
+            }
+        ],
+        "hasMap": "https://www.google.com/maps/search/?api=1&query=Behind+Shree+Chemicals+Amar+Singh+Chowk+Jammu",
+        "medicalSpecialty": ["InternalMedicine", "Diabetology", "PreventiveMedicine"],
+        "employee": {
+            "@type": "Physician",
+            "name": "Dr. Anil Kumar Dhar",
+            "description": "MBBS, MD, DNB - Internal Medicine Specialist",
+            "medicalSpecialty": ["InternalMedicine", "Diabetology"],
+            "alumniOf": {
+                "@type": "EducationalOrganization",
+                "name": "Government Medical College"
+            }
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5",
+            "reviewCount": "100"
+        }
+    }
+    </script>
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #1e5f8e;
-            --secondary: #52b788;
-            --accent: #f77f00;
-            --whatsapp: #25d366;
-            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --card-gradient: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
-        }
-
-        body {
-            font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f0f4f8;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #1e5f8e 0%, #2d7ab8 100%);
-            color: white;
-            padding: 15px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-icon {
-            background: white;
-            color: var(--primary);
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            overflow: visible;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-        }
-        
-        .logo-icon svg {
-            width: 36px;
-            height: 36px;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 40px 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 20px 20px;
-            transform: rotate(45deg);
-        }
-
-        .doctor-info {
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .doctor-card {
-            background: white;
-            border-radius: 20px;
-            padding: 35px 30px 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .doctor-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(-5px) scale(1.05) rotateY(15deg) rotateX(-5deg);
-            }
-            50% {
-                transform: translateY(-15px) scale(1.05) rotateY(15deg) rotateX(-5deg);
-            }
-            100% {
-                transform: translateY(-5px) scale(1.05) rotateY(15deg) rotateX(-5deg);
-            }
-        }
-
-        .doctor-photo {
-            width: 180px;
-            height: 180px;
-            background: #f0f0f0;
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 25px 50px rgba(102, 126, 234, 0.5);
-            border: 5px solid #667eea;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 4px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            transform: translateY(-10px) scale(1.05) rotateY(15deg) rotateX(-5deg);
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        .doctor-photo:hover {
-            transform: translateY(-15px) scale(1.08) rotateY(20deg) rotateX(-8deg);
-            box-shadow: 0 30px 60px rgba(102, 126, 234, 0.6);
-        }
-        
-        .doctor-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 20%;
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-            transform: scale(1.1) translateZ(20px);
-        }
-        
-        .doctor-photo:hover img {
-            transform: scale(1.15) translateZ(30px);
-        }
-
-        h1 {
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 2.2rem;
-            font-weight: 700;
-        }
-
-        .qualifications {
-            color: #666;
-            margin-bottom: 8px;
-            font-size: 1.1rem;
-        }
-
-        .badges {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 10px 20px;
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        }
-
-        .badge-icon {
-            color: var(--accent);
-            font-size: 1.2rem;
-        }
-
-        /* Quick Actions */
-        .quick-actions {
-            padding: 30px 20px;
-            background: white;
-            margin-top: -20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .action-btn {
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .action-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .action-btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        .action-btn.primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .action-btn.whatsapp {
-            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-            color: white;
-        }
-
-        .action-btn.call {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-            color: white;
-        }
-
-        /* Services */
-        .services {
-            padding: 50px 20px;
-            background: #f8f9fa;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.2rem;
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 40px;
-            font-size: 1.1rem;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .service-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid transparent;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-            transform: translateX(-100%);
-            transition: transform 0.3s;
-        }
-
-        .service-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-            border-color: #e3e3e3;
-        }
-
-        .service-card:hover::before {
-            transform: translateX(0);
-        }
-
-        .service-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #f0f4f8 0%, #e1e8ed 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 2.5rem;
-            transition: all 0.3s;
-        }
-
-        .service-card:hover .service-icon {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .service-card h3 {
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 1.3rem;
-        }
-
-        .service-card p {
-            color: #666;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-        }
-
-        .price {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #52b788 0%, #40916c 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Trust Section */
-        .trust-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .trust-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        @media (max-width: 768px) {
-            .trust-grid {
-                grid-template-columns: repeat(1, 1fr);
-                gap: 20px;
-            }
-        }
-
-        .trust-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .trust-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
-
-        .trust-label {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        /* About Doctor Section */
-        .about-doctor {
-            padding: 50px 20px;
-            background: white;
-        }
-
-        .about-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 50px;
-            align-items: center;
-        }
-
-        .doctor-image {
-            position: relative;
-            text-align: center;
-        }
-
-        .experience-badge {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-
-        .experience-badge .years {
-            display: block;
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .experience-badge .text {
-            font-size: 0.9rem;
-        }
-
-        .doctor-details h2 {
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        .doctor-qualification {
-            color: #666;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
-
-        .doctor-bio {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #555;
-            margin-bottom: 30px;
-        }
-
-        .credentials {
-            display: grid;
-            gap: 20px;
-        }
-
-        .credential-item {
-            display: flex;
-            gap: 15px;
-            align-items: start;
-        }
-
-        .credential-item .icon {
-            font-size: 2rem;
-            width: 50px;
-            height: 50px;
-            background: #f0f4f8;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .credential-item h4 {
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-
-        .credential-item p {
-            color: #666;
-        }
-
-        /* Clinic Info */
-        .clinic-info {
-            padding: 50px 20px;
-            background: white;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .info-card {
-            background: var(--card-gradient);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-        }
-
-        .info-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-        }
-
-        .info-card h3 {
-            color: var(--primary);
-            margin-bottom: 20px;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .timing-table {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #e9ecef;
-        }
-
-        .timing-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .timing-row:last-child {
-            border-bottom: none;
-        }
-
-        .timing-day {
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .timing-hours {
-            color: #666;
-        }
-
-        .closed {
-            color: #dc3545;
-            font-weight: 600;
-        }
-
-        /* Booking Section Styles */
-        .booking-section {
-            background: linear-gradient(135deg, #f0f4f8 0%, #e1e8ed 100%);
-            padding: 50px 20px;
-        }
-
-        .booking-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .booking-option {
-            transition: all 0.3s ease;
-        }
-        
-        .booking-option:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Contact */
-        .contact {
-            padding: 50px 20px;
-            background: white;
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .contact-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-
-        .contact-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-        }
-
-        .contact-icon {
-            width: 70px;
-            height: 70px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 2rem;
-            color: var(--primary);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .contact-card h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-        }
-
-        .contact-card a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        /* Map */
-        .map-section {
-            background: #f8f9fa;
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .map-card {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .address-details {
-            text-align: left;
-            margin: 20px 0;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .map-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--primary);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            margin-top: 20px;
-        }
-
-        .map-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(30, 95, 142, 0.3);
-        }
-
-        /* Footer */
-        footer {
-            background: linear-gradient(135deg, #1e5f8e 0%, #2d7ab8 100%);
-            color: white;
-            padding: 40px 20px 20px;
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            .section-title {
-                font-size: 1.8rem;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .action-btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-
-
-            .about-container {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .doctor-image img {
-                margin: 0 auto;
-                display: block;
-            }
-            
-            .doctor-photo {
-                width: 150px;
-                height: 150px;
-            }
-
-            .credentials {
-                text-align: left;
-            }
-
-        }
+        /* Critical CSS for above-the-fold content */
+        body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif; margin: 0; }
+        .header { background: linear-gradient(135deg, #1e5f8e 0%, #2d7ab8 100%); color: white; padding: 15px 0; position: sticky; top: 0; z-index: 100; }
+        .skip-link { position: absolute; top: -40px; left: 0; background: #1e5f8e; color: white; padding: 8px; text-decoration: none; z-index: 100; }
+        .skip-link:focus { top: 0; }
     </style>
 </head>
 <body>
+    <!-- Skip to main content link -->
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
+    <!-- SVG Symbol Definition -->
+    <svg style="display: none;">
+        <symbol id="medical-logo" viewBox="0 0 140 100">
+            <!-- Large, Prominent Wings -->
+            <path d="M5 15 C0 8, -5 12, 0 20 C10 18, 20 20, 35 28 L55 38 L55 15 C50 8, 30 5, 15 8 C10 10, 5 12, 5 15 Z M35 30 C25 28, 15 30, 10 35 C15 38, 25 36, 35 38 L45 40 C35 38, 25 40, 20 43 C25 45, 35 42, 45 42 L55 40 Z"/>
+            <path d="M135 15 C140 8, 145 12, 140 20 C130 18, 120 20, 105 28 L85 38 L85 15 C90 8, 110 5, 125 8 C130 10, 135 12, 135 15 Z M105 30 C115 28, 125 30, 130 35 C125 38, 115 36, 105 38 L95 40 C105 38, 115 40, 120 43 C115 45, 105 42, 95 42 L85 40 Z"/>
+            
+            <!-- Staff -->
+            <rect x="68" y="8" width="4" height="82" rx="2"/>
+            
+            <!-- Left snake -->
+            <path d="M 66 25 Q 58 30, 58 38 T 66 50 Q 58 55, 58 63 T 66 75 Q 58 80, 58 88" 
+                  fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+            
+            <!-- Right snake -->
+            <path d="M 74 25 Q 82 30, 82 38 T 74 50 Q 82 55, 82 63 T 74 75 Q 82 80, 82 88" 
+                  fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+            
+            <!-- Snake heads -->
+            <circle cx="58" cy="88" r="3.5"/>
+            <circle cx="82" cy="88" r="3.5"/>
+            
+            <!-- Top orb -->
+            <circle cx="70" cy="8" r="7"/>
+        </symbol>
+    </svg>
+    
     <!-- Header -->
-    <header class="header">
+    <header class="header" role="banner">
         <div class="header-content">
             <div class="logo">
-                <div class="logo-icon">
-                    <svg width="32" height="32" viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Large, Prominent Wings -->
-                        <path d="M5 15 C0 8, -5 12, 0 20 C10 18, 20 20, 35 28 L55 38 L55 15 C50 8, 30 5, 15 8 C10 10, 5 12, 5 15 Z M35 30 C25 28, 15 30, 10 35 C15 38, 25 36, 35 38 L45 40 C35 38, 25 40, 20 43 C25 45, 35 42, 45 42 L55 40 Z" fill="#1e5f8e"/>
-                        <path d="M135 15 C140 8, 145 12, 140 20 C130 18, 120 20, 105 28 L85 38 L85 15 C90 8, 110 5, 125 8 C130 10, 135 12, 135 15 Z M105 30 C115 28, 125 30, 130 35 C125 38, 115 36, 105 38 L95 40 C105 38, 115 40, 120 43 C115 45, 105 42, 95 42 L85 40 Z" fill="#1e5f8e"/>
-                        
-                        <!-- Staff -->
-                        <rect x="68" y="8" width="4" height="82" rx="2" fill="#1e5f8e"/>
-                        
-                        <!-- Left snake -->
-                        <path d="M 66 25 Q 58 30, 58 38 T 66 50 Q 58 55, 58 63 T 66 75 Q 58 80, 58 88" 
-                              fill="none" stroke="#1e5f8e" stroke-width="3.5" stroke-linecap="round"/>
-                        
-                        <!-- Right snake -->
-                        <path d="M 74 25 Q 82 30, 82 38 T 74 50 Q 82 55, 82 63 T 74 75 Q 82 80, 82 88" 
-                              fill="none" stroke="#1e5f8e" stroke-width="3.5" stroke-linecap="round"/>
-                        
-                        <!-- Snake heads -->
-                        <circle cx="58" cy="88" r="3.5" fill="#1e5f8e"/>
-                        <circle cx="82" cy="88" r="3.5" fill="#1e5f8e"/>
-                        
-                        <!-- Top orb -->
-                        <circle cx="70" cy="8" r="7" fill="#1e5f8e"/>
+                <div class="logo-icon" role="img" aria-label="Medical caduceus symbol">
+                    <svg width="32" height="32" style="fill: #1e5f8e; color: #1e5f8e;">
+                        <use href="#medical-logo"></use>
                     </svg>
                 </div>
                 <span>Dr. Dhar's Clinic</span>
+            </div>
+            
+            <!-- Live Status Badge -->
+            <div class="status-badge" id="clinic-status">
+                <span class="status-dot"></span>
+                <span class="status-text">Checking...</span>
             </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <main id="main">
+    <section class="hero" aria-labelledby="doctor-name">
         <div class="doctor-info">
             <div class="doctor-card">
                 <div class="doctor-photo">
-                    <img src="doctor-photo.jpg" alt="Dr. Anil Kumar Dhar">
+                    <img src="doctor-photo.jpg" alt="Dr. Anil Kumar Dhar - Internal Medicine Specialist" loading="eager">
                 </div>
-                <h1>Dr. Anil Kumar Dhar</h1>
+                <h1 id="doctor-name">Dr. Anil Kumar Dhar</h1>
                 <p class="qualifications">MBBS, MD, DNB</p>
                 <p class="qualifications">Registration No: 3672</p>
                 
@@ -841,6 +177,13 @@
                     Specialist in Internal Medicine, Diabetes Management, Longevity & Preventive Healthcare
                 </p>
             </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
         </div>
     </section>
 
@@ -884,38 +227,38 @@
         
         <div class="services-grid">
             <div class="service-card">
-                <div class="service-icon">🩺</div>
+                <div class="service-icon" role="img" aria-label="Stethoscope icon">🩺</div>
                 <h3>General Check-up</h3>
                 <p>Complete health examination including BP, sugar tests & consultation</p>
                 <div class="price">₹1000</div>
             </div>
             
             <div class="service-card">
-                <div class="service-icon">💊</div>
+                <div class="service-icon" role="img" aria-label="Medicine pill icon">💊</div>
                 <h3>Diabetes Care</h3>
                 <p>Sugar monitoring, diet planning & medicine management</p>
             </div>
             
             <div class="service-card">
-                <div class="service-icon">❤️</div>
+                <div class="service-icon" role="img" aria-label="Heart icon">❤️</div>
                 <h3>Heart & BP Care</h3>
                 <p>Regular BP monitoring & heart health management</p>
             </div>
             
             <div class="service-card">
-                <div class="service-icon">💉</div>
+                <div class="service-icon" role="img" aria-label="Syringe icon">💉</div>
                 <h3>Vaccination</h3>
                 <p>All vaccines for adults</p>
             </div>
             
             <div class="service-card">
-                <div class="service-icon">🧬</div>
+                <div class="service-icon" role="img" aria-label="DNA helix icon">🧬</div>
                 <h3>Longevity Care</h3>
                 <p>Advanced preventive care, health optimization & anti-aging treatments</p>
             </div>
             
             <div class="service-card">
-                <div class="service-icon">🏪</div>
+                <div class="service-icon" role="img" aria-label="Pharmacy store icon">🏪</div>
                 <h3>In-house Pharmacy</h3>
                 <p>All medicines available on-site for your convenience</p>
             </div>
@@ -1184,33 +527,14 @@
             </div>
         </div>
     </section>
+    </main>
 
     <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-logo">
-                <svg width="26" height="26" viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 8px;">
-                    <!-- Large, Prominent Wings -->
-                    <path d="M5 15 C0 8, -5 12, 0 20 C10 18, 20 20, 35 28 L55 38 L55 15 C50 8, 30 5, 15 8 C10 10, 5 12, 5 15 Z M35 30 C25 28, 15 30, 10 35 C15 38, 25 36, 35 38 L45 40 C35 38, 25 40, 20 43 C25 45, 35 42, 45 42 L55 40 Z" fill="white"/>
-                    <path d="M135 15 C140 8, 145 12, 140 20 C130 18, 120 20, 105 28 L85 38 L85 15 C90 8, 110 5, 125 8 C130 10, 135 12, 135 15 Z M105 30 C115 28, 125 30, 130 35 C125 38, 115 36, 105 38 L95 40 C105 38, 115 40, 120 43 C115 45, 105 42, 95 42 L85 40 Z" fill="white"/>
-                    
-                    <!-- Staff -->
-                    <rect x="68" y="8" width="4" height="82" rx="2" fill="white"/>
-                    
-                    <!-- Left snake -->
-                    <path d="M 66 25 Q 58 30, 58 38 T 66 50 Q 58 55, 58 63 T 66 75 Q 58 80, 58 88" 
-                          fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-                    
-                    <!-- Right snake -->
-                    <path d="M 74 25 Q 82 30, 82 38 T 74 50 Q 82 55, 82 63 T 74 75 Q 82 80, 82 88" 
-                          fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-                    
-                    <!-- Snake heads -->
-                    <circle cx="58" cy="88" r="3.5" fill="white"/>
-                    <circle cx="82" cy="88" r="3.5" fill="white"/>
-                    
-                    <!-- Top orb -->
-                    <circle cx="70" cy="8" r="7" fill="white"/>
+                <svg width="26" height="26" style="vertical-align: middle; margin-right: 8px; fill: white; color: white;">
+                    <use href="#medical-logo"></use>
                 </svg>
                 Dr. Anil Kumar Dhar's Clinic
             </div>
@@ -1223,8 +547,102 @@
         </div>
     </footer>
 
+    <!-- Floating Action Buttons for Mobile -->
+    <div class="floating-actions">
+        <a href="tel:+919419190388" class="fab fab-call" aria-label="Call clinic">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+            </svg>
+        </a>
+        <a href="https://wa.me/919419190388?text=Dr.%20Dhar%20I%20would%20like%20to%20book%20an%20appointment" class="fab fab-whatsapp" aria-label="WhatsApp">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+            </svg>
+        </a>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+        </svg>
+    </button>
+
     <script>
-        // Smooth scrolling for navigation
+        // Check clinic status based on current time (IST)
+        function updateClinicStatus() {
+            const statusBadge = document.getElementById('clinic-status');
+            const statusDot = statusBadge.querySelector('.status-dot');
+            const statusText = statusBadge.querySelector('.status-text');
+            
+            // Get current time in IST
+            const now = new Date();
+            const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const istTime = new Date(utc + istOffset);
+            
+            const day = istTime.getDay();
+            const hours = istTime.getHours();
+            const minutes = istTime.getMinutes();
+            const currentTime = hours * 60 + minutes;
+            
+            // Define clinic hours
+            const schedule = {
+                1: [{ start: 9 * 60, end: 13 * 60 }, { start: 16.5 * 60, end: 19 * 60 }], // Monday
+                2: [], // Tuesday - Closed
+                3: [{ start: 9 * 60, end: 13 * 60 }, { start: 16.5 * 60, end: 19 * 60 }], // Wednesday
+                4: [{ start: 9 * 60, end: 13 * 60 }, { start: 16.5 * 60, end: 19 * 60 }], // Thursday
+                5: [{ start: 9 * 60, end: 13 * 60 }, { start: 16.5 * 60, end: 19 * 60 }], // Friday
+                6: [{ start: 9 * 60, end: 13 * 60 }, { start: 16.5 * 60, end: 19 * 60 }], // Saturday
+                0: [{ start: 9 * 60, end: 13 * 60 }] // Sunday
+            };
+            
+            let isOpen = false;
+            const todaySchedule = schedule[day] || [];
+            
+            for (const slot of todaySchedule) {
+                if (currentTime >= slot.start && currentTime < slot.end) {
+                    isOpen = true;
+                    break;
+                }
+            }
+            
+            // Helper function to format time in 12-hour format
+            function formatTime12Hour(totalMinutes) {
+                const hours = Math.floor(totalMinutes / 60);
+                const minutes = totalMinutes % 60;
+                const period = hours >= 12 ? 'PM' : 'AM';
+                const displayHours = hours > 12 ? hours - 12 : (hours === 0 ? 12 : hours);
+                return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
+            }
+            
+            if (isOpen) {
+                statusBadge.classList.add('open');
+                statusBadge.classList.remove('closed');
+                statusText.textContent = 'Open Now';
+            } else {
+                statusBadge.classList.add('closed');
+                statusBadge.classList.remove('open');
+                
+                // Find next opening time
+                let nextOpen = 'Tomorrow';
+                if (todaySchedule.length > 0) {
+                    for (const slot of todaySchedule) {
+                        if (currentTime < slot.start) {
+                            nextOpen = `Opens at ${formatTime12Hour(slot.start)}`;
+                            break;
+                        }
+                    }
+                }
+                statusText.textContent = `Closed • ${nextOpen}`;
+            }
+        }
+        
+        // Update status immediately and every minute
+        updateClinicStatus();
+        setInterval(updateClinicStatus, 60000);
+        
+        // Smooth scrolling for navigation with keyboard support
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -1236,6 +654,21 @@
                     });
                 }
             });
+            
+            // Add keyboard support for Enter and Space keys
+            anchor.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        target.focus();
+                    }
+                }
+            });
         });
         
         // Track WhatsApp button clicks (optional analytics)
@@ -1243,6 +676,49 @@
             button.addEventListener('click', function() {
                 // You can add Google Analytics or other tracking here
                 console.log('WhatsApp booking clicked');
+            });
+        });
+        
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        // Add fade-in class to sections
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('fade-in-section');
+            observer.observe(section);
+        });
+        
+        // Observe grids for stagger animation
+        document.querySelectorAll('.services-grid, .trust-grid, .contact-grid').forEach(grid => {
+            observer.observe(grid);
+        });
+        
+        // Back to Top Button
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         });
     </script>

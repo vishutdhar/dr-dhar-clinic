@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed:*)",
+      "Bash(awk:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(open:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(sips:*)",
+      "Bash(grep:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": []
+  }
+}
