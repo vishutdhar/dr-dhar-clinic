@@ -562,11 +562,9 @@
             const statusDot = statusBadge.querySelector('.status-dot');
             const statusText = statusBadge.querySelector('.status-text');
             
-            // Get current time in IST
+            // Get current time in IST using proper timezone
             const now = new Date();
-            const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
-            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const istTime = new Date(utc + istOffset);
+            const istTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
             
             const day = istTime.getDay();
             const hours = istTime.getHours();
@@ -581,7 +579,7 @@
                 4: [{ start: 9 * 60, end: 13 * 60 }, { start: 16.5 * 60, end: 19 * 60 }], // Thursday
                 5: [{ start: 9 * 60, end: 13 * 60 }, { start: 16.5 * 60, end: 19 * 60 }], // Friday
                 6: [{ start: 9 * 60, end: 13 * 60 }, { start: 16.5 * 60, end: 19 * 60 }], // Saturday
-                0: [{ start: 9 * 60, end: 13 * 60 }] // Sunday
+                0: [{ start: 9 * 60, end: 15 * 60 }] // Sunday - 9 AM to 3 PM
             };
             
             let isOpen = false;

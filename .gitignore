@@ -1,12 +1,27 @@
 # Claude AI settings
 .claude/
 
+# Test and debugging files
+test-status.html
+verify-schedule.html
+
 # macOS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+ehthumbs.db
+Thumbs.db
 
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 
 # Logs
 *.log
