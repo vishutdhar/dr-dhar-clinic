@@ -610,15 +610,39 @@
                 statusBadge.classList.remove('open');
                 
                 // Find next opening time
-                let nextOpen = 'Tomorrow';
+                let nextOpen = '';
+                
+                // First check if there's a slot later today
+                let foundToday = false;
                 if (todaySchedule.length > 0) {
                     for (const slot of todaySchedule) {
                         if (currentTime < slot.start) {
                             nextOpen = `Opens at ${formatTime12Hour(slot.start)}`;
+                            foundToday = true;
                             break;
                         }
                     }
                 }
+                
+                // If no slot found today, check tomorrow
+                if (!foundToday) {
+                    const tomorrow = (day + 1) % 7;
+                    const tomorrowSchedule = schedule[tomorrow] || [];
+                    
+                    if (tomorrowSchedule.length === 0) {
+                        // Tomorrow is closed, check day after
+                        const dayAfter = (tomorrow + 1) % 7;
+                        const dayAfterSchedule = schedule[dayAfter] || [];
+                        if (dayAfterSchedule.length > 0) {
+                            const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                            nextOpen = `Opens ${daysOfWeek[dayAfter]} at ${formatTime12Hour(dayAfterSchedule[0].start)}`;
+                        }
+                    } else {
+                        // Tomorrow has slots
+                        nextOpen = `Opens tomorrow at ${formatTime12Hour(tomorrowSchedule[0].start)}`;
+                    }
+                }
+                
                 statusText.textContent = `Closed • ${nextOpen}`;
             }
         }
