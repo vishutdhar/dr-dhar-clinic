@@ -374,6 +374,30 @@ h1 {
     transform: translateY(-1px);
 }
 
+/* Fix for mobile devices - prevent hover state from sticking */
+@media (hover: none) and (pointer: coarse) {
+    .action-btn:hover {
+        transform: none !important;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+    }
+    
+    .action-btn:hover::before {
+        width: 0 !important;
+        height: 0 !important;
+    }
+    
+    /* Use active state for mobile feedback */
+    .action-btn:active {
+        transform: scale(0.95) !important;
+        transition: transform 0.1s ease !important;
+    }
+    
+    /* Remove focus styles on touch devices */
+    .action-btn:focus {
+        outline: none !important;
+    }
+}
+
 .action-btn.primary {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -1185,5 +1209,68 @@ footer {
     }
     60% {
         transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+/* Mobile-specific fixes for all interactive elements */
+@media (hover: none) and (pointer: coarse) {
+    /* Prevent all hover states from sticking on mobile */
+    .service-card:hover,
+    .contact-card:hover,
+    .review-card:hover,
+    .doctor-photo:hover,
+    .credential-item:hover,
+    .fab:hover,
+    .back-to-top:hover,
+    .scroll-indicator:hover {
+        transform: none !important;
+    }
+    
+    /* Reset service card icon hover */
+    .service-card:hover .service-icon {
+        transform: none !important;
+    }
+    
+    /* Add tap highlight color for better feedback */
+    a, button, .action-btn, .fab, .back-to-top {
+        -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+    }
+    
+    /* Use active states for touch feedback */
+    .service-card:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+    
+    .contact-card:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+    
+    /* Remove persistent focus outlines on touch devices */
+    *:focus {
+        outline: none !important;
+    }
+    
+    /* Prevent FAB hover effects */
+    .fab:hover::before {
+        width: 0 !important;
+        height: 0 !important;
+    }
+    
+    /* Better active state for FAB */
+    .fab:active {
+        transform: scale(0.9) !important;
+    }
+    
+    /* Prevent back-to-top hover */
+    .back-to-top:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+    }
+    
+    /* Prevent map button hover */
+    .map-btn:hover {
+        transform: none !important;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
     }
 }
