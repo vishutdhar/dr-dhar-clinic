@@ -17,7 +17,7 @@
 
     /* Backgrounds */
     --bg: #ffffff;
-    --bg-warm: #f8f9fb;
+    --bg-warm: #eef1f6;
     --surface: #ffffff;
 
     /* Borders */
@@ -864,8 +864,9 @@ body {
    =========================== */
 
 .booking-section {
-    background: var(--bg);
+    background: var(--dark);
     padding: 96px 32px;
+    color: var(--text-on-dark);
 }
 
 .booking-container {
@@ -958,6 +959,29 @@ body {
     font-size: 0.84rem;
     font-weight: 400;
 }
+
+/* Booking dark overrides */
+.booking-section .section-title { color: var(--text-on-dark); }
+.booking-section .section-title::after { background: var(--accent-light); }
+.booking-section .section-subtitle { color: var(--text-on-dark-muted); }
+.booking-section .booking-notice { background: rgba(220, 38, 38, 0.12); border-color: rgba(220, 38, 38, 0.25); }
+.booking-section .booking-card {
+    background: var(--dark-surface);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+.booking-section .booking-card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.booking-section .booking-card-title { color: var(--text-on-dark); }
+.booking-section .booking-card-text { color: var(--text-on-dark-muted); }
+.booking-section .booking-card-note { color: rgba(255, 255, 255, 0.35); }
+.booking-section .booking-info {
+    background: var(--dark-surface);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+.booking-section .booking-info-title { color: var(--text-on-dark); }
+.booking-section .booking-info-grid { color: var(--text-on-dark-muted); }
 
 /* ===========================
    Map
@@ -1251,7 +1275,7 @@ footer {
 
 .faq-section {
     padding: 96px 32px;
-    background: var(--bg);
+    background: var(--bg-warm);
 }
 
 .faq-container {
