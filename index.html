@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚕ Dr. Anil Kumar Dhar - Expert Internal Medicine Doctor & Longevity Specialist in Jammu</title>
-    
+    <title>Dr. Anil Kumar Dhar - Expert Internal Medicine Doctor & Longevity Specialist in Jammu</title>
+
     <!-- Meta Tags for SEO and Social Media -->
     <meta name="description" content="Dr. Anil Kumar Dhar - Expert Internal Medicine Doctor & Longevity Specialist in Jammu. 30+ years experience, 500K+ patients. Book appointment online or call 94191 90388.">
     <meta name="keywords" content="doctor jammu, internal medicine doctor jammu, longevity specialist jammu, dr anil kumar dhar, diabetes doctor jammu, best physician jammu">
-    
+
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Dr. Anil Kumar Dhar - Expert Internal Medicine Doctor & Longevity Specialist">
     <meta property="og:description" content="30+ years experience, 500K+ patients treated. Expert in Internal Medicine, Diabetes Management & Longevity. Book appointment today.">
@@ -16,21 +16,26 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Dr. Anil Kumar Dhar's Clinic">
     <meta property="og:locale" content="en_IN">
-    
+
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Dr. Anil Kumar Dhar - Internal Medicine Doctor & Longevity Expert">
     <meta name="twitter:description" content="Book appointment with Dr. Anil Kumar Dhar. 30+ years experience. Call 94191 90388.">
-    
+
     <!-- Canonical URL -->
     <link rel="canonical" href="https://dranilkumardhar.com">
-    
+
+    <!-- Google Fonts - Instrument Serif + Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
     <!-- External CSS -->
     <link rel="stylesheet" href="styles.css">
-    
+
     <!-- Preload critical resources -->
     <link rel="preload" href="doctor-photo.jpg" as="image">
-    
+
     <!-- Structured Data for SEO -->
     <script type="application/ld+json">
     {
@@ -92,59 +97,25 @@
         }
     }
     </script>
-    
-    <style>
-        /* Critical CSS for above-the-fold content */
-        body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif; margin: 0; }
-        .header { background: linear-gradient(135deg, #1e5f8e 0%, #2d7ab8 100%); color: white; padding: 15px 0; position: sticky; top: 0; z-index: 100; }
-        .skip-link { position: absolute; top: -40px; left: 0; background: #1e5f8e; color: white; padding: 8px; text-decoration: none; z-index: 100; }
-        .skip-link:focus { top: 0; }
-    </style>
 </head>
 <body>
-    <!-- Skip to main content link -->
     <a href="#main" class="skip-link">Skip to main content</a>
-    
-    <!-- SVG Symbol Definition -->
-    <svg style="display: none;">
-        <symbol id="medical-logo" viewBox="0 0 140 100">
-            <!-- Large, Prominent Wings -->
-            <path d="M5 15 C0 8, -5 12, 0 20 C10 18, 20 20, 35 28 L55 38 L55 15 C50 8, 30 5, 15 8 C10 10, 5 12, 5 15 Z M35 30 C25 28, 15 30, 10 35 C15 38, 25 36, 35 38 L45 40 C35 38, 25 40, 20 43 C25 45, 35 42, 45 42 L55 40 Z"/>
-            <path d="M135 15 C140 8, 145 12, 140 20 C130 18, 120 20, 105 28 L85 38 L85 15 C90 8, 110 5, 125 8 C130 10, 135 12, 135 15 Z M105 30 C115 28, 125 30, 130 35 C125 38, 115 36, 105 38 L95 40 C105 38, 115 40, 120 43 C115 45, 105 42, 95 42 L85 40 Z"/>
-            
-            <!-- Staff -->
-            <rect x="68" y="8" width="4" height="82" rx="2"/>
-            
-            <!-- Left snake -->
-            <path d="M 66 25 Q 58 30, 58 38 T 66 50 Q 58 55, 58 63 T 66 75 Q 58 80, 58 88" 
-                  fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
-            
-            <!-- Right snake -->
-            <path d="M 74 25 Q 82 30, 82 38 T 74 50 Q 82 55, 82 63 T 74 75 Q 82 80, 82 88" 
-                  fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
-            
-            <!-- Snake heads -->
-            <circle cx="58" cy="88" r="3.5"/>
-            <circle cx="82" cy="88" r="3.5"/>
-            
-            <!-- Top orb -->
-            <circle cx="70" cy="8" r="7"/>
-        </symbol>
-    </svg>
-    
+
     <!-- Header -->
     <header class="header" role="banner">
         <div class="header-content">
             <div class="logo">
-                <div class="logo-icon" role="img" aria-label="Medical caduceus symbol">
-                    <svg width="32" height="32" style="fill: #1e5f8e; color: #1e5f8e;">
-                        <use href="#medical-logo"></use>
-                    </svg>
-                </div>
+                <svg class="logo-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <rect x="10" y="2" width="4" height="20" rx="1"/>
+                    <rect x="2" y="10" width="20" height="4" rx="1"/>
+                </svg>
                 <span>Dr. Dhar's Clinic</span>
             </div>
-            
-            <!-- Live Status Badge -->
+            <nav class="header-nav" aria-label="Main navigation">
+                <a href="#services">Specialties</a>
+                <a href="#about">Our Team</a>
+                <a href="#booking">Book Appointment</a>
+            </nav>
             <div class="status-badge" id="clinic-status">
                 <span class="status-dot"></span>
                 <span class="status-text">Checking...</span>
@@ -152,160 +123,180 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <main id="main">
+    <!-- Hero -->
     <section class="hero" aria-labelledby="doctor-name">
-        <div class="doctor-info">
-            <div class="doctor-card">
-                <div class="doctor-photo">
+        <div class="hero-container">
+            <div class="hero-content">
+                <p class="hero-tagline">Internal Medicine & Longevity Specialist</p>
+                <h1 id="doctor-name">Dr. Anil Kumar Dhar</h1>
+                <p class="hero-credentials">MBBS, MD, DNB &middot; Reg. No: 3672</p>
+                <p class="hero-subtitle">Diabetes Management, Preventive Medicine & Anti-Aging Care</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-value">30+</span>
+                        <span class="stat-label">Years of Practice</span>
+                    </div>
+                    <div class="stat-divider" aria-hidden="true"></div>
+                    <div class="stat">
+                        <span class="stat-value">500K+</span>
+                        <span class="stat-label">Patients Treated</span>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <a href="#booking" class="btn btn-primary">Book Appointment</a>
+                    <a href="https://wa.me/919419190388?text=Dr.%20Dhar%20I%20would%20like%20to%20book%20an%20appointment%0A%0AName:%20%0AAge:%20%0ADate:%20%0ATime:%20" class="btn btn-whatsapp whatsapp">WhatsApp Now</a>
+                    <a href="tel:+919419190388" class="btn btn-ghost">Call Clinic</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-photo">
                     <img src="doctor-photo.jpg" alt="Dr. Anil Kumar Dhar - Internal Medicine Specialist" loading="eager">
                 </div>
-                <h1 id="doctor-name">Dr. Anil Kumar Dhar</h1>
-                <p class="qualifications">MBBS, MD, DNB</p>
-                <p class="qualifications">Registration No: 3672</p>
-                
-                <div class="badges">
-                    <div class="badge">
-                        <span class="badge-icon">⭐</span>
-                        <span>30+ Years</span>
-                    </div>
-                    <div class="badge">
-                        <span class="badge-icon">👥</span>
-                        <span>500K+ Patients</span>
-                    </div>
-                    <div class="badge">
-                        <span class="badge-icon">🏆</span>
-                        <span>Highly Acclaimed</span>
-                    </div>
-                </div>
-                
-                <p style="margin-top: 20px; color: #666; font-size: 1.1rem;">
-                    Specialist in Internal Medicine, Diabetes Management, Longevity & Preventive Healthcare
-                </p>
-            </div>
-        </div>
-        
-        <!-- Scroll Indicator -->
-        <div class="scroll-indicator">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-            </svg>
-        </div>
-    </section>
-
-    <!-- Quick Actions -->
-    <section class="quick-actions">
-        <div class="action-buttons">
-            <a href="#booking" class="action-btn primary">
-                📅 Book Appointment
-            </a>
-            <a href="https://wa.me/919419190388?text=Dr.%20Dhar%20I%20would%20like%20to%20book%20an%20appointment%0A%0AName:%20%0AAge:%20%0ADate:%20%0ATime:%20" class="action-btn whatsapp">
-                💬 WhatsApp Now
-            </a>
-            <a href="tel:+919419190388" class="action-btn call">
-                📞 Call Clinic
-            </a>
-        </div>
-    </section>
-
-    <!-- Trust Section -->
-    <section class="trust-section">
-        <div class="trust-grid">
-            <div class="trust-item">
-                <div class="trust-number">30+</div>
-                <div class="trust-label">Years Experience</div>
-            </div>
-            <div class="trust-item">
-                <div class="trust-number">500K+</div>
-                <div class="trust-label">Happy Patients</div>
-            </div>
-            <div class="trust-item">
-                <div class="trust-number">100%</div>
-                <div class="trust-label">Patient Satisfaction</div>
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section class="services">
+    <!-- Specialties Strip -->
+    <section class="specialties-strip" aria-label="Our specialties">
+        <div class="strip-inner">
+            <span class="strip-item">Internal Medicine</span>
+            <span class="strip-dot" aria-hidden="true"></span>
+            <span class="strip-item">Diabetes Care</span>
+            <span class="strip-dot" aria-hidden="true"></span>
+            <span class="strip-item">Heart & BP</span>
+            <span class="strip-dot" aria-hidden="true"></span>
+            <span class="strip-item">Vaccination</span>
+            <span class="strip-dot" aria-hidden="true"></span>
+            <span class="strip-item">Longevity</span>
+            <span class="strip-dot" aria-hidden="true"></span>
+            <span class="strip-item">Pharmacy</span>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="services" id="services">
         <h2 class="section-title">Our Services</h2>
         <p class="section-subtitle">Comprehensive healthcare for adults</p>
-        
+
         <div class="services-grid">
             <div class="service-card">
-                <div class="service-icon" role="img" aria-label="Stethoscope icon">🩺</div>
+                <div class="service-icon" role="img" aria-label="Stethoscope icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6 6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/>
+                        <path d="M8 15v1a6 6 0 0 0 6 6 6 6 0 0 0 6-6v-4"/>
+                        <circle cx="20" cy="10" r="2"/>
+                    </svg>
+                </div>
                 <h3>General Check-up</h3>
                 <p>Complete health examination including BP, sugar tests & consultation</p>
-                <div class="price">₹1000</div>
+                <div class="price">₹1,000</div>
             </div>
-            
+
             <div class="service-card">
-                <div class="service-icon" role="img" aria-label="Medicine pill icon">💊</div>
+                <div class="service-icon" role="img" aria-label="Blood drop icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>
+                    </svg>
+                </div>
                 <h3>Diabetes Care</h3>
                 <p>Sugar monitoring, diet planning & medicine management</p>
             </div>
-            
+
             <div class="service-card">
-                <div class="service-icon" role="img" aria-label="Heart icon">❤️</div>
+                <div class="service-icon" role="img" aria-label="Heart icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                    </svg>
+                </div>
                 <h3>Heart & BP Care</h3>
                 <p>Regular BP monitoring & heart health management</p>
             </div>
-            
+
             <div class="service-card">
-                <div class="service-icon" role="img" aria-label="Syringe icon">💉</div>
+                <div class="service-icon" role="img" aria-label="Syringe icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m18 2 4 4"/><path d="m17 7 3-3"/>
+                        <path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/>
+                        <path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/>
+                    </svg>
+                </div>
                 <h3>Vaccination</h3>
                 <p>All vaccines for adults</p>
             </div>
-            
+
             <div class="service-card">
-                <div class="service-icon" role="img" aria-label="DNA helix icon">🧬</div>
+                <div class="service-icon" role="img" aria-label="Shield icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <line x1="12" y1="8" x2="12" y2="14"/><line x1="9" y1="11" x2="15" y2="11"/>
+                    </svg>
+                </div>
                 <h3>Longevity Care</h3>
                 <p>Advanced preventive care, health optimization & anti-aging treatments</p>
             </div>
-            
+
             <div class="service-card">
-                <div class="service-icon" role="img" aria-label="Pharmacy store icon">🏪</div>
+                <div class="service-icon" role="img" aria-label="Pill icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+                        <path d="m8.5 8.5 7 7"/>
+                    </svg>
+                </div>
                 <h3>In-house Pharmacy</h3>
                 <p>All medicines available on-site for your convenience</p>
             </div>
         </div>
     </section>
 
-    <!-- About Doctor Section -->
-    <section class="about-doctor">
+    <!-- About Doctor / Our Medical Team -->
+    <section class="about-doctor" id="about">
         <div class="about-container">
             <div class="doctor-image">
-                <img src="doctor-photo.jpg" alt="Dr. Anil Kumar Dhar" style="width: 100%; max-width: 350px; height: auto; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); object-fit: cover;">
-                <div class="experience-badge">
-                    <span class="years">30+</span>
-                    <span class="text">Years Experience</span>
-                </div>
+                <img class="about-photo" src="doctor-photo.jpg" alt="Dr. Anil Kumar Dhar">
             </div>
             <div class="doctor-details">
-                <h2 class="section-title">Meet Dr. Anil Kumar Dhar</h2>
+                <h2 class="section-title">Our Medical Team</h2>
+                <p class="doctor-role">Founder & Lead Physician</p>
+                <h3 class="doctor-name-about">Dr. Anil Kumar Dhar</h3>
                 <p class="doctor-qualification">MBBS, MD, DNB</p>
                 <p class="doctor-bio">
-                    Dr. Anil Kumar Dhar is a highly experienced physician with over 30 years of dedicated service in Jammu. 
-                    He specializes in internal medicine, diabetes management, longevity, 
+                    Dr. Anil Kumar Dhar is a highly experienced physician with over 30 years of dedicated service in Jammu.
+                    He specializes in internal medicine, diabetes management, longevity,
                     and preventive healthcare. Dr. Dhar is committed to providing compassionate and comprehensive medical care.
                 </p>
                 <div class="credentials">
                     <div class="credential-item">
-                        <span class="icon">🎓</span>
+                        <div class="credential-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                                <path d="M6 12v5c3 3 6 3 6 3s3 0 6-3v-5"/>
+                            </svg>
+                        </div>
                         <div>
                             <h4>Education</h4>
                             <p>MBBS, MD, DNB</p>
                         </div>
                     </div>
                     <div class="credential-item">
-                        <span class="icon">📋</span>
+                        <div class="credential-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+                                <path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 12h4"/><path d="M10 16h4"/>
+                            </svg>
+                        </div>
                         <div>
                             <h4>Registration</h4>
                             <p>Registration No: 3672</p>
                         </div>
                     </div>
                     <div class="credential-item">
-                        <span class="icon">⭐</span>
+                        <div class="credential-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="6"/>
+                                <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                            </svg>
+                        </div>
                         <div>
                             <h4>Specialization</h4>
                             <p>Internal Medicine, Diabetes Care, Longevity, Preventive Healthcare</p>
@@ -316,220 +307,156 @@
         </div>
     </section>
 
-    <!-- Google Reviews Section -->
-    <section class="google-reviews" style="background: white; padding: 50px 20px;">
-        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+    <!-- Google Reviews -->
+    <section class="google-reviews">
+        <div class="google-reviews-inner">
             <h2 class="section-title">Rate Us on Google</h2>
-            
-            <div style="background: #f8f9fa; padding: 40px; border-radius: 20px; margin-top: 30px;">
-                <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px;">
-                    <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google" style="height: 30px;">
-                    <div style="font-size: 2rem; color: #fbbc04;">★★★★★</div>
+            <div class="google-reviews-card">
+                <div class="google-reviews-header">
+                    <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google" class="google-logo-img">
+                    <div class="google-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
                 </div>
-                
-                <p style="font-size: 1.1rem; color: #666; margin-bottom: 30px;">
-                    Give us a 5 star rating on Google.
-                </p>
-                
-                <a href="https://www.google.com/maps/search/Dr+Anil+Kumar+Dhar+48+Bhagwati+Nagar+Canal+Road+Jammu" 
-                   target="_blank" 
-                   class="action-btn primary" 
-                   style="display: inline-flex; gap: 10px;">
-                    <span>✍️</span>
-                    <span>Write a Review on Google</span>
+                <p class="google-reviews-text">Give us a 5 star rating on Google.</p>
+                <a href="https://www.google.com/maps/search/Dr+Anil+Kumar+Dhar+48+Bhagwati+Nagar+Canal+Road+Jammu" target="_blank" class="btn btn-primary">
+                    Write a Review on Google
                 </a>
             </div>
         </div>
     </section>
 
     <!-- Clinic Information -->
-    <section class="clinic-info">
+    <section class="clinic-info" id="clinic-info">
         <h2 class="section-title">Visit Our Clinic</h2>
-        
         <div class="info-grid">
             <div class="info-card">
-                <h3>⏰ Clinic Timings</h3>
+                <h3>Clinic Timings</h3>
                 <div class="timing-table">
-                    <div class="timing-row">
-                        <span class="timing-day">Monday</span>
-                        <span class="timing-hours">9 AM - 1 PM, 4:30 - 7 PM</span>
-                    </div>
-                    <div class="timing-row">
-                        <span class="timing-day closed">Tuesday</span>
-                        <span class="timing-hours closed">CLOSED</span>
-                    </div>
-                    <div class="timing-row">
-                        <span class="timing-day">Wednesday</span>
-                        <span class="timing-hours">9 AM - 1 PM, 4:30 - 7 PM</span>
-                    </div>
-                    <div class="timing-row">
-                        <span class="timing-day">Thursday</span>
-                        <span class="timing-hours">9 AM - 1 PM, 4:30 - 7 PM</span>
-                    </div>
-                    <div class="timing-row">
-                        <span class="timing-day">Friday</span>
-                        <span class="timing-hours">9 AM - 1 PM, 4:30 - 7 PM</span>
-                    </div>
-                    <div class="timing-row">
-                        <span class="timing-day">Saturday</span>
-                        <span class="timing-hours">9 AM - 1 PM, 4:30 - 7 PM</span>
-                    </div>
-                    <div class="timing-row" style="background: #e3f2fd;">
-                        <span class="timing-day">Sunday</span>
-                        <span class="timing-hours" style="font-weight: 600;">9 AM - 3 PM</span>
-                    </div>
+                    <div class="timing-row"><span class="timing-day">Monday</span><span class="timing-hours">9 AM - 1 PM, 4:30 - 7 PM</span></div>
+                    <div class="timing-row"><span class="timing-day closed">Tuesday</span><span class="timing-hours closed">CLOSED</span></div>
+                    <div class="timing-row"><span class="timing-day">Wednesday</span><span class="timing-hours">9 AM - 1 PM, 4:30 - 7 PM</span></div>
+                    <div class="timing-row"><span class="timing-day">Thursday</span><span class="timing-hours">9 AM - 1 PM, 4:30 - 7 PM</span></div>
+                    <div class="timing-row"><span class="timing-day">Friday</span><span class="timing-hours">9 AM - 1 PM, 4:30 - 7 PM</span></div>
+                    <div class="timing-row"><span class="timing-day">Saturday</span><span class="timing-hours">9 AM - 1 PM, 4:30 - 7 PM</span></div>
+                    <div class="timing-row timing-row--sunday"><span class="timing-day">Sunday</span><span class="timing-hours timing-hours--sunday">9 AM - 3 PM</span></div>
                 </div>
             </div>
-            
             <div class="info-card">
-                <h3>✅ We Accept</h3>
-                <div style="margin-top: 20px;">
-                    <h4 style="color: var(--primary); margin-bottom: 15px;">Payment Methods:</h4>
-                    <p>✓ Cash Payment</p>
-                    <p>✓ All UPI Apps (GPay, PhonePe, Paytm)</p>
+                <h3>We Accept</h3>
+                <div class="info-card-content">
+                    <h4 class="info-card-subtitle">Payment Methods</h4>
+                    <p>Cash Payment</p>
+                    <p>All UPI Apps (GPay, PhonePe, Paytm)</p>
                 </div>
             </div>
-            
             <div class="info-card">
-                <h3>🏥 Facilities</h3>
-                <div style="margin-top: 20px;">
-                    <p>✓ AC Waiting Area</p>
-                    <p>✓ Wheelchair Accessible</p>
-                    <p>✓ Free WiFi</p>
-                    <p>✓ Sanitized After Every Patient</p>
-                    <p>✓ Contact Reception for Parking Advice</p>
-                    <p>✓ In-house Pharmacy</p>
-                    <p>✓ Lab Collection Service</p>
+                <h3>Facilities</h3>
+                <div class="info-card-content">
+                    <p>AC Waiting Area</p>
+                    <p>Wheelchair Accessible</p>
+                    <p>Free WiFi</p>
+                    <p>Sanitized After Every Patient</p>
+                    <p>Contact Reception for Parking Advice</p>
+                    <p>In-house Pharmacy</p>
+                    <p>Lab Collection Service</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Booking Section -->
+    <!-- Booking -->
     <section class="booking-section" id="booking">
         <h2 class="section-title">Book Your Appointment</h2>
         <p class="section-subtitle">Choose your preferred method to book</p>
-        
         <div class="booking-container">
-            <!-- Important Notice -->
-            <div style="background: #fff3cd; padding: 20px; border-radius: 15px; margin-bottom: 30px; border: 2px solid #ffeeba; text-align: center;">
-                <h3 style="color: #856404; margin-bottom: 10px;">⏰ Clinic Timings</h3>
-                <p style="color: #856404; margin: 0; font-weight: 600;">
-                    Mon, Wed-Sat: 9 AM - 1 PM & 4:30 - 7 PM | Sunday: 9 AM - 3 PM
-                </p>
-                <p style="color: #dc3545; margin: 10px 0 0 0; font-weight: 700; font-size: 1.1rem;">
-                    ⚠️ CLOSED ON TUESDAYS
-                </p>
+            <div class="booking-notice">
+                <p class="booking-notice-text">Closed on Tuesdays</p>
             </div>
-
-            <!-- Booking Options -->
-            <div style="display: grid; gap: 25px; max-width: 700px; margin: 0 auto;">
-                
-                <!-- Option 1: Phone Call (Primary) -->
-                <div style="background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%); padding: 30px; border-radius: 20px; border: 2px solid #ff6b6b; text-align: center; transform: scale(1.05); box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);">
-                    <div style="background: #ff6b6b; color: white; padding: 5px 15px; border-radius: 20px; display: inline-block; font-size: 0.85rem; font-weight: 600; margin-bottom: 15px;">
-                        RECOMMENDED - FASTEST
-                    </div>
-                    <h3 style="color: #d63031; margin-bottom: 15px; font-size: 1.5rem;">📞 Call for Appointment</h3>
-                    <p style="color: #666; margin-bottom: 20px;">
-                        Speak directly with our staff for immediate booking
-                    </p>
-                    <a href="tel:+919419190388" class="action-btn call" style="display: inline-flex; font-size: 1.2rem; padding: 18px 40px;">
-                        📞 Call Now
-                    </a>
-                    <p style="color: #888; font-size: 0.85rem; margin-top: 15px;">
-                        Available during clinic hours • Instant confirmation
-                    </p>
+            <div class="booking-grid">
+                <div class="booking-card">
+                    <h3 class="booking-card-title">Call for Appointment</h3>
+                    <p class="booking-card-text">Speak directly with our staff for immediate booking</p>
+                    <a href="tel:+919419190388" class="btn btn-dark">Call Now</a>
+                    <p class="booking-card-note">Available during clinic hours</p>
                 </div>
-
-                <!-- Option 2: WhatsApp (Secondary) -->
-                <div style="background: #e7f3ee; padding: 25px; border-radius: 20px; border: 1px solid #25d366; text-align: center;">
-                    <h3 style="color: #25d366; margin-bottom: 15px;">💬 WhatsApp Booking</h3>
-                    <p style="color: #666; margin-bottom: 20px;">
-                        Send us a message and we'll confirm your appointment
-                    </p>
-                    <a href="https://wa.me/919419190388?text=Dr.%20Dhar%20I%20would%20like%20to%20book%20an%20appointment%0A%0AName:%20%0AAge:%20%0ADate:%20%0ATime:%20" class="action-btn whatsapp" style="display: inline-flex;">
-                        💬 Book via WhatsApp
-                    </a>
-                    <p style="color: #888; font-size: 0.85rem; margin-top: 15px;">
-                        Reply within 30 minutes during clinic hours
-                    </p>
+                <div class="booking-card">
+                    <h3 class="booking-card-title">WhatsApp Booking</h3>
+                    <p class="booking-card-text">Send us a message and we'll confirm your appointment</p>
+                    <a href="https://wa.me/919419190388?text=Dr.%20Dhar%20I%20would%20like%20to%20book%20an%20appointment%0A%0AName:%20%0AAge:%20%0ADate:%20%0ATime:%20" class="btn btn-whatsapp whatsapp">Book via WhatsApp</a>
+                    <p class="booking-card-note">Reply within 30 minutes during clinic hours</p>
                 </div>
-
-                <!-- Option 3: SMS (Tertiary) -->
-                <div style="background: #f0f4f8; padding: 25px; border-radius: 20px; border: 1px solid #667eea; text-align: center;">
-                    <h3 style="color: #667eea; margin-bottom: 15px;">📱 SMS Booking</h3>
-                    <p style="color: #666; margin-bottom: 20px;">
-                        Send SMS with your name and preferred time
-                    </p>
-                    <a href="sms:+919419190388?body=Dr.%20Dhar%20I%20would%20like%20to%20book%20an%20appointment%0A%0AName:%20%0AAge:%20%0ADate:%20%0ATime:%20" class="action-btn primary" style="display: inline-flex;">
-                        📱 Send SMS
-                    </a>
-                    <p style="color: #888; font-size: 0.85rem; margin-top: 15px;">
-                        We'll call you back to confirm
-                    </p>
+                <div class="booking-card">
+                    <h3 class="booking-card-title">SMS Booking</h3>
+                    <p class="booking-card-text">Send SMS with your name and preferred time</p>
+                    <a href="sms:+919419190388?body=Dr.%20Dhar%20I%20would%20like%20to%20book%20an%20appointment%0A%0AName:%20%0AAge:%20%0ADate:%20%0ATime:%20" class="btn btn-primary">Send SMS</a>
+                    <p class="booking-card-note">We'll call you back to confirm</p>
                 </div>
             </div>
-
-            <!-- Additional Info -->
-            <div style="margin-top: 40px; padding: 25px; background: #f8f9fa; border-radius: 15px; text-align: center;">
-                <h4 style="color: var(--primary); margin-bottom: 15px;">📋 What to Have Ready When Booking:</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; text-align: left; max-width: 600px; margin: 0 auto;">
-                    <div>✓ Patient's full name</div>
-                    <div>✓ Age of patient</div>
-                    <div>✓ Main health concern</div>
-                    <div>✓ Preferred date & time</div>
-                    <div>✓ Previous medical reports (if any)</div>
-                    <div>✓ Current medications</div>
+            <div class="booking-info">
+                <h4 class="booking-info-title">What to Have Ready When Booking</h4>
+                <div class="booking-info-grid">
+                    <div>Patient's full name</div>
+                    <div>Age of patient</div>
+                    <div>Main health concern</div>
+                    <div>Preferred date & time</div>
+                    <div>Previous medical reports (if any)</div>
+                    <div>Current medications</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Map Section -->
+    <!-- Map -->
     <section class="map-section">
         <h2 class="section-title">Find Us in Jammu</h2>
-        
         <div class="map-card">
             <div class="address-details">
-                <h3 style="color: var(--primary); margin-bottom: 15px;">📍 Dr. Anil Kumar Dhar's Clinic</h3>
+                <h3 class="address-title">Dr. Anil Kumar Dhar's Clinic</h3>
                 <p><strong>Address:</strong></p>
                 <p>House No. 48, Bhagwati Nagar</p>
                 <p>Canal Road, Jammu</p>
                 <p>Jammu & Kashmir - 180016</p>
-                <p style="margin-top: 15px;"><strong>Landmark:</strong> Near Canal Road</p>
+                <p class="address-landmark"><strong>Landmark:</strong> Near Canal Road</p>
             </div>
-            
             <a href="https://www.google.com/maps/search/Dr.+Anil+Kumar+Dhar+Clinic,+House+No.+48,+Bhagwati+Nagar,+Canal+Road,+Jammu,+Jammu+and+Kashmir+180016" target="_blank" class="map-btn">
-                📍 Get Directions on Google Maps
+                Get Directions on Google Maps
             </a>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section class="contact">
+    <!-- Contact -->
+    <section class="contact" id="contact">
         <h2 class="section-title">Contact Us</h2>
-        
         <div class="contact-grid">
             <div class="contact-card">
-                <div class="contact-icon">📞</div>
+                <div class="contact-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                </div>
                 <h3>Phone</h3>
                 <p><a href="tel:+919419190388">94191 90388</a></p>
-                <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">Available for appointments</p>
+                <p class="contact-card-note">Available for appointments</p>
             </div>
-            
             <div class="contact-card">
-                <div class="contact-icon">💬</div>
+                <div class="contact-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                    </svg>
+                </div>
                 <h3>WhatsApp</h3>
                 <p><a href="https://wa.me/919419190388?text=Dr.%20Dhar%20I%20would%20like%20to%20book%20an%20appointment%0A%0AName:%20%0AAge:%20%0ADate:%20%0ATime:%20">94191 90388</a></p>
-                <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">Quick replies & appointment booking</p>
+                <p class="contact-card-note">Quick replies & appointment booking</p>
             </div>
-            
             <div class="contact-card">
-                <div class="contact-icon">📧</div>
+                <div class="contact-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="16" x="2" y="4" rx="2"/>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    </svg>
+                </div>
                 <h3>Email</h3>
                 <p><a href="mailto:anil7dhar@gmail.com">anil7dhar@gmail.com</a></p>
-                <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">For reports & medical queries</p>
+                <p class="contact-card-note">For reports & medical queries</p>
             </div>
         </div>
     </section>
@@ -538,23 +465,58 @@
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <div class="footer-logo">
-                <svg width="26" height="26" style="vertical-align: middle; margin-right: 8px; fill: white; color: white;">
-                    <use href="#medical-logo"></use>
-                </svg>
-                Dr. Anil Kumar Dhar's Clinic
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <svg class="footer-logo-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <rect x="10" y="2" width="4" height="20" rx="1"/>
+                            <rect x="2" y="10" width="20" height="4" rx="1"/>
+                        </svg>
+                        Dr. Dhar's Clinic
+                    </div>
+                    <p class="footer-tagline">Comprehensive Healthcare in Jammu</p>
+                    <p class="footer-phone"><a href="tel:+919419190388">94191 90388</a></p>
+                    <p class="footer-email"><a href="mailto:anil7dhar@gmail.com">anil7dhar@gmail.com</a></p>
+                </div>
+                <div class="footer-col">
+                    <h4>Specialties</h4>
+                    <ul class="footer-links">
+                        <li><a href="#services">General Check-up</a></li>
+                        <li><a href="#services">Diabetes Care</a></li>
+                        <li><a href="#services">Heart & BP Care</a></li>
+                        <li><a href="#services">Vaccination</a></li>
+                        <li><a href="#services">Longevity Care</a></li>
+                        <li><a href="#services">In-house Pharmacy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#services">Our Services</a></li>
+                        <li><a href="#about">Our Team</a></li>
+                        <li><a href="#booking">Book Appointment</a></li>
+                        <li><a href="#clinic-info">Clinic Timings</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Clinic Hours</h4>
+                    <p class="footer-hours">Mon, Wed-Sat</p>
+                    <p class="footer-hours-detail">9 AM - 1 PM, 4:30 - 7 PM</p>
+                    <p class="footer-hours">Sunday</p>
+                    <p class="footer-hours-detail">9 AM - 3 PM</p>
+                    <p class="footer-hours footer-closed">Tuesday: Closed</p>
+                    <h4 class="footer-appt-title">For Appointments</h4>
+                    <p class="footer-appt-number"><a href="tel:+919419190388">94191 90388</a></p>
+                </div>
             </div>
-            <p style="margin-top: 20px; opacity: 0.8;">
-                © 2024 Dr. Anil Kumar Dhar's Clinic. All rights reserved.
-            </p>
-            <p style="margin-top: 10px; opacity: 0.6; font-size: 0.9rem;">
-                Designed with ❤️ by Vishut Dhar for the best father in the world
-            </p>
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy; 2026 Dr. Anil Kumar Dhar's Clinic. All rights reserved.</p>
+                <p class="footer-attribution">Built by Vishut Dhar</p>
+            </div>
         </div>
     </footer>
 
-
-    <!-- Back to Top Button -->
     <button id="back-to-top" class="back-to-top" aria-label="Back to top">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
             <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
@@ -562,51 +524,37 @@
     </button>
 
     <script>
-        // Check clinic status based on current time (IST)
         function updateClinicStatus() {
             const statusBadge = document.getElementById('clinic-status');
             const statusDot = statusBadge.querySelector('.status-dot');
             const statusText = statusBadge.querySelector('.status-text');
-            
-            // Get current time in IST using proper timezone
             const now = new Date();
             const istTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-            
             const day = istTime.getDay();
             const hours = istTime.getHours();
             const minutes = istTime.getMinutes();
             const currentTime = hours * 60 + minutes;
-            
-            // Define clinic hours
             const schedule = {
-                1: [{ start: 9 * 60, end: 13 * 60 }, { start: 16.5 * 60, end: 19 * 60 }], // Monday
-                2: [], // Tuesday - Closed
-                3: [{ start: 9 * 60, end: 13 * 60 }, { start: 16.5 * 60, end: 19 * 60 }], // Wednesday
-                4: [{ start: 9 * 60, end: 13 * 60 }, { start: 16.5 * 60, end: 19 * 60 }], // Thursday
-                5: [{ start: 9 * 60, end: 13 * 60 }, { start: 16.5 * 60, end: 19 * 60 }], // Friday
-                6: [{ start: 9 * 60, end: 13 * 60 }, { start: 16.5 * 60, end: 19 * 60 }], // Saturday
-                0: [{ start: 9 * 60, end: 15 * 60 }] // Sunday - 9 AM to 3 PM
+                1: [{ start: 540, end: 780 }, { start: 990, end: 1140 }],
+                2: [],
+                3: [{ start: 540, end: 780 }, { start: 990, end: 1140 }],
+                4: [{ start: 540, end: 780 }, { start: 990, end: 1140 }],
+                5: [{ start: 540, end: 780 }, { start: 990, end: 1140 }],
+                6: [{ start: 540, end: 780 }, { start: 990, end: 1140 }],
+                0: [{ start: 540, end: 900 }]
             };
-            
             let isOpen = false;
             const todaySchedule = schedule[day] || [];
-            
             for (const slot of todaySchedule) {
-                if (currentTime >= slot.start && currentTime < slot.end) {
-                    isOpen = true;
-                    break;
-                }
+                if (currentTime >= slot.start && currentTime < slot.end) { isOpen = true; break; }
             }
-            
-            // Helper function to format time in 12-hour format
             function formatTime12Hour(totalMinutes) {
-                const hours = Math.floor(totalMinutes / 60);
-                const minutes = totalMinutes % 60;
-                const period = hours >= 12 ? 'PM' : 'AM';
-                const displayHours = hours > 12 ? hours - 12 : (hours === 0 ? 12 : hours);
-                return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
+                const h = Math.floor(totalMinutes / 60);
+                const m = totalMinutes % 60;
+                const period = h >= 12 ? 'PM' : 'AM';
+                const dh = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+                return `${dh}:${m.toString().padStart(2, '0')} ${period}`;
             }
-            
             if (isOpen) {
                 statusBadge.classList.add('open');
                 statusBadge.classList.remove('closed');
@@ -614,127 +562,56 @@
             } else {
                 statusBadge.classList.add('closed');
                 statusBadge.classList.remove('open');
-                
-                // Find next opening time
                 let nextOpen = '';
-                
-                // First check if there's a slot later today
                 let foundToday = false;
-                if (todaySchedule.length > 0) {
-                    for (const slot of todaySchedule) {
-                        if (currentTime < slot.start) {
-                            nextOpen = `Opens at ${formatTime12Hour(slot.start)}`;
-                            foundToday = true;
-                            break;
-                        }
-                    }
+                for (const slot of todaySchedule) {
+                    if (currentTime < slot.start) { nextOpen = `Opens at ${formatTime12Hour(slot.start)}`; foundToday = true; break; }
                 }
-                
-                // If no slot found today, check tomorrow
                 if (!foundToday) {
                     const tomorrow = (day + 1) % 7;
-                    const tomorrowSchedule = schedule[tomorrow] || [];
-                    
-                    if (tomorrowSchedule.length === 0) {
-                        // Tomorrow is closed, check day after
-                        const dayAfter = (tomorrow + 1) % 7;
-                        const dayAfterSchedule = schedule[dayAfter] || [];
-                        if (dayAfterSchedule.length > 0) {
-                            const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                            nextOpen = `Opens ${daysOfWeek[dayAfter]} at ${formatTime12Hour(dayAfterSchedule[0].start)}`;
+                    const ts = schedule[tomorrow] || [];
+                    if (ts.length === 0) {
+                        const da = (tomorrow + 1) % 7;
+                        const das = schedule[da] || [];
+                        if (das.length > 0) {
+                            const dn = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+                            nextOpen = `Opens ${dn[da]} at ${formatTime12Hour(das[0].start)}`;
                         }
-                    } else {
-                        // Tomorrow has slots
-                        nextOpen = `Opens tomorrow at ${formatTime12Hour(tomorrowSchedule[0].start)}`;
-                    }
+                    } else { nextOpen = `Opens tomorrow at ${formatTime12Hour(ts[0].start)}`; }
                 }
-                
-                statusText.textContent = `Closed • ${nextOpen}`;
+                statusText.textContent = `Closed \u2022 ${nextOpen}`;
             }
         }
-        
-        // Update status immediately and every minute
         updateClinicStatus();
         setInterval(updateClinicStatus, 60000);
-        
-        // Smooth scrolling for navigation with keyboard support
+
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+                const t = document.querySelector(this.getAttribute('href'));
+                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
-            
-            // Add keyboard support for Enter and Space keys
-            anchor.addEventListener('keydown', function (e) {
+            anchor.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                        target.focus();
-                    }
+                    const t = document.querySelector(this.getAttribute('href'));
+                    if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); t.focus(); }
                 }
             });
         });
-        
-        // Track WhatsApp button clicks (optional analytics)
-        document.querySelectorAll('.whatsapp').forEach(button => {
-            button.addEventListener('click', function() {
-                // You can add Google Analytics or other tracking here
-            });
-        });
-        
-        // Scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
+
+        document.querySelectorAll('.whatsapp').forEach(b => b.addEventListener('click', function() {}));
+
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-        
-        // Add fade-in class to sections
-        document.querySelectorAll('section').forEach(section => {
-            section.classList.add('fade-in-section');
-            observer.observe(section);
-        });
-        
-        // Observe grids for stagger animation
-        document.querySelectorAll('.services-grid, .trust-grid, .contact-grid').forEach(grid => {
-            observer.observe(grid);
-        });
-        
-        // Back to Top Button
-        const backToTopButton = document.getElementById('back-to-top');
-        
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                backToTopButton.classList.add('visible');
-            } else {
-                backToTopButton.classList.remove('visible');
-            }
-        });
-        
-        backToTopButton.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('section').forEach(s => { s.classList.add('fade-in-section'); observer.observe(s); });
+        document.querySelectorAll('.services-grid, .contact-grid').forEach(g => observer.observe(g));
+
+        const btt = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => { btt.classList.toggle('visible', window.pageYOffset > 300); });
+        btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     </script>
 </body>
 </html>
