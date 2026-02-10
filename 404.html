@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Dr. Anil Kumar Dhar's Clinic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: #0a0f1c;
+            color: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+            text-align: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 48px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .logo svg { opacity: 0.6; }
+        h1 {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 4rem;
+            font-weight: 400;
+            color: #f3f4f6;
+            margin-bottom: 16px;
+        }
+        p {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 1rem;
+            max-width: 400px;
+            line-height: 1.7;
+            margin-bottom: 36px;
+        }
+        .actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+        .btn {
+            padding: 14px 28px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .btn-primary {
+            background: #1d5ba6;
+            color: white;
+            box-shadow: 0 2px 8px rgba(29, 91, 166, 0.3);
+        }
+        .btn-primary:hover { background: #174d91; }
+        .btn-ghost {
+            background: transparent;
+            color: #f3f4f6;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .btn-ghost:hover { background: rgba(255, 255, 255, 0.08); }
+        .contact-info {
+            margin-top: 48px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+        }
+        .contact-info a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+        }
+        .contact-info a:hover { color: white; }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <rect x="10" y="2" width="4" height="20" rx="1"/>
+            <rect x="2" y="10" width="20" height="4" rx="1"/>
+        </svg>
+        <span>Dr. Dhar's Clinic</span>
+    </div>
+    <h1>404</h1>
+    <p>The page you're looking for doesn't exist. You may have mistyped the address or the page may have moved.</p>
+    <div class="actions">
+        <a href="/" class="btn btn-primary">Go to Homepage</a>
+        <a href="tel:+919419190388" class="btn btn-ghost">Call Clinic: 94191 90388</a>
+    </div>
+    <div class="contact-info">
+        <p>Need help? Call <a href="tel:+919419190388">94191 90388</a> or <a href="https://wa.me/919419190388">WhatsApp us</a></p>
+    </div>
+</body>
+</html>

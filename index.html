@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,12 +18,28 @@
     <meta property="og:locale" content="en_IN">
 
     <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Dr. Anil Kumar Dhar - Internal Medicine Doctor & Longevity Expert">
     <meta name="twitter:description" content="Book appointment with Dr. Anil Kumar Dhar. 30+ years experience. Call 94191 90388.">
+    <meta name="twitter:image" content="https://dranilkumardhar.com/og-image.jpg">
+
+    <!-- Open Graph Image -->
+    <meta property="og:image" content="https://dranilkumardhar.com/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Dr. Anil Kumar Dhar - Internal Medicine & Longevity Specialist in Jammu">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#0a0f1c">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://dranilkumardhar.com">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
     <!-- Google Fonts - Instrument Serif + Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,6 +50,7 @@
     <link rel="stylesheet" href="styles.css">
 
     <!-- Preload critical resources -->
+    <link rel="preload" href="doctor-photo.webp" as="image" type="image/webp">
     <link rel="preload" href="doctor-photo.jpg" as="image">
 
     <!-- Structured Data for SEO -->
@@ -47,16 +64,16 @@
         "telephone": "+919419190388",
         "address": {
             "@type": "PostalAddress",
-            "streetAddress": "Behind Shree Chemicals, Amar Singh Chowk",
+            "streetAddress": "House No. 48, Bhagwati Nagar, Canal Road",
             "addressLocality": "Jammu",
             "addressRegion": "Jammu and Kashmir",
-            "postalCode": "180001",
+            "postalCode": "180016",
             "addressCountry": "IN"
         },
         "geo": {
             "@type": "GeoCoordinates",
-            "latitude": "32.7266",
-            "longitude": "74.8570"
+            "latitude": "32.7350",
+            "longitude": "74.8350"
         },
         "openingHoursSpecification": [
             {
@@ -78,13 +95,53 @@
                 "closes": "15:00"
             }
         ],
-        "hasMap": "https://www.google.com/maps/search/?api=1&query=Behind+Shree+Chemicals+Amar+Singh+Chowk+Jammu",
+        "hasMap": "https://www.google.com/maps/search/?api=1&query=Dr+Anil+Kumar+Dhar+48+Bhagwati+Nagar+Canal+Road+Jammu+180016",
+        "image": "https://dranilkumardhar.com/doctor-photo.jpg",
+        "priceRange": "$$",
         "medicalSpecialty": ["InternalMedicine", "Diabetology", "PreventiveMedicine"],
+        "sameAs": [],
         "employee": {
             "@type": "Physician",
             "name": "Dr. Anil Kumar Dhar",
-            "description": "MBBS, MD, DNB - Internal Medicine Specialist",
+            "description": "MBBS, MD, DNB - Internal Medicine Specialist with 30+ years experience in Jammu",
+            "image": "https://dranilkumardhar.com/doctor-photo.jpg",
+            "telephone": "+919419190388",
             "medicalSpecialty": ["InternalMedicine", "Diabetology"],
+            "knowsAbout": ["Internal Medicine", "Diabetes Management", "Preventive Healthcare", "Longevity Medicine", "Hypertension Management", "Vaccination"],
+            "hasCredential": [
+                {
+                    "@type": "EducationalOccupationalCredential",
+                    "credentialCategory": "degree",
+                    "name": "MBBS"
+                },
+                {
+                    "@type": "EducationalOccupationalCredential",
+                    "credentialCategory": "degree",
+                    "name": "MD (Internal Medicine)"
+                },
+                {
+                    "@type": "EducationalOccupationalCredential",
+                    "credentialCategory": "degree",
+                    "name": "DNB (Internal Medicine)"
+                }
+            ],
+            "identifier": [
+                {
+                    "@type": "PropertyValue",
+                    "name": "MBBS Registration Number",
+                    "value": "3672"
+                },
+                {
+                    "@type": "PropertyValue",
+                    "name": "MD Registration Number",
+                    "value": "5775"
+                },
+                {
+                    "@type": "PropertyValue",
+                    "name": "DNB Registration Number",
+                    "value": "5784"
+                }
+            ],
             "alumniOf": {
                 "@type": "EducationalOrganization",
                 "name": "Government Medical College"
@@ -95,6 +152,130 @@
             "ratingValue": "5",
             "reviewCount": "100"
         }
+    }
+    </script>
+
+    <!-- Service Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MedicalBusiness",
+        "name": "Dr. Anil Kumar Dhar's Clinic",
+        "url": "https://dranilkumardhar.com",
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Medical Services",
+            "itemListElement": [
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "MedicalProcedure",
+                        "name": "General Check-up",
+                        "description": "Complete health examination including blood pressure check, blood sugar testing, physical examination, and doctor consultation"
+                    },
+                    "price": "1000",
+                    "priceCurrency": "INR"
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "MedicalProcedure",
+                        "name": "Diabetes Care",
+                        "description": "Comprehensive Type 1 and Type 2 diabetes management including HbA1c tracking, blood sugar monitoring, diet planning, and medication management"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "MedicalProcedure",
+                        "name": "Heart & BP Care",
+                        "description": "Regular blood pressure monitoring, hypertension management, heart health assessment, and cardiovascular risk evaluation"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "MedicalProcedure",
+                        "name": "Vaccination",
+                        "description": "Complete adult vaccination services including flu vaccine, pneumonia vaccine, hepatitis, and other immunizations"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "MedicalProcedure",
+                        "name": "Longevity Care",
+                        "description": "Advanced preventive care, health optimization, and evidence-based anti-aging treatments"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "MedicalProcedure",
+                        "name": "In-house Pharmacy",
+                        "description": "On-site pharmacy with all prescribed medicines available for immediate dispensing"
+                    }
+                }
+            ]
+        }
+    }
+    </script>
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What are the clinic timings for Dr. Anil Kumar Dhar?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The clinic is open Monday, Wednesday to Saturday from 9 AM to 1 PM and 4:30 PM to 7 PM. Sunday hours are 9 AM to 3 PM. The clinic is closed on Tuesdays."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How can I book an appointment with Dr. Dhar?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You can book an appointment by calling 94191 90388, sending a WhatsApp message to the same number, or sending an SMS with your name and preferred time. The clinic staff will confirm your appointment."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the consultation fee at Dr. Dhar's clinic?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A general check-up consultation costs Rs 1,000. This includes a complete health examination with blood pressure check, blood sugar testing, and doctor consultation."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What conditions does Dr. Anil Kumar Dhar treat?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Dr. Dhar specializes in internal medicine and treats diabetes (Type 1 and Type 2), hypertension, heart conditions, thyroid disorders, respiratory problems, fever, infections, and general health issues. He also provides vaccination services and longevity care."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Where is Dr. Dhar's clinic located in Jammu?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The clinic is located at House No. 48, Bhagwati Nagar, Canal Road, Jammu, J&K - 180016. The landmark is near Canal Road."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What payment methods are accepted at the clinic?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The clinic accepts cash payment and all UPI apps including Google Pay, PhonePe, and Paytm."
+                }
+            }
+        ]
     }
     </script>
 </head>
@@ -114,6 +295,7 @@
             <nav class="header-nav" aria-label="Main navigation">
                 <a href="#services">Specialties</a>
                 <a href="#about">Our Team</a>
+                <a href="#faq">FAQ</a>
                 <a href="#booking">Book Appointment</a>
             </nav>
             <div class="status-badge" id="clinic-status">
@@ -130,7 +312,7 @@
             <div class="hero-content">
                 <p class="hero-tagline">Internal Medicine & Longevity Specialist</p>
                 <h1 id="doctor-name">Dr. Anil Kumar Dhar</h1>
-                <p class="hero-credentials">MBBS, MD, DNB &middot; Reg. No: 3672</p>
+                <p class="hero-credentials">MBBS (Reg. 3672), MD (Reg. 5775), DNB (Reg. 5784)</p>
                 <p class="hero-subtitle">Diabetes Management, Preventive Medicine & Anti-Aging Care</p>
                 <div class="hero-stats">
                     <div class="stat">
@@ -151,7 +333,11 @@
             </div>
             <div class="hero-visual">
                 <div class="hero-photo">
-                    <img src="doctor-photo.jpg" alt="Dr. Anil Kumar Dhar - Internal Medicine Specialist" loading="eager">
+                    <picture>
+                        <source srcset="doctor-photo-400w.webp 400w, doctor-photo.webp 600w" sizes="(max-width: 480px) 160px, (max-width: 768px) 200px, 300px" type="image/webp">
+                        <source srcset="doctor-photo-400w.jpg 400w, doctor-photo.jpg 600w" sizes="(max-width: 480px) 160px, (max-width: 768px) 200px, 300px" type="image/jpeg">
+                        <img src="doctor-photo.jpg" alt="Dr. Anil Kumar Dhar - Internal Medicine Specialist" width="600" height="712" fetchpriority="high">
+                    </picture>
                 </div>
             </div>
         </div>
@@ -189,7 +375,7 @@
                     </svg>
                 </div>
                 <h3>General Check-up</h3>
-                <p>Complete health examination including BP, sugar tests & consultation</p>
+                <p>Comprehensive physical examination including blood pressure monitoring, fasting and post-meal blood sugar testing, cholesterol screening, and detailed doctor consultation with personalized health advice</p>
                 <div class="price">₹1,000</div>
             </div>
 
@@ -200,7 +386,7 @@
                     </svg>
                 </div>
                 <h3>Diabetes Care</h3>
-                <p>Sugar monitoring, diet planning & medicine management</p>
+                <p>Expert management of Type 1 and Type 2 diabetes with regular HbA1c tracking, fasting blood sugar monitoring, personalized diet planning, insulin adjustment, and long-term complication prevention</p>
             </div>
 
             <div class="service-card">
@@ -210,7 +396,7 @@
                     </svg>
                 </div>
                 <h3>Heart & BP Care</h3>
-                <p>Regular BP monitoring & heart health management</p>
+                <p>Regular blood pressure monitoring, hypertension treatment, cholesterol management, cardiovascular risk assessment, and heart health optimization with evidence-based medication protocols</p>
             </div>
 
             <div class="service-card">
@@ -222,7 +408,7 @@
                     </svg>
                 </div>
                 <h3>Vaccination</h3>
-                <p>All vaccines for adults</p>
+                <p>Complete adult immunization including annual flu vaccine, pneumonia vaccine, hepatitis B, typhoid, and other recommended vaccines with proper cold chain storage</p>
             </div>
 
             <div class="service-card">
@@ -233,7 +419,7 @@
                     </svg>
                 </div>
                 <h3>Longevity Care</h3>
-                <p>Advanced preventive care, health optimization & anti-aging treatments</p>
+                <p>Advanced preventive medicine focusing on healthy aging, metabolic optimization, nutritional guidance, stress management, and evidence-based interventions to enhance quality of life and lifespan</p>
             </div>
 
             <div class="service-card">
@@ -244,7 +430,7 @@
                     </svg>
                 </div>
                 <h3>In-house Pharmacy</h3>
-                <p>All medicines available on-site for your convenience</p>
+                <p>Fully stocked on-site pharmacy with all prescribed medications available immediately after your consultation, saving you an extra trip to an outside chemist</p>
             </div>
         </div>
     </section>
@@ -253,7 +439,11 @@
     <section class="about-doctor" id="about">
         <div class="about-container">
             <div class="doctor-image">
-                <img class="about-photo" src="doctor-photo.jpg" alt="Dr. Anil Kumar Dhar">
+                <picture>
+                    <source srcset="doctor-photo-400w.webp 400w, doctor-photo.webp 600w" sizes="(max-width: 768px) 280px, 320px" type="image/webp">
+                    <source srcset="doctor-photo-400w.jpg 400w, doctor-photo.jpg 600w" sizes="(max-width: 768px) 280px, 320px" type="image/jpeg">
+                    <img class="about-photo" src="doctor-photo.jpg" alt="Dr. Anil Kumar Dhar" width="600" height="712" loading="lazy">
+                </picture>
             </div>
             <div class="doctor-details">
                 <h2 class="section-title">Our Medical Team</h2>
@@ -287,7 +477,7 @@
                         </div>
                         <div>
                             <h4>Registration</h4>
-                            <p>Registration No: 3672</p>
+                            <p>MBBS: 3672 &middot; MD: 5775 &middot; DNB: 5784</p>
                         </div>
                     </div>
                     <div class="credential-item">
@@ -360,6 +550,50 @@
                     <p>Lab Collection Service</p>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" id="faq">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Common questions about our clinic and services</p>
+        <div class="faq-container">
+            <details class="faq-item">
+                <summary class="faq-question">What are the clinic timings for Dr. Anil Kumar Dhar?</summary>
+                <div class="faq-answer">
+                    <p>The clinic is open Monday, Wednesday to Saturday from 9 AM to 1 PM and 4:30 PM to 7 PM. Sunday hours are 9 AM to 3 PM. The clinic is closed on Tuesdays.</p>
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-question">How can I book an appointment with Dr. Dhar?</summary>
+                <div class="faq-answer">
+                    <p>You can book an appointment by calling <a href="tel:+919419190388">94191 90388</a>, sending a <a href="https://wa.me/919419190388">WhatsApp message</a> to the same number, or sending an SMS with your name and preferred time. The clinic staff will confirm your appointment.</p>
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-question">What is the consultation fee at Dr. Dhar's clinic?</summary>
+                <div class="faq-answer">
+                    <p>A general check-up consultation costs &#8377;1,000. This includes a complete health examination with blood pressure check, blood sugar testing, and doctor consultation.</p>
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-question">What conditions does Dr. Anil Kumar Dhar treat?</summary>
+                <div class="faq-answer">
+                    <p>Dr. Dhar specializes in internal medicine and treats diabetes (Type 1 and Type 2), hypertension, heart conditions, thyroid disorders, respiratory problems, fever, infections, and general health issues. He also provides vaccination services and longevity care.</p>
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-question">Where is Dr. Dhar's clinic located in Jammu?</summary>
+                <div class="faq-answer">
+                    <p>The clinic is located at House No. 48, Bhagwati Nagar, Canal Road, Jammu, J&K - 180016. The landmark is near Canal Road. You can <a href="https://www.google.com/maps/search/Dr.+Anil+Kumar+Dhar+Clinic,+House+No.+48,+Bhagwati+Nagar,+Canal+Road,+Jammu,+Jammu+and+Kashmir+180016" target="_blank">get directions on Google Maps</a>.</p>
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-question">What payment methods are accepted at the clinic?</summary>
+                <div class="faq-answer">
+                    <p>The clinic accepts cash payment and all UPI apps including Google Pay, PhonePe, and Paytm.</p>
+                </div>
+            </details>
         </div>
     </section>
 
@@ -494,6 +728,7 @@
                     <ul class="footer-links">
                         <li><a href="#services">Our Services</a></li>
                         <li><a href="#about">Our Team</a></li>
+                        <li><a href="#faq">FAQ</a></li>
                         <li><a href="#booking">Book Appointment</a></li>
                         <li><a href="#clinic-info">Clinic Timings</a></li>
                         <li><a href="#contact">Contact Us</a></li>

@@ -1246,6 +1246,90 @@ footer {
 }
 
 /* ===========================
+   FAQ Section
+   =========================== */
+
+.faq-section {
+    padding: 96px 32px;
+    background: var(--bg);
+}
+
+.faq-container {
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: var(--bg-warm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.faq-item:hover {
+    border-color: var(--border-hover);
+}
+
+.faq-item[open] {
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent);
+}
+
+.faq-question {
+    padding: 20px 24px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    line-height: 1.5;
+}
+
+.faq-question::-webkit-details-marker {
+    display: none;
+}
+
+.faq-question::after {
+    content: '+';
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.faq-item[open] .faq-question::after {
+    content: '\2212';
+    transform: rotate(0deg);
+}
+
+.faq-answer {
+    padding: 0 24px 20px;
+}
+
+.faq-answer p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.75;
+    font-weight: 400;
+}
+
+.faq-answer a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.faq-answer a:hover {
+    text-decoration: underline;
+}
+
+/* ===========================
    Animations — Scroll Reveal
    =========================== */
 
@@ -1371,9 +1455,12 @@ footer {
     .contact-grid { grid-template-columns: 1fr; }
 
     .services, .about-doctor, .clinic-info,
-    .booking-section, .contact { padding: 72px 20px; }
+    .booking-section, .contact, .faq-section { padding: 72px 20px; }
 
     .google-reviews, .map-section { padding: 64px 20px; }
+
+    .faq-question { font-size: 0.9rem; padding: 18px 20px; }
+    .faq-answer { padding: 0 20px 18px; }
 
     .footer-grid {
         grid-template-columns: 1fr 1fr;
@@ -1412,9 +1499,13 @@ footer {
     .section-title { font-size: 1.6rem; }
 
     .services, .about-doctor, .clinic-info,
-    .booking-section, .contact { padding: 56px 16px; }
+    .booking-section, .contact, .faq-section { padding: 56px 16px; }
 
     .google-reviews, .map-section { padding: 52px 16px; }
+
+    .faq-question { font-size: 0.86rem; padding: 16px; }
+    .faq-answer { padding: 0 16px 16px; }
+    .faq-answer p { font-size: 0.86rem; }
 
     .google-reviews-card { padding: 28px 20px; }
     .map-card { padding: 24px 16px; }
