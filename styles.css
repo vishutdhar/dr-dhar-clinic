@@ -92,7 +92,7 @@ body {
 
 .skip-link {
     position: absolute;
-    top: -40px;
+    top: 0;
     left: 0;
     background: var(--accent);
     color: white;
@@ -101,8 +101,9 @@ body {
     z-index: 10000;
     border-radius: 0 0 var(--radius-sm) 0;
     font-family: var(--font-body);
+    transform: translateY(-100%);
 }
-.skip-link:focus { top: 0; }
+.skip-link:focus { transform: translateY(0); }
 
 /* ===========================
    Header
