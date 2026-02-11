@@ -1084,6 +1084,7 @@ body {
     padding: 96px 32px;
     background: var(--bg);
     position: relative;
+    overflow: hidden;
 }
 
 /* Subtle radial glow — adds depth to flat white section */
