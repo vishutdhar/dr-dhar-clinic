@@ -1,230 +1,122 @@
 # Dr. Anil Kumar Dhar's Clinic Website
 
-A modern, responsive, single-page website for Dr. Anil Kumar Dhar's medical clinic in Jammu. Built with performance and user experience at its core, featuring real-time clinic status tracking, seamless appointment booking, and comprehensive medical service information.
+A modern, responsive, single-page website for Dr. Anil Kumar Dhar's medical clinic in Jammu. Built with performance, SEO, and user experience at its core.
 
-🌐 **Live Demo**: [https://vishutdhar.github.io/dr-dhar-clinic/](https://vishutdhar.github.io/dr-dhar-clinic/)
+**Live:** [https://dranilkumardhar.com](https://dranilkumardhar.com)
 
-## 🚀 Latest Updates (v2.0)
+## Technology Stack
 
-### Clinic Status Indicator Fix
-- **Fixed timezone calculation**: Replaced manual UTC offset with native JavaScript timezone API for accurate IST (Indian Standard Time) display
-- **Updated Sunday hours**: Corrected clinic hours from 9 AM - 1 PM to 9 AM - 3 PM to match actual operating hours
-- **Enhanced reliability**: Status now updates correctly regardless of user's local timezone
+- **HTML5** - Semantic markup with structured data (JSON-LD)
+- **CSS3** - CSS Grid, Flexbox, custom properties, animations
+- **Vanilla JavaScript** - No frameworks or dependencies
+- **Vercel** - Hosting with automatic deployments from GitHub
+- **Zero Build Process** - No compilation or bundling required
 
-## ✨ Key Features
-
-### Real-time Clinic Status
-- **Live Status Badge**: Displays "Open Now" with green indicator or "Closed" with red indicator
-- **Smart Scheduling**: Automatically calculates open/closed status based on current IST time
-- **Next Opening Time**: Shows when clinic will open next when currently closed
-- **Auto-refresh**: Status updates every minute without page reload
-
-### Responsive & Accessible Design
-- **Mobile-First**: Optimized for all devices (phones, tablets, desktops)
-- **Accessibility**: WCAG 2.1 AA compliant with:
-  - Proper ARIA labels and roles
-  - Keyboard navigation support
-  - Skip-to-content link
-  - High contrast ratios
-  - Screen reader friendly
-
-### Performance Optimized
-- **Lightning Fast**: < 2 second load time on 3G networks
-- **Optimized Images**: 84% size reduction (239KB → 38KB)
-- **External CSS**: Browser caching for repeat visits
-- **Lazy Loading**: Images load as needed
-- **Minimal Dependencies**: Pure HTML/CSS/JS - no frameworks
-
-### Contact & Booking Options
-- **Multi-channel Booking**:
-  - Direct phone call integration
-  - WhatsApp with pre-filled appointment template
-  - SMS booking option
-  - Email support
-- **One-Click Actions**: All contact methods work with single tap/click
-
-### SEO & Marketing
-- **Structured Data**: Schema.org medical clinic markup
-- **Meta Tags**: Optimized for search engines and social media
-- **Local SEO**: Google Maps integration and local business signals
-- **Social Proof**: Google Reviews integration
-
-## 🛠️ Technology Stack
-
-- **HTML5**: Semantic markup with structured data
-- **CSS3**: Modern styling with CSS Grid, Flexbox, and animations
-- **Vanilla JavaScript**: No dependencies, pure ES6+
-- **Progressive Enhancement**: Works without JavaScript
-- **Zero Build Process**: No compilation or bundling required
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 dr-dhar-clinic/
-├── index.html                 # Main website (single-page application)
-├── styles.css                 # External stylesheet for caching
-├── doctor-photo.jpg           # Optimized hero image (38KB)
-├── doctor-photo-original.jpg  # Original high-resolution backup
-├── README.md                  # This file - project documentation
-├── OPTIMIZATION_GUIDE.md      # Performance optimization details
-├── HOSTINGER_DEPLOYMENT.md    # Hosting deployment guide
-├── test-status.html           # Clinic status debugger (development)
-└── verify-schedule.html       # Schedule verification tool (development)
+├── index.html                  # Main website
+├── styles.css                  # All styling
+├── 404.html                    # Custom error page
+├── robots.txt                  # Search engine crawl directives
+├── sitemap.xml                 # Page index for search engines
+├── vercel.json                 # Cache headers configuration
+├── doctor-photo.jpg            # Hero image (57KB, 600x900)
+├── doctor-photo.webp           # WebP variant (32KB, 600x900)
+├── doctor-photo-400w.jpg       # Mobile variant (31KB, 400x600)
+├── doctor-photo-400w.webp      # Mobile WebP variant (19KB, 400x600)
+├── og-image.jpg                # Social sharing image (67KB, 1200x630)
+├── favicon.ico                 # Browser tab icon
+├── favicon-32x32.png           # High-res favicon
+├── favicon-16x16.png           # Standard favicon
+├── apple-touch-icon.png        # iOS home screen icon
+├── README.md                   # This file
+├── test-status.html            # Clinic status debugger (dev only)
+├── verify-schedule.html        # Schedule verification (dev only)
+├── comprehensive-test-report.html  # Test report (dev only)
+└── mobile-test.html            # Mobile testing page (dev only)
 ```
 
-## 🕐 Clinic Hours & Status Logic
+## Features
 
-### Operating Hours
-**Monday, Wednesday-Saturday:**
-- Morning: 9:00 AM - 1:00 PM
-- Evening: 4:30 PM - 7:00 PM
-
-**Tuesday:** CLOSED
-
-**Sunday:** 9:00 AM - 3:00 PM
-
-### Status Indicator Behavior
-The clinic status indicator in the header shows:
-- 🟢 **Green dot + "Open Now"**: During operating hours
-- 🔴 **Red dot + "Closed • Opens at [time]"**: Outside operating hours
-- Automatically detects Indian Standard Time (IST/UTC+5:30)
-- Updates every 60 seconds without page refresh
+### Real-time Clinic Status
+- Live open/closed indicator in the header using IST timezone
 - Shows next opening time when closed
+- Auto-refreshes every 60 seconds
 
-## 📱 Features in Detail
+### SEO (Lighthouse Score: 100/100)
+- 3 JSON-LD schema blocks: MedicalClinic + Physician, MedicalBusiness with services, FAQPage
+- Complete meta tags: Open Graph, Twitter Card, canonical URL, theme-color
+- robots.txt and sitemap.xml
+- Optimized title, description, and heading hierarchy
+- `lang="en-IN"` for regional targeting
 
-### 1. Smart Header
-- Sticky navigation that follows scroll
-- Live clinic status with pulsing animation when open
-- Responsive logo with medical caduceus symbol
-- Backdrop blur effect for modern aesthetic
+### Performance (Lighthouse Score: 88/100)
+- Doctor photo optimized from 2.16MB to 32KB WebP (98.5% reduction)
+- Responsive `<picture>` elements with WebP/JPEG srcset and mobile variants
+- `fetchpriority="high"` on hero image, `loading="lazy"` on below-fold images
+- Vercel cache headers: 1 year for images, 1 week for CSS
+- Image `width`/`height` attributes to prevent layout shift
 
-### 2. Hero Section
-- Professional doctor photo with credentials
-- Key achievements badges (30+ years, 500K+ patients)
-- Smooth scroll indicator animation
-- Responsive layout for all screen sizes
+### Accessibility (Lighthouse Score: 94/100)
+- Skip-to-content link (hidden with `translateY(-100%)`, visible on focus)
+- Proper ARIA labels, roles, and landmarks
+- Keyboard navigation support
+- Semantic HTML5 structure
 
-### 3. Quick Actions Bar
-- Three primary CTAs: Book Appointment, WhatsApp, Call
-- Color-coded buttons for visual hierarchy
-- Pre-filled WhatsApp message template
-- Direct tel: and sms: protocol integration
+### Contact & Booking
+- 3 booking channels: Phone call, WhatsApp (pre-filled message), SMS
+- Contact info (phone, email, registration numbers) obfuscated from bot scraping using JavaScript char codes
+- Schema markup left readable for Google crawlers
 
-### 4. Services Grid
-- Six core services with icons
-- Hover effects and smooth transitions
-- Pricing information where applicable
-- Responsive grid layout (auto-fit)
+### Visual Design
+- Dark hero and booking sections for visual anchoring
+- Gradient backgrounds and dot textures on light sections
+- Subtle card elevation with hover states
+- FAQ section using native `<details>/<summary>` elements
 
-### 5. Clinic Information
-- Comprehensive timing table with visual highlighting
-- Accepted payment methods
-- Available facilities and amenities
-- Special Sunday hours emphasis
+## Clinic Information
 
-### 6. Booking Section
-- Multiple booking channels with priority indication
-- Step-by-step booking preparation guide
-- Visual hierarchy: Phone (primary) → WhatsApp → SMS
-- Clear closed day warning (Tuesday)
+**Address:** House No. 48, Bhagwati Nagar, Canal Road, Jammu, J&K - 180016
+**Phone:** 94191 90388
+**Email:** anil7dhar@gmail.com
 
-### 7. Footer & Extras
-- Back-to-top button with smooth scroll
-- Contact information redundancy
-- Google Maps integration
-- Personal touch attribution
+### Hours
+| Day | Hours |
+|-----|-------|
+| Monday | 9 AM - 1 PM, 4:30 - 7 PM |
+| Tuesday | CLOSED |
+| Wednesday - Saturday | 9 AM - 1 PM, 4:30 - 7 PM |
+| Sunday | 9 AM - 3 PM |
 
-## 🚀 Deployment Guide
+## Deployment
 
-### Quick Deploy
-1. Upload `index.html`, `styles.css`, and `doctor-photo.jpg` to your web server
-2. No build process or compilation needed
-3. Works on any static hosting (GitHub Pages, Netlify, Vercel, Hostinger)
+The site auto-deploys from the `main` branch on GitHub to Vercel.
 
-### Hostinger Specific
-See `HOSTINGER_DEPLOYMENT.md` for detailed Hostinger setup instructions.
-
-### GitHub Pages
-1. Push to repository
-2. Enable Pages in Settings → Pages
-3. Select main branch and root folder
-4. Site will be live at `https://[username].github.io/[repo-name]/`
-
-## 🌐 Browser Compatibility
-
-| Browser | Version | Support |
-|---------|---------|---------|
-| Chrome | 90+ | ✅ Full |
-| Firefox | 88+ | ✅ Full |
-| Safari | 14+ | ✅ Full |
-| Edge | 90+ | ✅ Full |
-| Mobile Safari | iOS 14+ | ✅ Full |
-| Chrome Mobile | Android 10+ | ✅ Full |
-| Samsung Internet | 14+ | ✅ Full |
-
-**Note**: Basic functionality works on all modern browsers. Advanced features (backdrop-filter, smooth scroll) gracefully degrade on older browsers.
-
-## 🔧 Development
+1. Push changes to `main`
+2. Vercel builds and deploys automatically
+3. Live at dranilkumardhar.com within ~1 minute
 
 ### Local Development
 1. Clone the repository
-2. Open `index.html` in a browser
-3. No server required for basic testing
-4. Use Live Server extension in VS Code for auto-reload
+2. Open `index.html` in a browser (or use Live Server in VS Code)
+3. No build step or server required
 
-### Testing Tools
-- `test-status.html`: Debug clinic status calculations
-- `verify-schedule.html`: Verify schedule logic and time zones
-- Browser DevTools for responsive testing
+## Off-Page SEO (Manual Steps)
 
-### Code Style
-- Semantic HTML5 elements
-- BEM-inspired CSS naming
-- ES6+ JavaScript features
-- Comprehensive code comments
+These items require manual setup outside the codebase:
 
-## 📈 Performance Metrics
+- [ ] Google Search Console - verify ownership, submit sitemap
+- [ ] Google Business Profile - claim/create listing with correct NAP
+- [ ] Google Analytics 4 - add tracking
+- [ ] Directory listings (Practo, Lybrate, JustDial) with identical NAP
+- [ ] Google review generation - target 50+ reviews
 
-| Metric | Target | Actual |
-|--------|--------|--------|
-| First Contentful Paint | < 1.5s | 0.8s |
-| Largest Contentful Paint | < 2.5s | 1.2s |
-| Time to Interactive | < 3.5s | 1.5s |
-| Cumulative Layout Shift | < 0.1 | 0.02 |
-| Total Page Size | < 500KB | 195KB |
-| Lighthouse Score | > 90 | 96 |
+## License
 
-## 🔒 Security & Privacy
-
-- No cookies or tracking
-- No external scripts or analytics
-- All resources served over HTTPS
-- No user data collection
-- Contact links use native protocols
-
-## 🤝 Contributing
-
-This is a proprietary website for Dr. Anil Kumar Dhar's clinic. For updates or modifications, please contact the clinic administration.
-
-## 📄 License
-
-© 2024 Dr. Anil Kumar Dhar's Clinic. All rights reserved.
-
-This website and its contents are proprietary to Dr. Anil Kumar Dhar's medical practice. Unauthorized copying, modification, or distribution is prohibited.
-
-## 📞 Support
-
-**For Medical Appointments:**
-- Phone: +91 94191 90388
-- WhatsApp: +91 94191 90388
-- Email: anil7dhar@gmail.com
-
-**For Technical Issues:**
-Contact the clinic administration.
+(c) 2026 Dr. Anil Kumar Dhar's Clinic. All rights reserved.
 
 ---
 
-💻 **Developed with ❤️ by Vishut Dhar**
-
-*Last Updated: December 2024*
+Built by Vishut Dhar

@@ -1,61 +1,90 @@
-# Website Optimization Guide
+# Optimization Guide
 
-This guide documents all optimizations made to improve the website's performance, accessibility, and user experience.
+Documents all optimizations applied to dranilkumardhar.com.
 
-## Completed Improvements ✅
+## Current Lighthouse Scores (February 2026)
 
-### 1. **Performance Optimizations**
-- ✅ **Image Optimization**: Reduced doctor photo from 239KB to 38KB (84% reduction)
-- ✅ **External CSS**: Moved 750+ lines of CSS to external file for browser caching
-- ✅ **Critical CSS**: Kept minimal above-the-fold CSS inline
-- ✅ **Resource Preloading**: Added preload for critical image
+| Category | Score |
+|----------|-------|
+| SEO | 100/100 |
+| Best Practices | 100/100 |
+| Accessibility | 94/100 |
+| Performance | 88/100 |
 
-### 2. **Accessibility Improvements**
-- ✅ **Skip Navigation**: Added skip to main content link
-- ✅ **ARIA Labels**: Added proper ARIA labels to icons and interactive elements
-- ✅ **Keyboard Navigation**: Enhanced JavaScript to support keyboard interactions
-- ✅ **Focus Indicators**: Added visible focus styles in CSS
-- ✅ **Semantic HTML**: Added proper landmarks (main, header with role="banner")
-- ✅ **Image Alt Text**: Improved alt text descriptions
+## Image Optimization
 
-### 3. **SEO Enhancements**
-- ✅ **Structured Data**: Added comprehensive Schema.org markup for MedicalClinic
-- ✅ **Canonical URL**: Added canonical link tag
-- ✅ **Meta Tags**: Already well-optimized for social media
+The doctor photo was the single biggest performance issue. Original file was a 2.16MB PNG saved with a `.jpg` extension.
 
-### 4. **Code Quality**
-- ✅ **DRY Principle**: Created reusable SVG symbol to eliminate duplication
-- ✅ **Clean Structure**: Separated concerns (HTML, CSS, JS)
+| Variant | Dimensions | Size | Use |
+|---------|-----------|------|-----|
+| doctor-photo.webp | 600x900 | 32KB | Hero and About (modern browsers) |
+| doctor-photo.jpg | 600x900 | 57KB | Hero and About (fallback) |
+| doctor-photo-400w.webp | 400x600 | 19KB | Mobile (modern browsers) |
+| doctor-photo-400w.jpg | 400x600 | 31KB | Mobile (fallback) |
+| og-image.jpg | 1200x630 | 67KB | Social sharing previews |
 
-## Remaining Optimizations
+**Total reduction:** 2.16MB to 32KB (98.5% reduction for primary image)
 
-### High Priority
-1. **HTTPS Setup**: Deploy with SSL certificate
-2. **Performance Testing**: Run Lighthouse audit after deployment
-3. **Cross-browser Testing**: Test on Safari, Firefox, Edge
+Images use `<picture>` elements with WebP/JPEG srcset. Hero image has `fetchpriority="high"`, About image has `loading="lazy"`.
 
-### Medium Priority
-1. **Service Worker**: Add for offline functionality
-2. **Minification**: Minify CSS/HTML/JS for production
-3. **GZIP Compression**: Enable on server
+## SEO Optimizations
 
-### Future Enhancements
-1. **Online Booking System**: Integrate appointment scheduling
-2. **Patient Portal**: Add secure login for test results
-3. **Multi-language Support**: Add Hindi translation
-4. **Analytics**: Add privacy-respecting analytics
+### Schema Markup (3 JSON-LD blocks)
+1. **MedicalClinic + Physician** - clinic details, address (NAP), hours, doctor credentials (MBBS/MD/DNB), registration numbers, geo coordinates
+2. **MedicalBusiness** - service catalog with 6 services and pricing
+3. **FAQPage** - 6 frequently asked questions
 
-## Deployment Checklist
-- [ ] Upload optimized files to hosting
-- [ ] Configure SSL certificate
-- [ ] Set up proper caching headers
-- [ ] Submit sitemap to Google Search Console
-- [ ] Test all contact links (phone, WhatsApp, email)
-- [ ] Verify structured data with Google's testing tool
+### Meta Tags
+- Open Graph (title, description, image, URL, type, locale)
+- Twitter Card (summary_large_image)
+- Canonical URL
+- Theme color (#0a0f1c)
+- Language: en-IN
 
-## Performance Metrics
-- **Before**: ~300KB total page weight
-- **After**: ~100KB total page weight
-- **Load Time Improvement**: ~60% faster
-- **Accessibility Score**: Significantly improved
-- **SEO Score**: Enhanced with structured data
+### Technical SEO Files
+- `robots.txt` - allows all crawlers, references sitemap
+- `sitemap.xml` - single URL entry for homepage
+- `404.html` - branded error page with clinic contact info
+- Favicons (ico, 32x32, 16x16, apple-touch-icon) - shown in Google search results
+
+### Contact Obfuscation
+Phone numbers, email, and registration numbers are injected via JavaScript using character codes. This prevents bot scraping while keeping the data readable for users and in schema markup for Google.
+
+## Performance Optimizations
+
+### Caching (vercel.json)
+- Images (.jpg, .webp, .png, .ico): 1 year, immutable
+- CSS: 1 week
+
+### Layout Shift Prevention
+- All images have explicit `width` and `height` attributes
+- Fonts preconnected to Google Fonts
+
+### Remaining Performance Notes
+- **FCP/LCP: 2.8s** - caused by render-blocking Google Fonts CSS (~2s). Acceptable tradeoff for typography quality.
+- **Speed Index: 4.6s** - primarily font loading on slower connections.
+
+## Accessibility
+
+- Skip-to-content link (hidden with `transform: translateY(-100%)`)
+- ARIA labels on all interactive elements
+- Keyboard navigation support
+- Semantic HTML5 landmarks
+- FAQ uses native `<details>/<summary>` (built-in accessibility)
+
+### Known Issues
+- Minor contrast ratio issue on subtitle text in dark hero section
+- Heading order not perfectly sequential in footer (h4 without preceding h3)
+
+## CSS Architecture
+
+Sections use distinct visual treatments to avoid monotony:
+- **Hero:** Dark background with dot texture
+- **Services:** Cool gradient (blue-grey to white) with dot texture and elevated cards
+- **About:** White background
+- **Google Reviews:** Blue tint (`--accent-soft`)
+- **Clinic Info:** Warm grey (`--bg-warm`)
+- **Booking:** Dark theme (matches hero)
+- **Location/Contact:** White with radial blue glow (contact has `overflow: hidden`)
+- **FAQ:** Warm grey with white cards
+- **Footer:** Dark theme
