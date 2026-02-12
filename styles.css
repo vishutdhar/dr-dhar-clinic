@@ -730,58 +730,12 @@ body {
 }
 
 /* ===========================
-   Google Reviews
-   =========================== */
-
-.google-reviews {
-    background: var(--accent-soft);
-    padding: 80px 32px;
-}
-
-.google-reviews-inner {
-    max-width: 640px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.google-reviews-card {
-    background: var(--bg-warm);
-    padding: 44px;
-    border-radius: var(--radius-lg);
-    margin-top: 36px;
-    border: 1px solid var(--border);
-}
-
-.google-reviews-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 20px;
-}
-
-.google-logo-img { height: 26px; }
-
-.google-stars {
-    font-size: 1.5rem;
-    color: #f59e0b;
-    letter-spacing: 2px;
-}
-
-.google-reviews-text {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    margin-bottom: 24px;
-    font-weight: 400;
-}
-
-/* ===========================
    Clinic Information
    =========================== */
 
 .clinic-info {
     padding: 96px 32px;
-    background: var(--bg-warm);
+    background: var(--bg);
 }
 
 .info-grid {
@@ -1522,7 +1476,7 @@ footer {
     .services, .about-doctor, .clinic-info,
     .booking-section, .contact, .faq-section { padding: 72px 20px; }
 
-    .google-reviews, .map-section { padding: 64px 20px; }
+    .map-section { padding: 64px 20px; }
 
     .faq-question { font-size: 0.9rem; padding: 18px 20px; }
     .faq-answer { padding: 0 20px 18px; }
@@ -1566,13 +1520,12 @@ footer {
     .services, .about-doctor, .clinic-info,
     .booking-section, .contact, .faq-section { padding: 56px 16px; }
 
-    .google-reviews, .map-section { padding: 52px 16px; }
+    .map-section { padding: 52px 16px; }
 
     .faq-question { font-size: 0.86rem; padding: 16px; }
     .faq-answer { padding: 0 16px 16px; }
     .faq-answer p { font-size: 0.86rem; }
 
-    .google-reviews-card { padding: 28px 20px; }
     .map-card { padding: 24px 16px; }
 
     .footer-grid {
