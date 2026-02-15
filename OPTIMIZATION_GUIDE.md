@@ -30,9 +30,20 @@ Images use `<picture>` elements with WebP/JPEG srcset. Hero image has `fetchprio
 ## SEO Optimizations
 
 ### Schema Markup (3 JSON-LD blocks)
-1. **MedicalClinic + Physician** - clinic details, address (NAP), hours, doctor credentials (MBBS/MD/DNB), registration numbers, geo coordinates
+1. **MedicalClinic + Physician** - clinic details, address (NAP), hours, doctor credentials (MBBS/MD/DNB), registration numbers, geo coordinates, payment methods
 2. **MedicalBusiness** - service catalog with 6 services and pricing
 3. **FAQPage** - 6 frequently asked questions
+
+### Google Search Console
+- Verified via HTML meta tag (2026-02-12)
+- Sitemap submitted: https://dranilkumardhar.com/sitemap.xml
+
+### Changes (2026-02-12)
+- Removed fake aggregateRating (was claiming 5 stars/100 reviews; actual is 3.1 stars/165 reviews)
+- Removed empty sameAs array from schema
+- Added paymentAccepted field to MedicalClinic schema
+- Removed Google Reviews section from page (business owner request)
+- Changed Clinic Info background from warm grey to white to maintain visual rhythm
 
 ### Meta Tags
 - Open Graph (title, description, image, URL, type, locale)
@@ -82,8 +93,7 @@ Sections use distinct visual treatments to avoid monotony:
 - **Hero:** Dark background with dot texture
 - **Services:** Cool gradient (blue-grey to white) with dot texture and elevated cards
 - **About:** White background
-- **Google Reviews:** Blue tint (`--accent-soft`)
-- **Clinic Info:** Warm grey (`--bg-warm`)
+- **Clinic Info:** White (`--bg`)
 - **Booking:** Dark theme (matches hero)
 - **Location/Contact:** White with radial blue glow (contact has `overflow: hidden`)
 - **FAQ:** Warm grey with white cards

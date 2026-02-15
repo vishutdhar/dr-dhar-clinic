@@ -103,15 +103,21 @@ The site auto-deploys from the `main` branch on GitHub to Vercel.
 2. Open `index.html` in a browser (or use Live Server in VS Code)
 3. No build step or server required
 
-## Off-Page SEO (Manual Steps)
+## Off-Page SEO Status (Updated: 2026-02-12)
 
-These items require manual setup outside the codebase:
+- [x] Google Search Console - verified (HTML tag method), sitemap submitted (2026-02-12)
+- [ ] Google Analytics 4 - property needs to be created, then tracking script added to index.html
+- [ ] Google Business Profile - needs business owner's consent and verification (email sent 2026-02-12)
+- [ ] Directory listings (Practo, Lybrate, JustDial) - needs business owner's consent
+- [ ] Google review strategy - current rating is 3.1 stars / 165 reviews, needs improvement to 4.0+
 
-- [ ] Google Search Console - verify ownership, submit sitemap
-- [ ] Google Business Profile - claim/create listing with correct NAP
-- [ ] Google Analytics 4 - add tracking
-- [ ] Directory listings (Practo, Lybrate, JustDial) with identical NAP
-- [ ] Google review generation - target 50+ reviews
+## DNS & Hosting Status (Updated: 2026-02-12)
+
+- **Registrar:** Hostinger
+- **Nameservers:** Changed to `ns1.vercel-dns.com` / `ns2.vercel-dns.com` (2026-02-12, propagating)
+- **Hosting:** Vercel (auto-deploy from GitHub main branch)
+- **Vercel Authentication:** Disabled (re-enable with Standard Protection after DNS propagation completes)
+- **SSL:** Managed by Vercel
 
 ## License
 
