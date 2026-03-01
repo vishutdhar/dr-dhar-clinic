@@ -10,6 +10,8 @@
     box-sizing: border-box;
 }
 
+html { scroll-behavior: smooth; }
+
 :root {
     /* Fonts */
     --font-display: 'Instrument Serif', Georgia, serif;
@@ -78,6 +80,7 @@ body {
 *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto !important; }
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;

@@ -303,7 +303,7 @@
         </div>
     </header>
 
-    <main id="main">
+    <main id="main" tabindex="-1">
     <!-- Hero -->
     <section class="hero" aria-labelledby="doctor-name">
         <div class="hero-container">
@@ -588,7 +588,7 @@
                 <p>Jammu & Kashmir - 180016</p>
                 <p class="address-landmark"><strong>Landmark:</strong> Near Canal Road</p>
             </div>
-            <a href="https://www.google.com/maps/search/Dr.+Anil+Kumar+Dhar+Clinic,+House+No.+48,+Bhagwati+Nagar,+Canal+Road,+Jammu,+Jammu+and+Kashmir+180016" target="_blank" class="map-btn">
+            <a href="https://www.google.com/maps/search/Dr.+Anil+Kumar+Dhar+Clinic,+House+No.+48,+Bhagwati+Nagar,+Canal+Road,+Jammu,+Jammu+and+Kashmir+180016" target="_blank" rel="noopener noreferrer" class="map-btn">
                 Get Directions on Google Maps
             </a>
         </div>
@@ -664,7 +664,7 @@
             <details class="faq-item">
                 <summary class="faq-question">Where is Dr. Dhar's clinic located in Jammu?</summary>
                 <div class="faq-answer">
-                    <p>The clinic is located at House No. 48, Bhagwati Nagar, Canal Road, Jammu, J&K - 180016. The landmark is near Canal Road. You can <a href="https://www.google.com/maps/search/Dr.+Anil+Kumar+Dhar+Clinic,+House+No.+48,+Bhagwati+Nagar,+Canal+Road,+Jammu,+Jammu+and+Kashmir+180016" target="_blank">get directions on Google Maps</a>.</p>
+                    <p>The clinic is located at House No. 48, Bhagwati Nagar, Canal Road, Jammu, J&K - 180016. The landmark is near Canal Road. You can <a href="https://www.google.com/maps/search/Dr.+Anil+Kumar+Dhar+Clinic,+House+No.+48,+Bhagwati+Nagar,+Canal+Road,+Jammu,+Jammu+and+Kashmir+180016" target="_blank" rel="noopener noreferrer">get directions on Google Maps</a>.</p>
                 </div>
             </details>
             <details class="faq-item">
@@ -819,23 +819,6 @@
         updateClinicStatus();
         setInterval(updateClinicStatus, 60000);
 
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const t = document.querySelector(this.getAttribute('href'));
-                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-            anchor.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    const t = document.querySelector(this.getAttribute('href'));
-                    if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); t.focus(); }
-                }
-            });
-        });
-
-        document.querySelectorAll('.whatsapp').forEach(b => b.addEventListener('click', function() {}));
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
         }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
@@ -847,5 +830,10 @@
         window.addEventListener('scroll', () => { btt.classList.toggle('visible', window.pageYOffset > 300); });
         btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     </script>
+    <noscript>
+        <div style="position:fixed;bottom:0;left:0;right:0;background:#0a0f1c;color:#f3f4f6;text-align:center;padding:14px 20px;font-family:-apple-system,sans-serif;font-size:0.9rem;z-index:9999;border-top:2px solid #1d5ba6">
+            To book an appointment, call <strong>94191 90388</strong> or email <strong>anil7dhar@gmail.com</strong>
+        </div>
+    </noscript>
 </body>
 </html>
