@@ -26,14 +26,11 @@
 5. Vercel Authentication: Disabled on dr-dhar-clinic (re-enable Standard Protection after DNS propagates)
 6. Vercel Authentication: Enabled Standard Protection on dr-dhar-prescription (private tool)
 
+### Scope Decision (2026-07-05, FINAL)
+**Dr. Dhar DECLINED all off-page work: Google Business Profile, directory listings (Practo, Lybrate, JustDial), and the Google review strategy. Do NOT propose these again.** This site's scope is on-site SEO optimization only.
+
 ### Resume Here (Next Steps)
-1. **Google Analytics 4** - User needs to create a GA4 property at analytics.google.com, get the Measurement ID (G-XXXXXX), then add the tracking script to index.html
-2. **DNS propagation check** - Run `dig NS dranilkumardhar.com +short` to verify nameservers changed to vercel-dns.com. Once confirmed, re-enable Standard Protection on Vercel for dr-dhar-clinic
-3. **Waiting on business owner (Dr. Dhar) response for:**
-   - Google Business Profile setup (needs his consent + verification call to clinic)
-   - Directory listings on Practo, Lybrate, JustDial (needs his consent)
-   - Google review improvement strategy (3.1 stars -> target 4.0+)
-4. **Future SEO improvements:**
+1. **On-site SEO only** - technical SEO, on-page content/keyword optimization, structured data, Search Console monitoring
+2. **Future on-site SEO improvements:**
    - Add dedicated pages per specialty for better keyword targeting
-   - Add Google Analytics to understand visitor behavior
    - Consider adding social media profiles to schema (sameAs) if any exist
