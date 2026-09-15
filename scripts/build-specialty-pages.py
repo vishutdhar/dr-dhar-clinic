@@ -254,7 +254,7 @@ def render(page: dict) -> str:
             <p class="article-lede">{esc(page['lede'])}</p>
             <div class="hero-actions article-actions">
                 <a href="https://wa.me/91{PHONE_ENT}" data-obf-href="wa" class="btn btn-whatsapp whatsapp">WhatsApp to Book</a>
-                <a href="tel:+91{PHONE_ENT}" data-obf-href="tel" class="btn btn-ghost">Call Clinic</a>
+                <a href="tel:+91{PHONE_ENT}" data-obf-href="tel" class="btn btn-dark">Call Clinic</a>
             </div>
 
 {sections}
@@ -328,6 +328,12 @@ def render(page: dict) -> str:
             </div>
         </div>
     </footer>
+
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+        </svg>
+    </button>
 
     <script src="/script.js" defer></script>
     <noscript>
