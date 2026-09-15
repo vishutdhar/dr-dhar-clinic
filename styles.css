@@ -514,7 +514,7 @@ body {
 
 .btn-whatsapp {
     background: var(--whatsapp);
-    color: white;
+    color: var(--text);
     box-shadow: 0 2px 8px rgba(37, 211, 102, 0.25);
 }
 .btn-whatsapp:hover {
@@ -1247,7 +1247,7 @@ footer {
 }
 
 .footer-hours {
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(255, 255, 255, 0.88);
     font-size: 0.84rem;
     font-weight: 600;
     margin-top: 8px;
@@ -1256,13 +1256,13 @@ footer {
 .footer-hours:first-of-type { margin-top: 0; }
 
 .footer-hours-detail {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.72);
     font-size: 0.82rem;
     margin-top: 2px;
 }
 
 .footer-closed {
-    color: rgba(220, 38, 38, 0.65);
+    color: #fca5a5;
     margin-top: 10px;
 }
 
@@ -1301,7 +1301,7 @@ footer {
 
 .footer-attribution {
     margin-top: 6px;
-    opacity: 0.25;
+    color: rgba(255, 255, 255, 0.6);
     font-size: 0.76rem;
     font-weight: 400;
 }
