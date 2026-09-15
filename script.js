@@ -85,5 +85,7 @@ document.querySelectorAll('section').forEach(s => { s.classList.add('fade-in-sec
 document.querySelectorAll('.services-grid, .contact-grid').forEach(g => observer.observe(g));
 
 const btt = document.getElementById('back-to-top');
-window.addEventListener('scroll', () => { btt.classList.toggle('visible', window.pageYOffset > 300); });
-btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+if (btt) {
+    window.addEventListener('scroll', () => { btt.classList.toggle('visible', window.pageYOffset > 300); });
+    btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
