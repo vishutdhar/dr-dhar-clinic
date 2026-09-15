@@ -1616,14 +1616,14 @@ a.logo {
 
 .breadcrumb {
     font-size: 0.85rem;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     display: flex;
     gap: 10px;
     margin-bottom: 24px;
 }
 
 .breadcrumb a {
-    color: var(--text-muted);
+    color: var(--text-secondary);
     text-decoration: none;
 }
 
@@ -1644,7 +1644,7 @@ a.logo {
 .article-lede {
     font-size: 1.15rem;
     line-height: 1.65;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     margin-bottom: 28px;
 }
 
@@ -1666,7 +1666,7 @@ a.logo {
 
 .article-section p {
     line-height: 1.7;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     margin-bottom: 14px;
 }
 
@@ -1691,7 +1691,7 @@ a.logo {
 
 .disclaimer {
     font-size: 0.85rem;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     border-top: 1px solid var(--border);
     padding-top: 20px;
     margin-top: 48px;
