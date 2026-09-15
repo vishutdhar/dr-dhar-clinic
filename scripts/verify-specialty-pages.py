@@ -185,6 +185,88 @@ for page in gen.PAGES:
 v_index = re.search(r'styles\.css\?v=(\d+)', index).group(1)
 check(v_index == gen.CSS_VERSION, f"CSS version differs: index.html {v_index}, generator {gen.CSS_VERSION}")
 
+# 7. Expectations derived from the home page alone, never from the generator.
+#    (a) fee: the check-up Offer price; (b) schedule: OpeningHoursSpecification;
+#    (c) address: the PostalAddress; (d) inclusions: the check-up card text;
+#    (e) script.js runtime schedule and link prefixes.
+_offer = next(o for o in home_clinic["hasOfferCatalog"]["itemListElement"] if o["itemOffered"]["name"] == "General Check-up")
+expected_fee = f"₹{int(_offer['price']):,}"
+check(gen.FEE == expected_fee, f"generator fee {gen.FEE} differs from the home Offer price {expected_fee}")
+_addr = home_clinic["address"]
+expected_where = f"{_addr['streetAddress']}, {_addr['addressLocality']}, J&K {_addr['postalCode']}"
+_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+def _clock(t):
+    h, m = (int(x) for x in t.split(":")); suffix = "AM" if h < 12 else "PM"; h12 = h % 12 or 12
+    return f"{h12}:{m:02d} {suffix}" if m else f"{h12} {suffix}"
+home_schedule = {d: [] for d in _days}
+for spec in home_clinic["openingHoursSpecification"]:
+    for d in spec["dayOfWeek"]:
+        home_schedule[d].append((spec["opens"], spec["closes"]))
+closed_days = [d for d in _days if not home_schedule[d]]
+home_checkup_text = _h.unescape(re.search(r"<h3>General Check-up</h3>\s*<p>(.*?)</p>", index, re.S).group(1)).lower()
+INCLUSION_WORDS = {"blood pressure": "blood pressure", "blood sugar": "blood sugar", "cholesterol": "cholesterol", "consultation": "consultation", "physical examination": "physical examination"}
+
+for page in gen.PAGES:
+    html = gen.render(page)
+    text = _h.unescape(re.sub(r"<[^>]+>", " ", html))
+    text = re.sub(r"\s+", " ", text)
+    # (a) fee amount on the page equals the home Offer price, and each priced
+    #     sentence names the check-up and no other service.
+    for m in re.finditer(r"(?:₹|Rs\.?|INR)\s?[\d,]+", text):
+        check(m.group(0) == expected_fee, f"{page['slug']}: fee '{m.group(0)}' is not the home Offer price {expected_fee}")
+        sentence = text[text.rfind(".", 0, m.start()) + 1 : text.find(".", m.end()) + 1].lower()
+        check("check-up" in sentence, f"{page['slug']}: priced sentence does not name the check-up: '{sentence.strip()[:80]}'")
+        check(not re.search(r"vaccin|diabetes consultation|consultation cost|per vaccine|heart|blood pressure care", sentence),
+              f"{page['slug']}: priced sentence names another service: '{sentence.strip()[:80]}'")
+    # (b) the hours sentence states every open day's intervals and every closed day,
+    #     and no day name appears anywhere else on the page.
+    for d in _days:
+        for opens, closes in home_schedule[d]:
+            check(f"{_clock(opens)} to {_clock(closes)}" in gen.HOURS, f"hours sentence lacks {d} {opens}-{closes}")
+    for d in closed_days:
+        check(f"Closed on {d}s" in gen.HOURS, f"hours sentence does not say closed on {d}s")
+    covered = set()
+    for a_day, b_day in re.findall(r"(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday) to (Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)", gen.HOURS):
+        covered.update(_days[_days.index(a_day):_days.index(b_day) + 1])
+    covered.update(d for d in _days if re.search(r"\b" + d + r"\b", gen.HOURS))
+    for d in [d for d in _days if home_schedule[d]]:
+        check(d in covered, f"hours sentence does not cover {d}")
+    stripped = re.sub(r"\s+", " ", _h.unescape(re.sub(r"<[^>]+>", " ", html.replace(gen.HOURS, "").replace(gen.FOOTER_HOURS_BLOCK, ""))))
+    stray_days = [d for d in _days if re.search(r"\b" + d + r"s?\b", stripped)]
+    check(not stray_days, f"{page['slug']}: day names outside the home-derived hours: {stray_days}")
+    # (c) the visible address equals the home PostalAddress.
+    where = _h.unescape(re.search(r"<strong>Where:</strong> (.*?)\.</p>", html).group(1))
+    check(where == expected_where, f"{page['slug']}: visit address '{where}' differs from the home PostalAddress")
+    # (d) every check-up inclusion the page promises is in the home check-up card.
+    for sentence in re.split(r"(?<=[.!?])\s+", text):
+        s = sentence.lower()
+        if "check-up" in s and ("include" in s or "includes" in s):
+            for word in INCLUSION_WORDS:
+                if word in s:
+                    check(word in home_checkup_text, f"{page['slug']}: check-up promises '{word}', not in the home card")
+    # (e) full contact destinations, country code included.
+    for href in re.findall(r'href="((?:tel:|sms:|https://wa\.me/|mailto:)[^"]*)"', html):
+        dest = _h.unescape(href).split("?")[0]
+        if dest.startswith("tel:"):
+            check(dest == f"tel:{home_clinic['telephone']}", f"{page['slug']}: {dest} is not tel:{home_clinic['telephone']}")
+        elif dest.startswith("sms:"):
+            check(dest == f"sms:{home_clinic['telephone']}", f"{page['slug']}: {dest} is not sms:{home_clinic['telephone']}")
+        elif dest.startswith("https://wa.me/"):
+            check(dest == f"https://wa.me/{home_clinic['telephone'].lstrip('+')}", f"{page['slug']}: {dest} is not the clinic WhatsApp")
+
+# 7e. script.js: runtime link prefixes and the open/closed schedule match the home page.
+cc = home_clinic["telephone"][:3]  # +91
+check(f"el.href='tel:{cc}'+p" in js and f"el.href='sms:{cc}'+p" in js and f"el.href='https://wa.me/{cc.lstrip('+')}'+p" in js,
+      "script.js dials a different country code than the home page")
+js_sched = {}
+for m in re.finditer(r"^\s*(\d): \[(.*?)\],?$", js, re.M):
+    js_sched[int(m.group(1))] = [(int(a), int(b)) for a, b in re.findall(r"start: (\d+), end: (\d+)", m.group(2))]
+js_day = {"Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
+mins = lambda t: int(t[:2]) * 60 + int(t[3:])
+for d in _days:
+    expected = sorted((mins(o), mins(c)) for o, c in home_schedule[d])
+    check(sorted(js_sched.get(js_day[d], [])) == expected, f"script.js schedule for {d} differs from the home OpeningHoursSpecification")
+
 if failures:
     print("\n".join(f"FAIL {f}" for f in failures)); sys.exit(1)
 print(f"ok: {len(gen.PAGES)} pages verified against index.html")
