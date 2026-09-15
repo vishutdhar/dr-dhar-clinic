@@ -4,13 +4,17 @@ and with each other. Exit code 1 on any drift.
 
   python3 scripts/verify-specialty-pages.py
 """
-import re, sys, json, pathlib
-import importlib.util
+import re, sys, json, pathlib, types
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
-spec = importlib.util.spec_from_file_location("gen", ROOT / "scripts" / "build-specialty-pages.py")
-gen = importlib.util.module_from_spec(spec); spec.loader.exec_module(gen)
+# Execute the generator's source directly rather than importing it: an import
+# would go through the bytecode cache, which is keyed by mtime at one-second
+# resolution, so an edit made within a second of the last run would verify
+# stale code.
+gen = types.ModuleType("gen")
+gen.__file__ = str(ROOT / "scripts" / "build-specialty-pages.py")
+exec(compile((ROOT / "scripts" / "build-specialty-pages.py").read_text(encoding="utf-8"), gen.__file__, "exec"), gen.__dict__)
 
 index = (ROOT / "index.html").read_text(encoding="utf-8")
 failures = []
@@ -69,6 +73,49 @@ for page in gen.PAGES:
           f"{page['slug']}: visible FAQ and FAQPage differ")
     check(html.count('id="back-to-top"') == 1, f"{page['slug']}: back-to-top button missing (script.js binds it)")
     check('id="clinic-status"' in html, f"{page['slug']}: status badge missing (script.js binds it)")
+
+# 5b. Every fee, hours string and phone number that appears on a page appears on
+#     index.html too, and the page schema's clinic facts equal the home schema's.
+home_ld = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', index, re.S).group(1))
+home_clinic = next(n for n in home_ld["@graph"] if n["@type"] == "MedicalClinic")
+check(gen.CLINIC["telephone"] == home_clinic["telephone"], "schema telephone differs from index.html")
+for k in ("streetAddress", "addressLocality", "postalCode"):
+    check(gen.CLINIC["address"][k] == home_clinic["address"][k], f"schema address {k} differs from index.html")
+for page in gen.PAGES:
+    html = gen.render(page)
+    for fee in set(re.findall(r"₹[\d,]+", html)):
+        check(fee in index, f"{page['slug']}: fee {fee} not on index.html")
+    for hours in set(re.findall(r"\d{1,2}(?::\d{2})? ?[AP]M(?: - \d{1,2}(?::\d{2})? ?[AP]M)?", html)):
+        check(hours in index, f"{page['slug']}: hours '{hours}' not on index.html")
+    for phone in set(re.findall(r"\b\d{5} \d{5}\b", html)):
+        check(phone in index, f"{page['slug']}: phone {phone} not on index.html")
+    check(html.count("+919419190388") == html.count('"telephone"'), f"{page['slug']}: schema telephone changed")
+
+# 5c. Elements and script that script.js depends on at runtime.
+for page in gen.PAGES:
+    html = gen.render(page)
+    check('<script src="/script.js" defer></script>' in html, f"{page['slug']}: script.js not loaded")
+    badge = re.search(r'<div class="status-badge" id="clinic-status">(.*?)</div>', html, re.S)
+    check(badge is not None and 'class="status-dot"' in badge.group(1) and 'class="status-text"' in badge.group(1),
+          f"{page['slug']}: status badge lacks .status-dot or .status-text (updateClinicStatus throws)")
+
+# 5d. Rendered metadata: lengths and parity across title, description, OG, Twitter and JSON-LD.
+import html as _h
+for page in gen.PAGES:
+    html = gen.render(page)
+    title = _h.unescape(re.search(r"<title>(.*?)</title>", html).group(1))
+    desc = _h.unescape(re.search(r'<meta name="description" content="([^"]*)"', html).group(1))
+    check(len(title) <= 60, f"{page['slug']}: rendered title {len(title)} chars")
+    check(len(desc) <= 160, f"{page['slug']}: rendered description {len(desc)} chars")
+    for prop in ("og:title", "twitter:title"):
+        m = re.search(r'(?:property|name)="' + prop + r'" content="([^"]*)"', html)
+        check(m and _h.unescape(m.group(1)) == title, f"{page['slug']}: {prop} differs from <title>")
+    for prop in ("og:description", "twitter:description"):
+        m = re.search(r'(?:property|name)="' + prop + r'" content="([^"]*)"', html)
+        check(m and _h.unescape(m.group(1)) == desc, f"{page['slug']}: {prop} differs from description")
+    ld = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1))
+    wp = next(n for n in ld["@graph"] if n["@type"] == "MedicalWebPage")
+    check(wp["name"] == title and wp["description"] == desc, f"{page['slug']}: MedicalWebPage name/description differ from metadata")
 
 # 6. The stylesheet version the pages request is the one index.html requests.
 v_index = re.search(r'styles\.css\?v=(\d+)', index).group(1)
