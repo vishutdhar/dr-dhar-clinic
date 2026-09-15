@@ -30,22 +30,27 @@ for page in gen.PAGES:
     if path.exists():
         check(path.read_text(encoding="utf-8") == gen.render(page), f"{path.name} is stale: run scripts/build-specialty-pages.py")
 
-# 2. Shared contact and hours facts match index.html byte for byte.
-for token, label in [
-    (gen.PHONE_ENT, "phone entity"),
-    (gen.PHONE_DISPLAY_ENT, "displayed phone"),
-    (gen.EMAIL_ENT, "email entity"),
-    ("House No. 48, Bhagwati Nagar, Canal Road", "street address"),
-    ("9 AM - 1 PM, 4:30 - 7 PM", "weekday hours"),
-    ("9 AM - 3 PM", "Sunday hours"),
-    ("Tuesday: Closed", "closed day"),
-    ("₹1,000", "check-up fee"),
-]:
-    check(token in index, f"{label} not found in index.html")
-    for page in gen.PAGES:
-        html = gen.render(page)
-        if label in ("phone entity", "displayed phone", "email entity", "street address", "weekday hours", "Sunday hours", "closed day"):
-            check(token in html, f"{page['slug']}: {label} missing")
+# 2. Shared contact facts, parsed from index.html independently of the generator,
+#    appear on every page in the same encoded form the home page uses.
+home_ld = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', index, re.S).group(1))
+home_clinic = next(n for n in home_ld["@graph"] if n["@type"] == "MedicalClinic")
+home_digits = home_clinic["telephone"].removeprefix("+91")
+home_display = f"{home_digits[:5]} {home_digits[5:]}"
+import html as _h
+home_email = _h.unescape(re.search(r'data-obf="email">([^<]+)<', index).group(1))
+ent = lambda t: "".join(f"&#{ord(c)};" for c in t)
+check(gen._DIGITS == home_digits and gen.PHONE_DISPLAY == home_display and gen.EMAIL == home_email, "generator facts differ from index.html")
+for page in gen.PAGES:
+    html = gen.render(page)
+    for token, label in [(ent(home_digits), "phone entity"), (ent(home_display), "displayed phone"), (ent(home_email), "email entity")]:
+        check(token in html, f"{page['slug']}: {label} missing")
+
+# 2b. script.js, which rewrites the contact details at runtime, carries the same
+#     phone and email as the home page.
+js = (ROOT / "script.js").read_text(encoding="utf-8")
+codes = lambda name: "".join(chr(int(c)) for c in re.search(r"var " + name + r" = \[([\d,]+)\]", js).group(1).split(","))
+check(codes("p") == home_digits, "script.js phone differs from index.html")
+check(codes("e") == home_email, "script.js email differs from index.html")
 
 # 3. Every service the pages describe is a service index.html lists.
 for name in ["General Check-up", "Diabetes Care", "Heart & BP Care", "Vaccination", "In-house Pharmacy"]:
@@ -76,8 +81,6 @@ for page in gen.PAGES:
 
 # 5b. Every fee, hours string and phone number that appears on a page appears on
 #     index.html too, and the page schema's clinic facts equal the home schema's.
-home_ld = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', index, re.S).group(1))
-home_clinic = next(n for n in home_ld["@graph"] if n["@type"] == "MedicalClinic")
 check(gen.CLINIC["telephone"] == home_clinic["telephone"], "schema telephone differs from index.html")
 for k in ("streetAddress", "addressLocality", "postalCode"):
     check(gen.CLINIC["address"][k] == home_clinic["address"][k], f"schema address {k} differs from index.html")
@@ -89,7 +92,6 @@ for page in gen.PAGES:
         check(hours in index, f"{page['slug']}: hours '{hours}' not on index.html")
     for phone in set(re.findall(r"\b\d{5} \d{5}\b", html)):
         check(phone in index, f"{page['slug']}: phone {phone} not on index.html")
-    check(html.count("+919419190388") == html.count('"telephone"'), f"{page['slug']}: schema telephone changed")
 
 # 5c. Elements and script that script.js depends on at runtime.
 for page in gen.PAGES:
@@ -118,16 +120,29 @@ for page in gen.PAGES:
     check(wp["name"] == title and wp["description"] == desc, f"{page['slug']}: MedicalWebPage name/description differ from metadata")
 
 # 5e. No fee, phone number, hours or address component other than the home page's.
-home_phone_digits = gen._DIGITS
+home_phone_digits = home_digits
 for page in gen.PAGES:
     html = gen.render(page)
     text = _h.unescape(re.sub(r"<[^>]+>", " ", html))
-    for fee in set(re.findall(r"(?:₹|Rs\.?|INR)\s?[\d,]+", text)):
-        check(fee == gen.FEE, f"{page['slug']}: fee '{fee}' is not the home page fee {gen.FEE}")
+    # Fees: only the home page's amount, and only in a sentence about the check-up it prices.
+    for m in re.finditer(r"(?:₹|Rs\.?|INR)\s?[\d,]+", text):
+        check(m.group(0) == gen.FEE, f"{page['slug']}: fee '{m.group(0)}' is not the home page fee {gen.FEE}")
+        sentence = text[text.rfind(".", 0, m.start()) + 1 : text.find(".", m.end()) + 1]
+        check("check-up" in sentence.lower(), f"{page['slug']}: fee stated for something other than the check-up: '{sentence.strip()[:80]}'")
     for num in set(re.findall(r"(?<![\d])(?:\+?91[ -]?)?\d{5}[ -]?\d{5}(?![\d])", text)):
         check(re.sub(r"\D", "", num).endswith(home_phone_digits), f"{page['slug']}: phone '{num}' is not the clinic phone")
-    for t in set(re.findall(r"\d{1,2}(?::\d{2})? ?[AP]M", text)):
-        check(t in gen.HOURS or t in index, f"{page['slug']}: time '{t}' not in the home page hours")
+    # Hours: every clock time on the page lives inside the generated hours sentence
+    # or the footer block copied from the home page; nowhere else may state hours.
+    stripped = html.replace(gen.HOURS, "").replace(gen.FOOTER_HOURS_BLOCK, "")
+    stray = re.findall(r"\d{1,2}(?::\d{2})? ?[AP]M", _h.unescape(re.sub(r"<[^>]+>", " ", stripped)))
+    check(not stray, f"{page['slug']}: hours stated outside the home-derived sentence: {stray}")
+    # Contact links: every tel/sms/wa/mailto destination decodes to the home phone or email.
+    for href in re.findall(r'href="((?:tel:|sms:|https://wa\.me/|mailto:)[^"]*)"', html):
+        dest = _h.unescape(href)
+        if dest.startswith("mailto:"):
+            check(dest.split("?")[0] == f"mailto:{home_email}", f"{page['slug']}: mailto destination {dest} is not the clinic email")
+        else:
+            check(re.sub(r"\D", "", dest.split("?")[0]).endswith(home_phone_digits), f"{page['slug']}: link {dest[:40]} does not dial the clinic")
     when = re.search(r"<strong>When:</strong> (.*?)</p>", html).group(1)
     check(when == gen.HOURS, f"{page['slug']}: visit hours differ from the home schema")
     where = _h.unescape(re.search(r"<strong>Where:</strong> (.*?)\.</p>", html).group(1))

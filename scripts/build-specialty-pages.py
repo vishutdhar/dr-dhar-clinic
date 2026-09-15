@@ -414,7 +414,7 @@ def render(page: dict) -> str:
     <script src="/script.js" defer></script>
     <noscript>
         <div class="noscript-banner">
-            To book an appointment, call <strong>{PHONE_DISPLAY}</strong> or email <strong>anil7dhar@gmail.com</strong>
+            To book an appointment, call <strong>{PHONE_DISPLAY}</strong> or email <strong>{EMAIL}</strong>
         </div>
     </noscript>
 </body>
