@@ -1216,7 +1216,8 @@ footer {
     color: white;
 }
 
-.footer-col h4 {
+.footer-col h4,
+.footer-col .footer-heading {
     font-family: var(--font-body);
     font-size: 0.78rem;
     font-weight: 600;

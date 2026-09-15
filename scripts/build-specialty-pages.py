@@ -14,6 +14,7 @@ CSS_VERSION = "20260915"
 PHONE_ENT = "&#57;&#52;&#49;&#57;&#49;&#57;&#48;&#51;&#56;&#56;"          # 9419190388
 PHONE_DISPLAY_ENT = "&#57;&#52;&#49;&#57;&#49;&#32;&#57;&#48;&#51;&#56;&#56;"  # 94191 90388
 TODAY = datetime.date.today().isoformat()
+EMAIL_ENT = "&#97;&#110;&#105;&#108;&#55;&#100;&#104;&#97;&#114;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;"  # anil7dhar@gmail.com
 
 CLINIC = {
     "@type": "MedicalClinic",
@@ -46,12 +47,12 @@ PAGES = [
             ("The general check-up",
              "<p>The clinic's general check-up costs <strong>₹1,000</strong> and includes a physical examination, blood pressure measurement, fasting and post-meal blood sugar testing, cholesterol screening and a detailed consultation with personalised advice. It is the right starting point if you have not seen a doctor in a while, have a family history of diabetes or heart disease, or simply want a baseline.</p>"),
             ("What to bring",
-             "<p>Any previous medical reports, a list of the medicines you take (or the strips themselves), and, if you have them, recent blood test results. If you are coming for a check-up that includes fasting blood sugar, come without breakfast; the post-meal reading is taken after you eat.</p>"),
+             "<p>Any previous medical reports, a list of the medicines you take (or the strips themselves), and, if you have them, recent blood test results. If your check-up includes a fasting blood sugar test, ask the clinic when you book how long to fast and what to do about any medicines you take that morning; do not stop a medicine on your own.</p>"),
             ("When not to wait for an appointment",
              "<p>Chest pain, sudden weakness or numbness on one side, difficulty speaking, severe breathlessness, or a very high fever with confusion are emergencies. Go to the nearest hospital emergency department rather than waiting for a clinic slot.</p>"),
         ],
         "faqs": [
-            ("Do I need a referral to see Dr. Dhar?", "No. Anyone can book directly by phone, WhatsApp or SMS on 94191 90388."),
+            ("How do I book a consultation?", "By phone, WhatsApp or SMS on 94191 90388, with your name and preferred time. The clinic staff confirm the appointment."),
             ("What does the general check-up cost?", "₹1,000. It includes the examination, blood pressure, fasting and post-meal blood sugar, cholesterol screening and the consultation."),
             ("Which days is the clinic open?", "Monday and Wednesday to Saturday, 9 AM to 1 PM and 4:30 PM to 7 PM; Sunday 9 AM to 3 PM. The clinic is closed on Tuesdays."),
         ],
@@ -66,11 +67,11 @@ PAGES = [
         "about_condition": "Diabetes mellitus",
         "sections": [
             ("What diabetes care involves here",
-             "<p>Diabetes is managed over years, not in one visit. The clinic tracks <strong>HbA1c</strong> (the three-month average of your blood sugar) at regular intervals, checks fasting and post-meal sugar, reviews your medicines and adjusts insulin doses when readings call for it. Diet advice is personalised rather than a printed sheet, because a plan you cannot follow is not a plan.</p><p>Just as important is watching for complications early: blood pressure and cholesterol, kidney function, and the eye and foot problems that diabetes can cause when sugar stays high for a long time. Catching these early is the point of regular follow-up.</p>"),
+             "<p>Diabetes is managed over years, not in one visit. The clinic tracks <strong>HbA1c</strong> (the three-month average of your blood sugar) at regular intervals, checks fasting and post-meal sugar, reviews your medicines and adjusts insulin doses when readings call for it. Diet planning is personalised to what you eat.</p><p>Just as important is long-term prevention of complications. Diabetes can affect the heart, kidneys, eyes and feet when sugar stays high for years, and the doctor advises which checks are due so that problems are caught early. That is the point of regular follow-up.</p>"),
             ("Who should come",
              "<p>Anyone already diagnosed with diabetes who wants one doctor to follow their control over time. Anyone with symptoms that suggest it: unusual thirst, passing urine often, tiredness, blurred vision, wounds that heal slowly, or unexplained weight loss. And anyone with a strong family history who wants to be screened; the general check-up includes fasting and post-meal blood sugar.</p>"),
             ("What to bring",
-             "<p>Your glucometer log if you keep one, recent HbA1c and blood reports, the medicines or insulin you use with their doses, and a note of any low-sugar episodes. If your visit includes a fasting test, come without breakfast and bring something to eat afterwards.</p>"),
+             "<p>Your glucometer log if you keep one, recent HbA1c and blood reports, the medicines or insulin you use with their doses, and a note of any low-sugar episodes. If your visit includes a fasting test, ask the clinic when you book how long to fast and what to do about your diabetes medicines or insulin that morning; skipping a meal while on them can drop your sugar too low, so do not decide this alone.</p>"),
             ("The pharmacy on site",
              "<p>Prescribed medicines and insulin are available from the clinic's own pharmacy immediately after the consultation, so a change in dose does not mean a second trip.</p>"),
         ],
@@ -84,13 +85,13 @@ PAGES = [
     {
         "slug": "bp-and-heart-care-jammu",
         "title": "Blood Pressure and Heart Care in Jammu | Dr. Anil Kumar Dhar",
-        "description": "Hypertension treatment and heart risk care in Jammu with Dr. Anil Kumar Dhar, MBBS MD DNB: BP monitoring, cholesterol management, cardiovascular risk assessment.",
+        "description": "Hypertension treatment and heart risk care in Jammu with Dr. Anil Kumar Dhar, MBBS MD DNB: BP monitoring, cholesterol management and cardiovascular risk review.",
         "h1": "Blood Pressure and Heart Care in Jammu",
-        "lede": "High blood pressure rarely announces itself, which is why it is measured at every visit here. Dr. Anil Kumar Dhar treats hypertension, manages cholesterol and assesses cardiovascular risk at his internal medicine clinic on Canal Road, Jammu, with medication chosen on evidence-based protocols.",
+        "lede": "High blood pressure rarely announces itself, which is why it is worth having measured. Dr. Anil Kumar Dhar treats hypertension, manages cholesterol and assesses cardiovascular risk at his internal medicine clinic on Canal Road, Jammu, with medication chosen on evidence-based protocols.",
         "about_condition": "Hypertension",
         "sections": [
             ("What blood pressure care involves here",
-             "<p>Blood pressure is measured properly, seated and rested, and compared with your readings at home if you take them. If treatment is needed, the doctor starts or adjusts medicines and follows up until the numbers are where they should be. Cholesterol is checked and managed alongside, because blood pressure and cholesterol together decide most of the risk to the heart.</p><p>A cardiovascular risk assessment puts these together with your age, sugar, weight, smoking and family history to estimate where you stand and what would change it most.</p>"),
+             "<p>Blood pressure is measured at the visit, and your readings at home are useful to bring if you take them. If treatment is needed, the doctor starts or adjusts medicines and reviews the result at follow-up. Cholesterol is checked and managed alongside, because blood pressure and cholesterol are two of the main things that decide the risk to the heart.</p><p>A cardiovascular risk assessment puts these together with your age, sugar, weight, smoking and family history to estimate where you stand and what would change it most.</p>"),
             ("Who should come",
              "<p>Anyone told their blood pressure is high, anyone on blood pressure or cholesterol medicine who wants it reviewed, and anyone with a family history of heart disease, stroke or diabetes who has not been assessed. Headaches, breathlessness on exertion, or swelling of the feet are worth a visit.</p>"),
             ("What to bring",
@@ -100,7 +101,7 @@ PAGES = [
         ],
         "faqs": [
             ("Does the clinic do ECGs?", "Ask when you book on 94191 90388. The clinic offers lab collection on site; the doctor will tell you which tests you need and where."),
-            ("Can I stop my blood pressure medicine if my readings are normal?", "Not on your own. Readings are normal because the medicine is working; any change should be made by the doctor after a review."),
+            ("Can I stop my blood pressure medicine if my readings are normal?", "Not on your own. Normal readings may be the medicine working; any change should be made by the doctor after a review."),
             ("What does a consultation cost?", "Ask when you book. The general check-up, which includes blood pressure and cholesterol screening, is ₹1,000."),
         ],
         "specialty": "InternalMedicine",
@@ -110,7 +111,7 @@ PAGES = [
         "title": "Adult Vaccination in Jammu | Dr. Anil Kumar Dhar",
         "description": "Adult vaccination in Jammu at Dr. Anil Kumar Dhar's clinic: annual flu, pneumonia, hepatitis B, typhoid and other recommended vaccines under proper cold chain.",
         "h1": "Adult Vaccination in Jammu",
-        "lede": "Vaccines are not only for children. Dr. Anil Kumar Dhar's clinic on Canal Road, Jammu, offers adult immunisation including the annual flu vaccine, pneumonia vaccine, hepatitis B, typhoid and other recommended vaccines, stored under proper cold chain and given by the clinic.",
+        "lede": "Vaccines are not only for children. Dr. Anil Kumar Dhar's clinic on Canal Road, Jammu, offers adult immunisation including the annual flu vaccine, pneumonia vaccine, hepatitis B, typhoid and other recommended vaccines, stored under proper cold chain.",
         "about_condition": None,
         "sections": [
             ("Vaccines offered",
@@ -120,12 +121,12 @@ PAGES = [
             ("What to bring",
              "<p>Any record of previous vaccinations, and a note of allergies or reactions to past vaccines. Tell the doctor if you are unwell on the day, pregnant, or on medicines that affect immunity; the vaccine may be given or deferred accordingly.</p>"),
             ("Cold chain",
-             "<p>A vaccine that has been warm is a vaccine that may not work. The clinic stores its vaccines under proper cold chain so that what you receive is effective.</p>"),
+             "<p>Vaccines have to be kept at the right temperature from manufacture to injection, or they can lose their effect. The clinic stores its vaccines under proper cold chain.</p>"),
         ],
         "faqs": [
             ("When should I get the flu vaccine?", "Once a year. Ask the clinic about timing for the current season when you book on 94191 90388."),
-            ("Do I need an appointment for a vaccine?", "Yes. Book by phone, WhatsApp or SMS so the right vaccine is ready for you."),
-            ("What do vaccines cost?", "Prices differ by vaccine. Ask when you book."),
+            ("How do I arrange a vaccination?", "Book by phone, WhatsApp or SMS on 94191 90388 and say which vaccine you are asking about, so the clinic can confirm it for your visit."),
+            ("What do vaccines cost?", "Ask when you book on 94191 90388."),
         ],
         "specialty": "InternalMedicine",
     },
@@ -290,9 +291,10 @@ def render(page: dict) -> str:
                     </div>
                     <p class="footer-tagline">Comprehensive Healthcare in Jammu</p>
                     <p class="footer-phone"><a href="tel:+91{PHONE_ENT}" data-obf-href="tel" data-obf="phone">{PHONE_DISPLAY_ENT}</a></p>
+                    <p class="footer-email"><a href="mailto:{EMAIL_ENT}" data-obf-href="email" data-obf="email">{EMAIL_ENT}</a></p>
                 </div>
                 <div class="footer-col">
-                    <h4>Specialties</h4>
+                    <h3 class="footer-heading">Specialties</h3>
                     <ul class="footer-links">
                         <li><a href="/general-physician-jammu">General Physician</a></li>
                         <li><a href="/diabetes-doctor-jammu">Diabetes Care</a></li>
@@ -303,7 +305,7 @@ def render(page: dict) -> str:
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h4>Quick Links</h4>
+                    <h3 class="footer-heading">Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="/#services">Our Services</a></li>
                         <li><a href="/#about">Our Team</a></li>
@@ -314,7 +316,7 @@ def render(page: dict) -> str:
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h4>Clinic Hours</h4>
+                    <h3 class="footer-heading">Clinic Hours</h3>
                     <p class="footer-hours">Mon, Wed-Sat</p>
                     <p class="footer-hours-detail">9 AM - 1 PM, 4:30 - 7 PM</p>
                     <p class="footer-hours">Sunday</p>
