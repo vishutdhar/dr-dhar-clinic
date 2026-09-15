@@ -6,32 +6,103 @@ Run from the repo root:  python3 scripts/build-specialty-pages.py
 Every claim below is drawn from index.html (services, FAQ, timings, fees).
 Nothing here states an outcome or a fee the home page does not state.
 """
-import json, html, pathlib, datetime
+import json, html, pathlib, datetime, re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = "https://dranilkumardhar.com"
 CSS_VERSION = "20260915"
-PHONE_ENT = "&#57;&#52;&#49;&#57;&#49;&#57;&#48;&#51;&#56;&#56;"          # 9419190388
-PHONE_DISPLAY_ENT = "&#57;&#52;&#49;&#57;&#49;&#32;&#57;&#48;&#51;&#56;&#56;"  # 94191 90388
 TODAY = datetime.date.today().isoformat()
-EMAIL_ENT = "&#97;&#110;&#105;&#108;&#55;&#100;&#104;&#97;&#114;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;"  # anil7dhar@gmail.com
+
+# ---- Facts come from index.html, never from this file ----------------------
+# The home page's structured data is the clinic's single statement of its
+# phone, address, opening hours and the one published fee. The pages below
+# are rendered from those values, so a change on the home page is a change
+# here on the next run, and a value that is not on the home page cannot appear.
+INDEX_HTML = (ROOT / "index.html").read_text(encoding="utf-8")
+_HOME_GRAPH = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', INDEX_HTML, re.S).group(1))["@graph"]
+_HOME_CLINIC = next(n for n in _HOME_GRAPH if n["@type"] == "MedicalClinic")
+_HOME_PHYSICIAN = next(n for n in _HOME_GRAPH if n["@type"] == "Physician")
+_HOME_WEBSITE = next(n for n in _HOME_GRAPH if n["@type"] == "WebSite")
+
+TELEPHONE = _HOME_CLINIC["telephone"]                       # +919419190388
+_DIGITS = TELEPHONE.removeprefix("+91")                     # 9419190388
+PHONE_DISPLAY = f"{_DIGITS[:5]} {_DIGITS[5:]}"              # five digits, space, five digits
+EMAIL = html.unescape(re.search(r'data-obf="email">([^<]+)<', INDEX_HTML).group(1))
+
+
+def entities(text: str) -> str:
+    """Encode every character as a numeric entity, as index.html does for
+    contact details, so the values are not trivially scraped from source."""
+    return "".join(f"&#{ord(c)};" for c in text)
+
+
+PHONE_ENT = entities(_DIGITS)
+PHONE_DISPLAY_ENT = entities(PHONE_DISPLAY)
+EMAIL_ENT = entities(EMAIL)
+
+_GENERAL_OFFER = next(
+    o for o in _HOME_CLINIC["hasOfferCatalog"]["itemListElement"]
+    if o["itemOffered"]["name"] == "General Check-up"
+)
+FEE = f"₹{int(_GENERAL_OFFER['price']):,}"                 # formatted from the Offer price
+
+_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+
+def _clock(t: str) -> str:
+    h, m = (int(x) for x in t.split(":"))
+    suffix = "AM" if h < 12 else "PM"
+    h12 = h % 12 or 12
+    return f"{h12}:{m:02d} {suffix}" if m else f"{h12} {suffix}"
+
+
+def hours_sentence(specs: list[dict]) -> str:
+    """'Monday and Wednesday to Saturday, 9 AM to 1 PM and 4:30 PM to 7 PM.
+    Sunday 9 AM to 3 PM. Closed on Tuesdays.' from OpeningHoursSpecification."""
+    by_day: dict[str, list[str]] = {d: [] for d in _DAYS}
+    for spec in specs:
+        for d in spec["dayOfWeek"]:
+            by_day[d].append(f"{_clock(spec['opens'])} to {_clock(spec['closes'])}")
+    # consecutive day runs with an identical schedule
+    runs: list[tuple[list[str], tuple[str, ...]]] = []
+    for d in _DAYS:
+        sched = tuple(by_day[d])
+        if runs and runs[-1][1] == sched and _DAYS.index(runs[-1][0][-1]) == _DAYS.index(d) - 1:
+            runs[-1][0].append(d)
+        else:
+            runs.append(([d], sched))
+    label = lambda days: days[0] if len(days) == 1 else f"{days[0]} to {days[-1]}"
+    parts, closed = [], []
+    # merge non-consecutive runs that share a schedule ("Monday and Wednesday to Saturday")
+    merged: dict[tuple[str, ...], list[str]] = {}
+    for days, sched in runs:
+        if not sched:
+            closed.extend(days)
+        else:
+            merged.setdefault(sched, []).append(label(days))
+    for sched, labels in merged.items():
+        parts.append(f"{' and '.join(labels)}, {' and '.join(sched)}." if len(sched) > 1 or len(labels) > 1
+                     else f"{labels[0]} {sched[0]}.")
+    if closed:
+        parts.append("Closed on " + " and ".join(f"{d}s" for d in closed) + ".")
+    return " ".join(parts)
+
+
+HOURS = hours_sentence(_HOME_CLINIC["openingHoursSpecification"])
+# The footer hours block is the home page's, verbatim.
+FOOTER_HOURS_BLOCK = re.search(r"<h4>Clinic Hours</h4>(.*?)</div>", INDEX_HTML, re.S).group(1).rstrip()
+ADDRESS = _HOME_CLINIC["address"]
+ADDRESS_LINE = f"{ADDRESS['streetAddress']}, {ADDRESS['addressLocality']}, J&K {ADDRESS['postalCode']}"
 
 CLINIC = {
     "@type": "MedicalClinic",
-    "@id": f"{SITE}#clinic",
-    "name": "Dr. Anil Kumar Dhar's Clinic",
+    "@id": _HOME_CLINIC["@id"],
+    "name": _HOME_CLINIC["name"],
     "url": SITE,
-    "telephone": "+919419190388",
-    "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "House No. 48, Bhagwati Nagar, Canal Road",
-        "addressLocality": "Jammu",
-        "addressRegion": "Jammu and Kashmir",
-        "postalCode": "180016",
-        "addressCountry": "IN",
-    },
+    "telephone": TELEPHONE,
+    "address": {"@type": "PostalAddress", **{k: v for k, v in ADDRESS.items() if k != "@type"}},
 }
-PHYSICIAN = {"@type": "Physician", "@id": f"{SITE}#physician", "name": "Dr. Anil Kumar Dhar", "url": SITE}
+PHYSICIAN = {"@type": "Physician", "@id": _HOME_PHYSICIAN["@id"], "name": _HOME_PHYSICIAN["name"], "url": SITE}
 
 PAGES = [
     {
@@ -45,16 +116,16 @@ PAGES = [
             ("What a general physician treats",
              "<p>An internal medicine physician looks after the health of adults as a whole rather than one organ. At this clinic that means fever and infections, respiratory problems such as cough and breathlessness, thyroid disorders, blood pressure, diabetes, heart-related risk, and the general complaints that do not fit a neat label: tiredness, weight change, poor sleep, aches that will not settle.</p><p>When one doctor sees you over time, a problem can be read in the context of your history, your reports and your other medicines, which is the advantage of having a physician rather than a different doctor for each complaint.</p>"),
             ("The general check-up",
-             "<p>The clinic's general check-up costs <strong>₹1,000</strong> and includes a physical examination, blood pressure measurement, fasting and post-meal blood sugar testing, cholesterol screening and a detailed consultation with personalised advice. It is the right starting point if you have not seen a doctor in a while, have a family history of diabetes or heart disease, or simply want a baseline.</p>"),
+             "<p>The clinic's general check-up costs <strong>[[FEE]]</strong> and includes a physical examination, blood pressure measurement, fasting and post-meal blood sugar testing, cholesterol screening and a detailed consultation with personalised advice. If you have not seen a doctor in a while, have a family history of diabetes or heart disease, or want a baseline, ask when you book whether the check-up is the right visit for you.</p>"),
             ("What to bring",
              "<p>Any previous medical reports, a list of the medicines you take (or the strips themselves), and, if you have them, recent blood test results. If your check-up includes a fasting blood sugar test, ask the clinic when you book how long to fast and what to do about any medicines you take that morning; do not stop a medicine on your own.</p>"),
             ("When not to wait for an appointment",
              "<p>Chest pain, sudden weakness or numbness on one side, difficulty speaking, severe breathlessness, or a very high fever with confusion are emergencies. Go to the nearest hospital emergency department rather than waiting for a clinic slot.</p>"),
         ],
         "faqs": [
-            ("How do I book a consultation?", "By phone, WhatsApp or SMS on 94191 90388, with your name and preferred time. The clinic staff confirm the appointment."),
-            ("What does the general check-up cost?", "₹1,000. It includes the examination, blood pressure, fasting and post-meal blood sugar, cholesterol screening and the consultation."),
-            ("Which days is the clinic open?", "Monday and Wednesday to Saturday, 9 AM to 1 PM and 4:30 PM to 7 PM; Sunday 9 AM to 3 PM. The clinic is closed on Tuesdays."),
+            ("How do I book a consultation?", "By phone, WhatsApp or SMS on [[PHONE]], with your name and preferred time. The clinic staff confirm the appointment."),
+            ("What does the general check-up cost?", "[[FEE]]. It includes the examination, blood pressure, fasting and post-meal blood sugar, cholesterol screening and the consultation."),
+            ("Which days is the clinic open?", "[[HOURS]]"),
         ],
         "specialty": "InternalMedicine",
     },
@@ -78,7 +149,7 @@ PAGES = [
         "faqs": [
             ("Does Dr. Dhar treat Type 1 as well as Type 2 diabetes?", "Yes. The clinic manages both, including insulin adjustment for patients who use it."),
             ("How often should HbA1c be checked?", "That depends on how stable your control is; the doctor sets the interval at your visit. The clinic tracks it regularly as part of ongoing care."),
-            ("What does a diabetes consultation cost?", "Ask when you book on 94191 90388. The general check-up, which includes fasting and post-meal blood sugar, is ₹1,000."),
+            ("What does a diabetes consultation cost?", "Ask when you book on [[PHONE]]. The general check-up, which includes fasting and post-meal blood sugar, is [[FEE]]."),
         ],
         "specialty": "Diabetology",
     },
@@ -100,9 +171,9 @@ PAGES = [
              "<p>Chest pain or pressure, pain spreading to the arm or jaw, sudden breathlessness, or sudden weakness or slurred speech are not clinic matters. Go to the nearest hospital emergency department at once.</p>"),
         ],
         "faqs": [
-            ("Does the clinic do ECGs?", "Ask when you book on 94191 90388. The clinic offers lab collection on site; the doctor will tell you which tests you need and where."),
+            ("Does the clinic do ECGs?", "Ask when you book on [[PHONE]]. The clinic offers lab collection on site; the doctor will tell you which tests you need and where."),
             ("Can I stop my blood pressure medicine if my readings are normal?", "Not on your own. Normal readings may be the medicine working; any change should be made by the doctor after a review."),
-            ("What does a consultation cost?", "Ask when you book. The general check-up, which includes blood pressure and cholesterol screening, is ₹1,000."),
+            ("What does a consultation cost?", "Ask when you book. The general check-up, which includes blood pressure and cholesterol screening, is [[FEE]]."),
         ],
         "specialty": "InternalMedicine",
     },
@@ -124,9 +195,9 @@ PAGES = [
              "<p>Vaccines have to be kept at the right temperature from manufacture to injection, or they can lose their effect. The clinic stores its vaccines under proper cold chain.</p>"),
         ],
         "faqs": [
-            ("When should I get the flu vaccine?", "Once a year. Ask the clinic about timing for the current season when you book on 94191 90388."),
-            ("How do I arrange a vaccination?", "Book by phone, WhatsApp or SMS on 94191 90388 and say which vaccine you are asking about, so the clinic can confirm it for your visit."),
-            ("What do vaccines cost?", "Ask when you book on 94191 90388."),
+            ("When should I get the flu vaccine?", "Once a year. Ask the clinic about timing for the current season when you book on [[PHONE]]."),
+            ("How do I arrange a vaccination?", "Book by phone, WhatsApp or SMS on [[PHONE]] and say which vaccine you are asking about, so the clinic can confirm it for your visit."),
+            ("What do vaccines cost?", "Ask when you book on [[PHONE]]."),
         ],
         "specialty": "InternalMedicine",
     },
@@ -175,7 +246,15 @@ def json_ld(page: dict) -> str:
     return json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False).replace("<", "\\u003c")
 
 
+def fill(text: str) -> str:
+    return text.replace("[[FEE]]", FEE).replace("[[PHONE]]", PHONE_DISPLAY).replace("[[HOURS]]", HOURS)
+
+
 def render(page: dict) -> str:
+    page = {**page,
+            "lede": fill(page["lede"]),
+            "sections": [(h, fill(b)) for h, b in page["sections"]],
+            "faqs": [(fill(q), fill(a)) for q, a in page["faqs"]]}
     url = f"{SITE}/{page['slug']}"
     sections = "\n".join(
         f'            <section class="article-section">\n                <h2>{esc(h)}</h2>\n                {b}\n            </section>'
@@ -262,8 +341,8 @@ def render(page: dict) -> str:
 
             <section class="article-section visit-card">
                 <h2>Visiting the clinic</h2>
-                <p><strong>Where:</strong> House No. 48, Bhagwati Nagar, Canal Road, Jammu, J&amp;K 180016.</p>
-                <p><strong>When:</strong> Monday and Wednesday to Saturday, 9 AM to 1 PM and 4:30 PM to 7 PM. Sunday 9 AM to 3 PM. Closed on Tuesdays.</p>
+                <p><strong>Where:</strong> {esc(ADDRESS_LINE)}.</p>
+                <p><strong>When:</strong> {HOURS}</p>
                 <p><strong>Booking:</strong> call or WhatsApp <a href="tel:+91{PHONE_ENT}" data-obf-href="tel" data-obf="phone">{PHONE_DISPLAY_ENT}</a>, or send an SMS with your name and preferred time. Cash and all UPI apps accepted. In-house pharmacy and lab collection on site.</p>
             </section>
 
@@ -316,12 +395,7 @@ def render(page: dict) -> str:
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h3 class="footer-heading">Clinic Hours</h3>
-                    <p class="footer-hours">Mon, Wed-Sat</p>
-                    <p class="footer-hours-detail">9 AM - 1 PM, 4:30 - 7 PM</p>
-                    <p class="footer-hours">Sunday</p>
-                    <p class="footer-hours-detail">9 AM - 3 PM</p>
-                    <p class="footer-hours footer-closed">Tuesday: Closed</p>
+                    <h3 class="footer-heading">Clinic Hours</h3>{FOOTER_HOURS_BLOCK}
                 </div>
             </div>
             <div class="footer-bottom">
@@ -340,7 +414,7 @@ def render(page: dict) -> str:
     <script src="/script.js" defer></script>
     <noscript>
         <div class="noscript-banner">
-            To book an appointment, call <strong>94191 90388</strong> or email <strong>anil7dhar@gmail.com</strong>
+            To book an appointment, call <strong>{PHONE_DISPLAY}</strong> or email <strong>anil7dhar@gmail.com</strong>
         </div>
     </noscript>
 </body>

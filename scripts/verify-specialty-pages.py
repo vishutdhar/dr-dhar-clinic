@@ -117,6 +117,55 @@ for page in gen.PAGES:
     wp = next(n for n in ld["@graph"] if n["@type"] == "MedicalWebPage")
     check(wp["name"] == title and wp["description"] == desc, f"{page['slug']}: MedicalWebPage name/description differ from metadata")
 
+# 5e. No fee, phone number, hours or address component other than the home page's.
+home_phone_digits = gen._DIGITS
+for page in gen.PAGES:
+    html = gen.render(page)
+    text = _h.unescape(re.sub(r"<[^>]+>", " ", html))
+    for fee in set(re.findall(r"(?:₹|Rs\.?|INR)\s?[\d,]+", text)):
+        check(fee == gen.FEE, f"{page['slug']}: fee '{fee}' is not the home page fee {gen.FEE}")
+    for num in set(re.findall(r"(?<![\d])(?:\+?91[ -]?)?\d{5}[ -]?\d{5}(?![\d])", text)):
+        check(re.sub(r"\D", "", num).endswith(home_phone_digits), f"{page['slug']}: phone '{num}' is not the clinic phone")
+    for t in set(re.findall(r"\d{1,2}(?::\d{2})? ?[AP]M", text)):
+        check(t in gen.HOURS or t in index, f"{page['slug']}: time '{t}' not in the home page hours")
+    when = re.search(r"<strong>When:</strong> (.*?)</p>", html).group(1)
+    check(when == gen.HOURS, f"{page['slug']}: visit hours differ from the home schema")
+    where = _h.unescape(re.search(r"<strong>Where:</strong> (.*?)\.</p>", html).group(1))
+    check(where == gen.ADDRESS_LINE, f"{page['slug']}: visit address differs from the home schema")
+    ld = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1))
+    clinic = next(n for n in ld["@graph"] if n["@type"] == "MedicalClinic")
+    check(clinic["address"] == home_clinic["address"], f"{page['slug']}: schema address differs from index.html")
+    check(clinic["telephone"] == home_clinic["telephone"], f"{page['slug']}: schema telephone differs from index.html")
+    for d in gen._DAYS:
+        if d in text:
+            pass  # day names are allowed; their hours are pinned by the When line above
+    # 5f. Indexable, and every self-reference names this page.
+    url = f"{gen.SITE}/{page['slug']}"
+    robots = re.search(r'<meta name="robots" content="([^"]*)"', html)
+    check(robots and "index" in robots.group(1).split(", ") and "noindex" not in robots.group(1), f"{page['slug']}: robots must allow indexing")
+    check(re.search(r'<link rel="canonical" href="([^"]*)"', html).group(1) == url, f"{page['slug']}: canonical is not {url}")
+    check(re.search(r'property="og:url" content="([^"]*)"', html).group(1) == url, f"{page['slug']}: og:url is not {url}")
+    wp = next(n for n in ld["@graph"] if n["@type"] == "MedicalWebPage")
+    check(wp["url"] == url and wp["@id"] == f"{url}#webpage", f"{page['slug']}: MedicalWebPage url/id differ")
+    crumbs = next(n for n in ld["@graph"] if n["@type"] == "BreadcrumbList")
+    check(crumbs["itemListElement"][-1]["item"] == url, f"{page['slug']}: breadcrumb does not end at {url}")
+    # 5g. No rating or review markup: the home page carries none, and none may be invented.
+    for banned in ("AggregateRating", "ratingValue", "reviewCount", '"Review"', "reviewRating"):
+        check(banned not in html, f"{page['slug']}: contains {banned}, which index.html does not support")
+    check("aggregateRating" not in html, f"{page['slug']}: contains aggregateRating")
+
+# 5h. The generator source carries no literal fee or phone of its own, and the
+#     footer hours block is the home page's block verbatim.
+src = (ROOT / "scripts" / "build-specialty-pages.py").read_text(encoding="utf-8")
+check(not re.search(r"₹[\d,]+", src), "generator hardcodes a fee; it must come from index.html")
+check(gen.PHONE_DISPLAY not in src and gen._DIGITS not in src.replace("# +919419190388", "").replace("# 9419190388", ""),
+      "generator hardcodes the phone; it must come from index.html")
+home_hours_block = re.search(r'<h4>Clinic Hours</h4>(.*?)</div>', index, re.S).group(1).strip()
+for page in gen.PAGES:
+    html = gen.render(page)
+    block = re.search(r'<h3 class="footer-heading">Clinic Hours</h3>(.*?)</div>', html, re.S).group(1).strip()
+    check(block == home_hours_block, f"{page['slug']}: footer hours block differs from index.html")
+
 # 6. The stylesheet version the pages request is the one index.html requests.
 v_index = re.search(r'styles\.css\?v=(\d+)', index).group(1)
 check(v_index == gen.CSS_VERSION, f"CSS version differs: index.html {v_index}, generator {gen.CSS_VERSION}")
