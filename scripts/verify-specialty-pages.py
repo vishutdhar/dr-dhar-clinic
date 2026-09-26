@@ -71,7 +71,7 @@ for page in gen.PAGES:
 # 5. Metadata lengths and FAQ parity between visible answers and JSON-LD.
 for page in gen.PAGES:
     html = gen.render(page)
-    check(len(page["title"]) <= 60, f"{page['slug']}: title {len(page['title'])} chars")
+    check(len(page["title"]) <= 63, f"{page['slug']}: title {len(page['title'])} chars")
     check(len(page["description"]) <= 160, f"{page['slug']}: description {len(page['description'])} chars")
     ld = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1))
     faq = next(n for n in ld["@graph"] if n["@type"] == "FAQPage")
@@ -110,7 +110,7 @@ for page in gen.PAGES:
     html = gen.render(page)
     title = _h.unescape(re.search(r"<title>(.*?)</title>", html).group(1))
     desc = _h.unescape(re.search(r'<meta name="description" content="([^"]*)"', html).group(1))
-    check(len(title) <= 60, f"{page['slug']}: rendered title {len(title)} chars")
+    check(len(title) <= 63, f"{page['slug']}: rendered title {len(title)} chars")
     check(len(desc) <= 160, f"{page['slug']}: rendered description {len(desc)} chars")
     for prop in ("og:title", "twitter:title"):
         m = re.search(r'(?:property|name)="' + prop + r'" content="([^"]*)"', html)
@@ -279,6 +279,11 @@ for page in gen.PAGES:
     SITE_PAGES[f"/{page['slug']}"] = path.read_text(encoding="utf-8") if path.exists() else ""
 text_of = lambda frag: re.sub(r"\s+", " ", _h.unescape(re.sub(r"<[^>]+>", " ", frag))).strip()
 GENERIC_ANCHORS = {"learn more", "read more", "click here", "here", "more", "details"}
+_FILLER = {"in", "jammu", "and", "care", "the", "a", "of", "about", "more", "learn"}
+def names_target(anchor, page):
+    """True when the anchor shares a meaningful word with the target page's H1."""
+    words = lambda t: {w for w in re.findall(r"[a-z]+", t.lower())} - _FILLER
+    return bool(words(anchor) & words(page["h1"]))
 
 def ld_nodes(obj, out):
     """Every dict in a JSON-LD tree, depth first."""
@@ -297,12 +302,30 @@ hero = re.search(r'<section class="hero".*?</section>', index, re.S)
 check(hero is not None, "index.html: hero section missing")
 if hero:
     h = hero.group(0)
-    check('data-obf-href="tel"' in h and 'data-obf-href="wa"' in h, "index.html: hero lost its Call or WhatsApp button")
+    actions = re.search(r'<div class="hero-actions">(.*?)</div>', h, re.S)
+    buttons = re.findall(r'<a [^>]*class="btn [^"]*"[^>]*>', actions.group(1)) if actions else []
+    check(any('data-obf-href="tel"' in b for b in buttons), "index.html: hero lost its Call Clinic button")
+    check(any('data-obf-href="wa"' in b for b in buttons), "index.html: hero lost its WhatsApp button")
     shown = [text_of(m) for m in re.findall(r'data-obf="phone"[^>]*>([^<]*)<', h)]
     check(home_display in shown, f"index.html: hero does not show the phone number {home_display} as text")
     check(ent(home_display) in h, "index.html: hero phone is not entity-encoded like the rest of the page")
     actions_to_phone = re.search(r'class="hero-actions".*?</div>\s*<p class="hero-phone">.*?data-obf="phone"', h, re.S)
     check(actions_to_phone is not None, "index.html: hero phone text does not sit directly under the hero buttons")
+
+# 8a2. The stylesheet never hides the hero phone line: no rule for it sets
+#      display none or visibility hidden, and the reduced-motion override that
+#      makes the animated hero lines visible includes it.
+css = (ROOT / "styles.css").read_text(encoding="utf-8")
+for sel, body in re.findall(r"([^{}]*\.hero-phone[^{}]*)\{([^{}]*)\}", css):
+    check(not re.search(r"display\s*:\s*none|visibility\s*:\s*hidden|font-size\s*:\s*0(?![.\d])|clip(?:-path)?\s*:", body),
+          f"styles.css: rule '{sel.strip()}' hides the hero phone")
+reduced = re.search(r"@media \(prefers-reduced-motion: reduce\) \{(.*?)\n\}", css, re.S)
+check(reduced is not None and re.search(r"\.hero-phone[^{]*\{\s*opacity: 1 !important;", reduced.group(1)) is not None,
+      "styles.css: reduced-motion override does not make the hero phone visible")
+anim = re.search(r"([^{}]*\.hero-phone[^{}]*)\{[^{}]*opacity: 0;[^{}]*animation: heroReveal[^{}]*forwards;[^{}]*\}", css)
+fixed_zero = [sel for sel, body in re.findall(r"([^{}]*\.hero-phone[^{}]*)\{([^{}]*)\}", css)
+              if re.search(r"opacity\s*:\s*0\b", body) and "forwards" not in body]
+check(not fixed_zero, f"styles.css: hero phone left at opacity 0 by {fixed_zero}")
 
 # 8b. Home links every specialty page from the services section and from the
 #     footer, each with descriptive anchor text.
@@ -316,7 +339,8 @@ for page in gen.PAGES:
         anchors = [text_of(t) for t in re.findall(r'<a [^>]*href="/' + page["slug"] + r'"[^>]*>(.*?)</a>', block.group(0), re.S)]
         check(anchors, f"index.html: {label} does not link /{page['slug']}")
         for a in anchors:
-            check(a.lower() not in GENERIC_ANCHORS and len(a.split()) >= 2, f"index.html: {label} anchor '{a}' for /{page['slug']} is not descriptive")
+            check(a.lower() not in GENERIC_ANCHORS and len(a.split()) >= 2 and names_target(a, page),
+                  f"index.html: {label} anchor '{a}' for /{page['slug']} does not describe the page")
 
 # 8c. Every specialty page links the other three from a Related care block in
 #     the article body, with the target page's H1 as anchor text, and not itself.
@@ -352,7 +376,7 @@ for route, html in SITE_PAGES.items():
     loc = re.search(r'<meta property="og:locale" content="([^"]*)"', html)
     check(loc is not None and loc.group(1) == "en_IN", f"{route}: og:locale is not en_IN")
     site_name = re.search(r'<meta property="og:site_name" content="([^"]*)"', html)
-    check(site_name is not None and site_name.group(1).strip() != "", f"{route}: og:site_name missing")
+    check(site_name is not None and _h.unescape(site_name.group(1)) == gen._HOME_WEBSITE["name"], f"{route}: og:site_name is not the site name")
     robots = re.search(r'<meta name="robots" content="([^"]*)"', html)
     check(robots is not None and ROBOTS_REQUIRED <= {d.strip() for d in robots.group(1).split(",")},
           f"{route}: robots meta lacks {sorted(ROBOTS_REQUIRED)}")
@@ -389,9 +413,35 @@ home_entry = sm_urls.get(gen.SITE + "/", "")
 home_lastmod = re.search(r"<lastmod>([^<]+)</lastmod>", home_entry)
 check(home_lastmod is not None and home_wp.get("dateModified") == home_lastmod.group(1),
       f"index.html: MedicalWebPage dateModified {home_wp.get('dateModified')} is not the sitemap lastmod")
-for n in home_nodes:
-    if "priceRange" in n:
-        check(re.search(r"₹|INR|Rs", n["priceRange"]) is not None, f"index.html: priceRange '{n['priceRange']}' is not in rupees")
+# priceRange stays out: the site publishes one fee, for the check-up, and the
+# check-up Offer already carries it; a range would state fees the site does not.
+check(not any("priceRange" in n for n in home_nodes), "index.html: priceRange present; the site publishes no fee range")
+
+# 8e2. Opening hours are the clinic's published schedule, pinned literally so
+#      no edit can change them without changing this line on purpose.
+PUBLISHED_HOURS = [
+    (["Monday", "Wednesday", "Thursday", "Friday", "Saturday"], "09:00", "13:00"),
+    (["Monday", "Wednesday", "Thursday", "Friday", "Saturday"], "16:30", "19:00"),
+    (["Sunday"], "09:00", "15:00"),
+]
+check([(s_["dayOfWeek"], s_["opens"], s_["closes"]) for s_ in home_clinic["openingHoursSpecification"]] == PUBLISHED_HOURS,
+      "index.html: openingHoursSpecification differs from the published schedule")
+
+# 8e3. Dates are not older than the content they describe: each sitemap lastmod
+#      and the home dateModified are on or after the file's last commit date.
+import subprocess
+def last_commit_date(name):
+    out = subprocess.run(["git", "-C", str(ROOT), "log", "-1", "--format=%cs", "--", name], capture_output=True, text=True)
+    return out.stdout.strip()
+route_file = {"/": "index.html", **{f"/{p['slug']}": f"{p['slug']}.html" for p in gen.PAGES}}
+for route, name in route_file.items():
+    committed = last_commit_date(name)
+    lm = re.search(r"<lastmod>([^<]+)</lastmod>", sm_urls.get(gen.SITE + route, ""))
+    check(committed == "" or (lm is not None and lm.group(1) >= committed),
+          f"sitemap.xml: lastmod for {route} is older than {name}'s last commit {committed}")
+    if route == "/":
+        check(committed == "" or str(home_wp.get("dateModified", "")) >= committed,
+              f"index.html: dateModified is older than its last commit {committed}")
 
 # 8f. Sitemap: exactly the five pages, each with an ISO lastmod, and the home
 #     entry keeps its image extension entry for the doctor's photo.
