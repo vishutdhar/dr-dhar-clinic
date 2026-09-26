@@ -391,7 +391,7 @@ for route, html in SITE_PAGES.items():
     check(len(re.findall(r"<h1[\s>]", html)) == 1, f"{route}: not exactly one H1")
     # Structured data: every block parses and every bare {"@id": ...} reference
     # resolves to a node defined on this same page.
-    defined, refs = set(), []
+    defined, refs, types = set(), [], {}
     for raw in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S):
         try:
             data = json.loads(raw)
@@ -403,7 +403,11 @@ for route, html in SITE_PAGES.items():
                 refs.append(node["@id"])
             elif "@id" in node:
                 defined.add(node["@id"])
+                types.setdefault(node["@id"], set()).update(node["@type"] if isinstance(node.get("@type"), list) else [node.get("@type")])
     check(defined, f"{route}: no JSON-LD nodes")
+    for suffix, typ in (("#website", "WebSite"), ("#clinic", "MedicalClinic"), ("#physician", "Physician")):
+        for r in {r for r in refs if r.endswith(suffix)}:
+            check(typ in types.get(r, set()), f"{route}: {r} does not resolve to a {typ} node")
     for r in refs:
         check(r in defined, f"{route}: JSON-LD reference {r} is not defined on this page")
     check('"priceRange": "$' not in html and '"priceRange":"$' not in html, f"{route}: priceRange uses a dollar sign")
@@ -453,12 +457,14 @@ if sm_history:
     route_file = {"/": "index.html", **{f"/{p['slug']}": f"{p['slug']}.html" for p in gen.PAGES}}
     for route, name in route_file.items():
         loc_ = gen.SITE + route
-        moved = None
+        moved, moved_from = None, None
         for i, c in enumerate(sm_history):
             before = snap[sm_history[i + 1]] if i + 1 < len(sm_history) else {}
             if snap[c].get(loc_) != before.get(loc_):
-                moved = c
+                moved, moved_from = c, before.get(loc_)
                 break
+        check(moved is None or moved_from is None or snap[moved][loc_] > moved_from,
+              f"sitemap.xml: lastmod for {route} was moved backwards ({moved_from} to {snap[moved][loc_] if moved else ''}) in {moved[:7] if moved else ''}")
         changed_since = moved is None or git("diff", "--quiet", moved, "--", name).returncode == 1
         check(not changed_since or now_lm.get(loc_) == today,
               f"sitemap.xml: {name} changed after its lastmod was last moved, so its lastmod must be today ({today})")
