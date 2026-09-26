@@ -273,10 +273,13 @@ for d in _days:
 
 # 8. Site-wide search signals, checked on the committed files of all five
 #    indexable pages (the home page and the four specialty pages).
-SITE_PAGES = {"/": index}
+# HTML comments are removed first: commented-out markup does not ship to readers.
+live = lambda t: re.sub(r"<!--.*?-->", "", t, flags=re.S)
+index_live = live(index)
+SITE_PAGES = {"/": index_live}
 for page in gen.PAGES:
     path = ROOT / f"{page['slug']}.html"
-    SITE_PAGES[f"/{page['slug']}"] = path.read_text(encoding="utf-8") if path.exists() else ""
+    SITE_PAGES[f"/{page['slug']}"] = live(path.read_text(encoding="utf-8")) if path.exists() else ""
 text_of = lambda frag: re.sub(r"\s+", " ", _h.unescape(re.sub(r"<[^>]+>", " ", frag))).strip()
 GENERIC_ANCHORS = {"learn more", "read more", "click here", "here", "more", "details"}
 _FILLER = {"in", "jammu", "and", "care", "the", "a", "of", "about", "more", "learn"}
@@ -298,7 +301,7 @@ def ld_nodes(obj, out):
 
 # 8a. The clinic phone is visible as text in the home hero, next to the Call
 #     and WhatsApp buttons, in the same obfuscated form the rest of the page uses.
-hero = re.search(r'<section class="hero".*?</section>', index, re.S)
+hero = re.search(r'<section class="hero".*?</section>', index_live, re.S)
 check(hero is not None, "index.html: hero section missing")
 if hero:
     h = hero.group(0)
@@ -339,8 +342,8 @@ check(not anim_overrides, f"styles.css: hero phone animation overridden by {anim
 
 # 8b. Home links every specialty page from the services section and from the
 #     footer, each with descriptive anchor text.
-services = re.search(r'<section class="services" id="services">.*?</section>', index, re.S)
-footer = re.search(r"<footer>.*?</footer>", index, re.S)
+services = re.search(r'<section class="services" id="services">.*?</section>', index_live, re.S)
+footer = re.search(r"<footer>.*?</footer>", index_live, re.S)
 check(services is not None and footer is not None, "index.html: services section or footer missing")
 for page in gen.PAGES:
     for label, block in (("services section", services), ("footer", footer)):
