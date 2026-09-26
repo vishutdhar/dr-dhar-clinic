@@ -18,8 +18,11 @@ exec(compile((ROOT / "scripts" / "build-specialty-pages.py").read_text(encoding=
 
 index = (ROOT / "index.html").read_text(encoding="utf-8")
 failures = []
+checks = 0
 
 def check(cond, msg):
+    global checks
+    checks += 1
     if not cond:
         failures.append(msg)
 
@@ -68,7 +71,7 @@ for page in gen.PAGES:
 # 5. Metadata lengths and FAQ parity between visible answers and JSON-LD.
 for page in gen.PAGES:
     html = gen.render(page)
-    check(len(page["title"]) <= 60, f"{page['slug']}: title {len(page['title'])} chars")
+    check(len(page["title"]) <= 63, f"{page['slug']}: title {len(page['title'])} chars")
     check(len(page["description"]) <= 160, f"{page['slug']}: description {len(page['description'])} chars")
     ld = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1))
     faq = next(n for n in ld["@graph"] if n["@type"] == "FAQPage")
@@ -107,7 +110,7 @@ for page in gen.PAGES:
     html = gen.render(page)
     title = _h.unescape(re.search(r"<title>(.*?)</title>", html).group(1))
     desc = _h.unescape(re.search(r'<meta name="description" content="([^"]*)"', html).group(1))
-    check(len(title) <= 60, f"{page['slug']}: rendered title {len(title)} chars")
+    check(len(title) <= 63, f"{page['slug']}: rendered title {len(title)} chars")
     check(len(desc) <= 160, f"{page['slug']}: rendered description {len(desc)} chars")
     for prop in ("og:title", "twitter:title"):
         m = re.search(r'(?:property|name)="' + prop + r'" content="([^"]*)"', html)
@@ -267,6 +270,247 @@ for d in _days:
     expected = sorted((mins(o), mins(c)) for o, c in home_schedule[d])
     check(sorted(js_sched.get(js_day[d], [])) == expected, f"script.js schedule for {d} differs from the home OpeningHoursSpecification")
 
+
+# 8. Site-wide search signals, checked on the committed files of all five
+#    indexable pages (the home page and the four specialty pages).
+# HTML comments are removed first: commented-out markup does not ship to readers.
+live = lambda t: re.sub(r"<!--.*?-->", "", t, flags=re.S)
+index_live = live(index)
+SITE_PAGES = {"/": index_live}
+for page in gen.PAGES:
+    path = ROOT / f"{page['slug']}.html"
+    SITE_PAGES[f"/{page['slug']}"] = live(path.read_text(encoding="utf-8")) if path.exists() else ""
+text_of = lambda frag: re.sub(r"\s+", " ", _h.unescape(re.sub(r"<[^>]+>", " ", frag))).strip()
+GENERIC_ANCHORS = {"learn more", "read more", "click here", "here", "more", "details"}
+_FILLER = {"in", "jammu", "and", "care", "the", "a", "of", "about", "more", "learn"}
+def names_target(anchor, page):
+    """True when the anchor shares a meaningful word with the target page's H1."""
+    words = lambda t: {w for w in re.findall(r"[a-z]+", t.lower())} - _FILLER
+    return bool(words(anchor) & words(page["h1"]))
+
+def ld_nodes(obj, out):
+    """Every dict in a JSON-LD tree, depth first."""
+    if isinstance(obj, dict):
+        out.append(obj)
+        for v in obj.values():
+            ld_nodes(v, out)
+    elif isinstance(obj, list):
+        for v in obj:
+            ld_nodes(v, out)
+    return out
+
+# 8a. The clinic phone is visible as text in the home hero, next to the Call
+#     and WhatsApp buttons, in the same obfuscated form the rest of the page uses.
+hero = re.search(r'<section class="hero".*?</section>', index_live, re.S)
+check(hero is not None, "index.html: hero section missing")
+if hero:
+    h = hero.group(0)
+    actions = re.search(r'<div class="hero-actions">(.*?)</div>', h, re.S)
+    buttons = re.findall(r'<a [^>]*class="btn [^"]*"[^>]*>', actions.group(1)) if actions else []
+    check(any('data-obf-href="tel"' in b for b in buttons), "index.html: hero lost its Call Clinic button")
+    check(any('data-obf-href="wa"' in b for b in buttons), "index.html: hero lost its WhatsApp button")
+    shown = [text_of(m) for m in re.findall(r'data-obf="phone"[^>]*>([^<]*)<', h)]
+    check(home_display in shown, f"index.html: hero does not show the phone number {home_display} as text")
+    check(ent(home_display) in h, "index.html: hero phone is not entity-encoded like the rest of the page")
+    phone_line = re.search(r'<p class="hero-phone">(.*?)</p>', h, re.S)
+    for tag in re.findall(r"<[a-z][^>]*>", phone_line.group(0) if phone_line else ""):
+        check(not re.search(r"\shidden\b|aria-hidden|\sstyle=", tag), f"index.html: hero phone markup hides it: {tag[:60]}")
+    ancestors = [re.search(r'<section class="hero"[^>]*>', h), re.search(r'<div class="hero-container"[^>]*>', h), re.search(r'<div class="hero-content"[^>]*>', h)]
+    check(all(ancestors), "index.html: hero phone is no longer inside the hero content column")
+    for tag in [m.group(0) for m in ancestors if m]:
+        check(not re.search(r"\shidden\b|aria-hidden|\sstyle=", tag), f"index.html: hero container hides the phone: {tag[:60]}")
+    actions_to_phone = re.search(r'class="hero-actions".*?</div>\s*<p class="hero-phone">.*?data-obf="phone"', h, re.S)
+    check(actions_to_phone is not None, "index.html: hero phone text does not sit directly under the hero buttons")
+
+# 8a2. The stylesheet never hides the hero phone line: no rule for it sets
+#      display none or visibility hidden, and the reduced-motion override that
+#      makes the animated hero lines visible includes it.
+css = re.sub(r"/\*.*?\*/", "", (ROOT / "styles.css").read_text(encoding="utf-8"), flags=re.S)
+for sel, body in re.findall(r"([^{}]*\.hero-phone[^{}]*)\{([^{}]*)\}", css):
+    check(not re.search(r"display\s*:\s*none|visibility\s*:\s*hidden|font-size\s*:\s*0(?![.\d])|clip(?:-path)?\s*:", body),
+          f"styles.css: rule '{sel.strip()}' hides the hero phone")
+reduced = re.search(r"@media \(prefers-reduced-motion: reduce\) \{(.*?)\n\}", css, re.S)
+check(reduced is not None and re.search(r"\.hero-phone[^{]*\{\s*opacity: 1 !important;", reduced.group(1)) is not None,
+      "styles.css: reduced-motion override does not make the hero phone visible")
+ENTRANCE = r"\s*opacity: 0;\s*animation: heroReveal [\d.]+s ease-out [\d.]+s forwards;\s*"
+anim = next((b for _, b in re.findall(r"([^{}]*\.hero-phone[^{}]*)\{([^{}]*)\}", css) if re.fullmatch(ENTRANCE, b)), None)
+check(anim is not None, "styles.css: hero phone does not use the heroReveal entrance")
+keyframes = re.search(r"@keyframes heroReveal \{(.*?)\n\}", css, re.S)
+check(keyframes is not None and re.search(r"to \{[^}]*opacity: 1;", keyframes.group(1)) is not None,
+      "styles.css: heroReveal does not end at full opacity")
+fixed_zero = [sel for sel, body in re.findall(r"([^{}]*\.hero-phone[^{}]*)\{([^{}]*)\}", css)
+              if re.search(r"opacity\s*:\s*0(?![.\d])", body) and not re.fullmatch(ENTRANCE, body)]
+check(not fixed_zero, f"styles.css: hero phone left at opacity 0 by {fixed_zero}")
+# Any rule anywhere (media queries included) that targets the phone line may
+# set animation properties only as the heroReveal entrance; an override such as
+# "animation: none" would strand it at opacity 0.
+anim_overrides = [sel.strip() for sel, body in re.findall(r"([^{}]*\.hero-phone[^{}]*)\{([^{}]*)\}", css)
+                  if re.search(r"animation", body) and not re.fullmatch(ENTRANCE, body)]
+check(not anim_overrides, f"styles.css: hero phone animation overridden by {anim_overrides}")
+
+# 8b. Home links every specialty page from the services section and from the
+#     footer, each with descriptive anchor text.
+services = re.search(r'<section class="services" id="services">.*?</section>', index_live, re.S)
+footer = re.search(r"<footer>.*?</footer>", index_live, re.S)
+check(services is not None and footer is not None, "index.html: services section or footer missing")
+for page in gen.PAGES:
+    for label, block in (("services section", services), ("footer", footer)):
+        if not block:
+            continue
+        anchors = [text_of(t) for t in re.findall(r'<a [^>]*href="/' + page["slug"] + r'"[^>]*>(.*?)</a>', block.group(0), re.S)]
+        check(anchors, f"index.html: {label} does not link /{page['slug']}")
+        for a in anchors:
+            check(a.lower() not in GENERIC_ANCHORS and len(a.split()) >= 2 and names_target(a, page),
+                  f"index.html: {label} anchor '{a}' for /{page['slug']} does not describe the page")
+
+# 8c. Every specialty page links the other three from a Related care block in
+#     the article body, with the target page's H1 as anchor text, and not itself.
+for page in gen.PAGES:
+    html = SITE_PAGES[f"/{page['slug']}"]
+    related = re.search(r'<section class="article-section related-care" aria-labelledby="related-heading">.*?</section>', html, re.S)
+    check(related is not None, f"{page['slug']}: no Related care block")
+    if not related:
+        continue
+    block = related.group(0)
+    check(f'href="/{page["slug"]}"' not in block, f"{page['slug']}: Related care links the page to itself")
+    for other in gen.PAGES:
+        if other is page:
+            continue
+        anchors = [text_of(t) for t in re.findall(r'<a [^>]*href="/' + other["slug"] + r'"[^>]*>(.*?)</a>', block, re.S)]
+        check(other["h1"] in anchors, f"{page['slug']}: Related care does not link /{other['slug']} as '{other['h1']}'")
+    check(block.count("<a ") == len(gen.PAGES) - 1, f"{page['slug']}: Related care has links other than the three sibling pages")
+
+# 8d. Per-page metadata and structured data on all five pages.
+ROBOTS_REQUIRED = {"index", "follow", "max-image-preview:large", "max-snippet:-1"}
+for route, html in SITE_PAGES.items():
+    url = gen.SITE + route
+    check(html != "", f"{route}: page missing")
+    if not html:
+        continue
+    title = _h.unescape(re.search(r"<title>(.*?)</title>", html).group(1))
+    desc = _h.unescape(re.search(r'<meta name="description" content="([^"]*)"', html).group(1))
+    check(len(title) <= 63, f"{route}: title {len(title)} chars (max 63)")
+    check(len(desc) <= 160, f"{route}: description {len(desc)} chars (max 160)")
+    for prop in ("og:description", "twitter:description"):
+        m = re.search(r'(?:property|name)="' + prop + r'" content="([^"]*)"', html)
+        check(m is not None and len(_h.unescape(m.group(1))) <= 160, f"{route}: {prop} missing or over 160 chars")
+    for prop in ("og:title", "twitter:title"):
+        m = re.search(r'(?:property|name)="' + prop + r'" content="([^"]*)"', html)
+        check(m is not None and len(_h.unescape(m.group(1))) <= 63, f"{route}: {prop} missing or over 63 chars")
+    loc = re.search(r'<meta property="og:locale" content="([^"]*)"', html)
+    check(loc is not None and loc.group(1) == "en_IN", f"{route}: og:locale is not en_IN")
+    site_name = re.search(r'<meta property="og:site_name" content="([^"]*)"', html)
+    check(site_name is not None and _h.unescape(site_name.group(1)) == gen._HOME_WEBSITE["name"], f"{route}: og:site_name is not the site name")
+    robots = re.search(r'<meta name="robots" content="([^"]*)"', html)
+    check(robots is not None and ROBOTS_REQUIRED <= {d.strip() for d in robots.group(1).split(",")},
+          f"{route}: robots meta lacks {sorted(ROBOTS_REQUIRED)}")
+    canon = re.search(r'<link rel="canonical" href="([^"]*)"', html)
+    ogurl = re.search(r'<meta property="og:url" content="([^"]*)"', html)
+    check(canon is not None and ogurl is not None and canon.group(1) == ogurl.group(1) and canon.group(1).startswith(gen.SITE),
+          f"{route}: canonical and og:url differ or are not absolute")
+    check(len(re.findall(r"<h1[\s>]", html)) == 1, f"{route}: not exactly one H1")
+    # Structured data: every block parses and every bare {"@id": ...} reference
+    # resolves to a node defined on this same page.
+    defined, refs, types = set(), [], {}
+    for raw in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S):
+        try:
+            data = json.loads(raw)
+        except ValueError as e:
+            check(False, f"{route}: JSON-LD does not parse ({e})")
+            continue
+        for node in ld_nodes(data, []):
+            if "@id" in node and len(node) == 1:
+                refs.append(node["@id"])
+            elif "@id" in node:
+                defined.add(node["@id"])
+                types.setdefault(node["@id"], set()).update(node["@type"] if isinstance(node.get("@type"), list) else [node.get("@type")])
+    check(defined, f"{route}: no JSON-LD nodes")
+    for suffix, typ in (("#website", "WebSite"), ("#clinic", "MedicalClinic"), ("#physician", "Physician")):
+        for r in {r for r in refs if r.endswith(suffix)}:
+            check(typ in types.get(r, set()), f"{route}: {r} does not resolve to a {typ} node")
+    for r in refs:
+        check(r in defined, f"{route}: JSON-LD reference {r} is not defined on this page")
+    check('"priceRange": "$' not in html and '"priceRange":"$' not in html, f"{route}: priceRange uses a dollar sign")
+
+# 8e. Home structured data: dateModified is the home page's sitemap lastmod,
+#     and priceRange, if present, is stated in rupees.
+home_nodes = ld_nodes(home_ld, [])
+home_wp = next(n for n in home_nodes if n.get("@type") == "MedicalWebPage")
+sm_urls = {m.group(1): m.group(0) for m in re.finditer(r"<url>\s*<loc>([^<]+)</loc>.*?</url>", sitemap, re.S)}
+home_entry = sm_urls.get(gen.SITE + "/", "")
+home_lastmod = re.search(r"<lastmod>([^<]+)</lastmod>", home_entry)
+check(home_lastmod is not None and home_wp.get("dateModified") == home_lastmod.group(1),
+      f"index.html: MedicalWebPage dateModified {home_wp.get('dateModified')} is not the sitemap lastmod")
+# priceRange stays out: the site publishes one fee, for the check-up, and the
+# check-up Offer already carries it; a range would state fees the site does not.
+check(not any("priceRange" in n for n in home_nodes), "index.html: priceRange present; the site publishes no fee range")
+
+# 8e2. Opening hours are the clinic's published schedule, pinned literally so
+#      no edit can change them without changing this line on purpose.
+PUBLISHED_HOURS = [
+    (["Monday", "Wednesday", "Thursday", "Friday", "Saturday"], "09:00", "13:00"),
+    (["Monday", "Wednesday", "Thursday", "Friday", "Saturday"], "16:30", "19:00"),
+    (["Sunday"], "09:00", "15:00"),
+]
+check([(s_["dayOfWeek"], s_["opens"], s_["closes"]) for s_ in home_clinic["openingHoursSpecification"]] == PUBLISHED_HOURS,
+      "index.html: openingHoursSpecification differs from the published schedule")
+
+# 8e3. Dates track content. For each page, find the last commit that moved its
+#      lastmod. If the page file has changed since that commit, its lastmod
+#      must be today (the change is being made now). No lastmod may move
+#      backwards from the committed sitemap or sit in the future. The home
+#      dateModified equals the home lastmod (8e). Every comparison is against
+#      git history, so a squash merge made on a later day still passes: the
+#      squash commit moves the lastmod and changes the page together.
+import subprocess, datetime as _dt
+def git(*args):
+    return subprocess.run(["git", "-C", str(ROOT), *args], capture_output=True, text=True)
+def lastmods(xml):
+    return {m.group(1): m.group(2) for m in re.finditer(r"<loc>([^<]+)</loc>\s*<lastmod>([^<]+)</lastmod>", xml)}
+today = _dt.date.today().isoformat()
+now_lm = lastmods(sitemap)
+sm_history = git("log", "--format=%H", "--", "sitemap.xml").stdout.split()
+check(sm_history != [], "git history for sitemap.xml unavailable")
+if sm_history:
+    snap = {c: lastmods(git("show", f"{c}:sitemap.xml").stdout) for c in sm_history}
+    at_head = lastmods(git("show", "HEAD:sitemap.xml").stdout)
+    route_file = {"/": "index.html", **{f"/{p['slug']}": f"{p['slug']}.html" for p in gen.PAGES}}
+    for route, name in route_file.items():
+        loc_ = gen.SITE + route
+        moved, moved_from = None, None
+        for i, c in enumerate(sm_history):
+            before = snap[sm_history[i + 1]] if i + 1 < len(sm_history) else {}
+            if snap[c].get(loc_) != before.get(loc_):
+                moved, moved_from = c, before.get(loc_)
+                break
+        check(moved is None or moved_from is None or snap[moved][loc_] > moved_from,
+              f"sitemap.xml: lastmod for {route} was moved backwards ({moved_from} to {snap[moved][loc_] if moved else ''}) in {moved[:7] if moved else ''}")
+        changed_since = moved is None or git("diff", "--quiet", moved, "--", name).returncode == 1
+        check(not changed_since or now_lm.get(loc_) == today,
+              f"sitemap.xml: {name} changed after its lastmod was last moved, so its lastmod must be today ({today})")
+        check(loc_ not in at_head or now_lm.get(loc_, "") >= at_head[loc_],
+              f"sitemap.xml: lastmod for {route} moved backwards from the committed {at_head.get(loc_)}")
+        check(now_lm.get(loc_, "9999") <= today, f"sitemap.xml: lastmod for {route} is in the future")
+
+# 8f. Sitemap: exactly the five pages, each with an ISO lastmod, and the home
+#     entry keeps its image extension entry for the doctor's photo.
+expected_locs = {gen.SITE + "/"} | {f"{gen.SITE}/{p['slug']}" for p in gen.PAGES}
+check(set(sm_urls) == expected_locs, f"sitemap.xml lists {sorted(set(sm_urls) ^ expected_locs)} unexpectedly")
+for loc_, entry in sm_urls.items():
+    check(re.search(r"<lastmod>\d{4}-\d{2}-\d{2}</lastmod>", entry) is not None, f"sitemap.xml: {loc_} has no ISO lastmod")
+import xml.etree.ElementTree as ET
+_NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9", "image": "http://www.google.com/schemas/sitemap-image/1.1"}
+try:
+    _tree = ET.fromstring(sitemap.encode("utf-8"))
+except ET.ParseError as e:
+    _tree = None
+    check(False, f"sitemap.xml does not parse ({e})")
+if _tree is not None:
+    home_url = [u for u in _tree.findall("sm:url", _NS) if (u.findtext("sm:loc", "", _NS) or "").strip() == gen.SITE + "/"]
+    images = [i.findtext("image:loc", "", _NS).strip() for u in home_url for i in u.findall("image:image", _NS)]
+    check(f"{gen.SITE}/doctor-photo.jpg" in images, "sitemap.xml: home url lacks an image:image entry for the doctor's photo")
+
 if failures:
-    print("\n".join(f"FAIL {f}" for f in failures)); sys.exit(1)
-print(f"ok: {len(gen.PAGES)} pages verified against index.html")
+    print("\n".join(f"FAIL {f}" for f in failures))
+    print(f"{len(failures)} of {checks} checks failed"); sys.exit(1)
+print(f"ok: {checks} checks passed; {len(gen.PAGES)} specialty pages and the home page verified against index.html")

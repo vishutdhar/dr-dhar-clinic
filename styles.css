@@ -125,7 +125,7 @@ body {
         transition-duration: 0.01ms !important;
     }
     .hero-tagline, .hero h1, .hero-credentials,
-    .hero-subtitle, .hero-stats, .hero-actions, .hero-visual {
+    .hero-subtitle, .hero-stats, .hero-actions, .hero-phone, .hero-visual {
         opacity: 1 !important;
         transform: none !important;
     }
@@ -347,6 +347,25 @@ body {
     flex-wrap: wrap;
 }
 
+.hero-phone {
+    margin-top: 16px;
+    font-size: 0.95rem;
+    color: var(--text-on-dark-muted);
+}
+
+.hero-phone a {
+    color: var(--text-on-dark);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.hero-phone a:hover,
+.hero-phone a:focus-visible {
+    text-decoration: underline;
+}
+
 /* Hero visual — photo with blue glow */
 .hero-visual {
     flex-shrink: 0;
@@ -419,7 +438,7 @@ body {
     animation: heroReveal 0.6s ease-out 0.45s forwards;
 }
 
-.hero-actions {
+.hero-actions, .hero-phone {
     opacity: 0;
     animation: heroReveal 0.6s ease-out 0.55s forwards;
 }
@@ -1683,6 +1702,26 @@ a.logo {
 
 .visit-card a {
     color: var(--accent);
+}
+
+.related-links {
+    list-style: none;
+    padding: 0;
+}
+
+.related-links li {
+    margin-bottom: 10px;
+}
+
+.related-links a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.related-links a:hover,
+.related-links a:focus-visible {
+    text-decoration: underline;
 }
 
 .article .faq-container {
