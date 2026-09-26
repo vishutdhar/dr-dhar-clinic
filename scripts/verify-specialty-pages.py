@@ -330,6 +330,12 @@ check(keyframes is not None and re.search(r"to \{[^}]*opacity: 1;", keyframes.gr
 fixed_zero = [sel for sel, body in re.findall(r"([^{}]*\.hero-phone[^{}]*)\{([^{}]*)\}", css)
               if re.search(r"opacity\s*:\s*0(?![.\d])", body) and not re.search(r"animation: heroReveal [^;]*forwards;", body)]
 check(not fixed_zero, f"styles.css: hero phone left at opacity 0 by {fixed_zero}")
+# Any rule anywhere (media queries included) that targets the phone line may
+# set animation properties only as the heroReveal entrance; an override such as
+# "animation: none" would strand it at opacity 0.
+anim_overrides = [sel.strip() for sel, body in re.findall(r"([^{}]*\.hero-phone[^{}]*)\{([^{}]*)\}", css)
+                  if re.search(r"animation", body) and not re.fullmatch(r"\s*opacity: 0;\s*animation: heroReveal [^;]*forwards;\s*", body)]
+check(not anim_overrides, f"styles.css: hero phone animation overridden by {anim_overrides}")
 
 # 8b. Home links every specialty page from the services section and from the
 #     footer, each with descriptive anchor text.
