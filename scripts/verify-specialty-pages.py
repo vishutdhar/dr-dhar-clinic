@@ -312,32 +312,40 @@ if hero:
     shown = [text_of(m) for m in re.findall(r'data-obf="phone"[^>]*>([^<]*)<', h)]
     check(home_display in shown, f"index.html: hero does not show the phone number {home_display} as text")
     check(ent(home_display) in h, "index.html: hero phone is not entity-encoded like the rest of the page")
+    phone_line = re.search(r'<p class="hero-phone">(.*?)</p>', h, re.S)
+    for tag in re.findall(r"<[a-z][^>]*>", phone_line.group(0) if phone_line else ""):
+        check(not re.search(r"\shidden\b|aria-hidden|\sstyle=", tag), f"index.html: hero phone markup hides it: {tag[:60]}")
+    ancestors = [re.search(r'<section class="hero"[^>]*>', h), re.search(r'<div class="hero-container"[^>]*>', h), re.search(r'<div class="hero-content"[^>]*>', h)]
+    check(all(ancestors), "index.html: hero phone is no longer inside the hero content column")
+    for tag in [m.group(0) for m in ancestors if m]:
+        check(not re.search(r"\shidden\b|aria-hidden|\sstyle=", tag), f"index.html: hero container hides the phone: {tag[:60]}")
     actions_to_phone = re.search(r'class="hero-actions".*?</div>\s*<p class="hero-phone">.*?data-obf="phone"', h, re.S)
     check(actions_to_phone is not None, "index.html: hero phone text does not sit directly under the hero buttons")
 
 # 8a2. The stylesheet never hides the hero phone line: no rule for it sets
 #      display none or visibility hidden, and the reduced-motion override that
 #      makes the animated hero lines visible includes it.
-css = (ROOT / "styles.css").read_text(encoding="utf-8")
+css = re.sub(r"/\*.*?\*/", "", (ROOT / "styles.css").read_text(encoding="utf-8"), flags=re.S)
 for sel, body in re.findall(r"([^{}]*\.hero-phone[^{}]*)\{([^{}]*)\}", css):
     check(not re.search(r"display\s*:\s*none|visibility\s*:\s*hidden|font-size\s*:\s*0(?![.\d])|clip(?:-path)?\s*:", body),
           f"styles.css: rule '{sel.strip()}' hides the hero phone")
 reduced = re.search(r"@media \(prefers-reduced-motion: reduce\) \{(.*?)\n\}", css, re.S)
 check(reduced is not None and re.search(r"\.hero-phone[^{]*\{\s*opacity: 1 !important;", reduced.group(1)) is not None,
       "styles.css: reduced-motion override does not make the hero phone visible")
-anim = re.search(r"([^{}]*\.hero-phone[^{}]*)\{[^{}]*opacity: 0;[^{}]*animation: heroReveal[^{}]*forwards;[^{}]*\}", css)
+ENTRANCE = r"\s*opacity: 0;\s*animation: heroReveal [\d.]+s ease-out [\d.]+s forwards;\s*"
+anim = next((b for _, b in re.findall(r"([^{}]*\.hero-phone[^{}]*)\{([^{}]*)\}", css) if re.fullmatch(ENTRANCE, b)), None)
 check(anim is not None, "styles.css: hero phone does not use the heroReveal entrance")
 keyframes = re.search(r"@keyframes heroReveal \{(.*?)\n\}", css, re.S)
 check(keyframes is not None and re.search(r"to \{[^}]*opacity: 1;", keyframes.group(1)) is not None,
       "styles.css: heroReveal does not end at full opacity")
 fixed_zero = [sel for sel, body in re.findall(r"([^{}]*\.hero-phone[^{}]*)\{([^{}]*)\}", css)
-              if re.search(r"opacity\s*:\s*0(?![.\d])", body) and not re.search(r"animation: heroReveal [^;]*forwards;", body)]
+              if re.search(r"opacity\s*:\s*0(?![.\d])", body) and not re.fullmatch(ENTRANCE, body)]
 check(not fixed_zero, f"styles.css: hero phone left at opacity 0 by {fixed_zero}")
 # Any rule anywhere (media queries included) that targets the phone line may
 # set animation properties only as the heroReveal entrance; an override such as
 # "animation: none" would strand it at opacity 0.
 anim_overrides = [sel.strip() for sel, body in re.findall(r"([^{}]*\.hero-phone[^{}]*)\{([^{}]*)\}", css)
-                  if re.search(r"animation", body) and not re.fullmatch(r"\s*opacity: 0;\s*animation: heroReveal [^;]*forwards;\s*", body)]
+                  if re.search(r"animation", body) and not re.fullmatch(ENTRANCE, body)]
 check(not anim_overrides, f"styles.css: hero phone animation overridden by {anim_overrides}")
 
 # 8b. Home links every specialty page from the services section and from the
