@@ -323,8 +323,12 @@ reduced = re.search(r"@media \(prefers-reduced-motion: reduce\) \{(.*?)\n\}", cs
 check(reduced is not None and re.search(r"\.hero-phone[^{]*\{\s*opacity: 1 !important;", reduced.group(1)) is not None,
       "styles.css: reduced-motion override does not make the hero phone visible")
 anim = re.search(r"([^{}]*\.hero-phone[^{}]*)\{[^{}]*opacity: 0;[^{}]*animation: heroReveal[^{}]*forwards;[^{}]*\}", css)
+check(anim is not None, "styles.css: hero phone does not use the heroReveal entrance")
+keyframes = re.search(r"@keyframes heroReveal \{(.*?)\n\}", css, re.S)
+check(keyframes is not None and re.search(r"to \{[^}]*opacity: 1;", keyframes.group(1)) is not None,
+      "styles.css: heroReveal does not end at full opacity")
 fixed_zero = [sel for sel, body in re.findall(r"([^{}]*\.hero-phone[^{}]*)\{([^{}]*)\}", css)
-              if re.search(r"opacity\s*:\s*0\b", body) and "forwards" not in body]
+              if re.search(r"opacity\s*:\s*0(?![.\d])", body) and not re.search(r"animation: heroReveal [^;]*forwards;", body)]
 check(not fixed_zero, f"styles.css: hero phone left at opacity 0 by {fixed_zero}")
 
 # 8b. Home links every specialty page from the services section and from the
@@ -427,32 +431,40 @@ PUBLISHED_HOURS = [
 check([(s_["dayOfWeek"], s_["opens"], s_["closes"]) for s_ in home_clinic["openingHoursSpecification"]] == PUBLISHED_HOURS,
       "index.html: openingHoursSpecification differs from the published schedule")
 
-# 8e3. Dates track content. For each page: a file that differs from its state
-#      at the last commit touching sitemap.xml must carry a newer lastmod than
-#      it had there; no lastmod may move backwards from the committed sitemap;
-#      and none may be in the future. (The home dateModified equals the home
-#      lastmod, pinned in 8e.) Comparisons are against git, so they hold across
-#      a squash merge made on a later day.
+# 8e3. Dates track content. For each page, find the last commit that moved its
+#      lastmod. If the page file has changed since that commit, its lastmod
+#      must be today (the change is being made now). No lastmod may move
+#      backwards from the committed sitemap or sit in the future. The home
+#      dateModified equals the home lastmod (8e). Every comparison is against
+#      git history, so a squash merge made on a later day still passes: the
+#      squash commit moves the lastmod and changes the page together.
 import subprocess, datetime as _dt
 def git(*args):
     return subprocess.run(["git", "-C", str(ROOT), *args], capture_output=True, text=True)
 def lastmods(xml):
     return {m.group(1): m.group(2) for m in re.finditer(r"<loc>([^<]+)</loc>\s*<lastmod>([^<]+)</lastmod>", xml)}
+today = _dt.date.today().isoformat()
 now_lm = lastmods(sitemap)
-sm_commit = git("log", "-1", "--format=%H", "--", "sitemap.xml").stdout.strip()
-check(sm_commit != "", "git history for sitemap.xml unavailable")
-if sm_commit:
-    at_sm = lastmods(git("show", f"{sm_commit}:sitemap.xml").stdout)
+sm_history = git("log", "--format=%H", "--", "sitemap.xml").stdout.split()
+check(sm_history != [], "git history for sitemap.xml unavailable")
+if sm_history:
+    snap = {c: lastmods(git("show", f"{c}:sitemap.xml").stdout) for c in sm_history}
     at_head = lastmods(git("show", "HEAD:sitemap.xml").stdout)
     route_file = {"/": "index.html", **{f"/{p['slug']}": f"{p['slug']}.html" for p in gen.PAGES}}
     for route, name in route_file.items():
         loc_ = gen.SITE + route
-        changed = git("diff", "--quiet", sm_commit, "--", name).returncode == 1
-        check(not changed or (loc_ in at_sm and now_lm.get(loc_, "") > at_sm[loc_]),
-              f"sitemap.xml: {name} changed since the sitemap was last committed but its lastmod did not move forward")
+        moved = None
+        for i, c in enumerate(sm_history):
+            before = snap[sm_history[i + 1]] if i + 1 < len(sm_history) else {}
+            if snap[c].get(loc_) != before.get(loc_):
+                moved = c
+                break
+        changed_since = moved is None or git("diff", "--quiet", moved, "--", name).returncode == 1
+        check(not changed_since or now_lm.get(loc_) == today,
+              f"sitemap.xml: {name} changed after its lastmod was last moved, so its lastmod must be today ({today})")
         check(loc_ not in at_head or now_lm.get(loc_, "") >= at_head[loc_],
               f"sitemap.xml: lastmod for {route} moved backwards from the committed {at_head.get(loc_)}")
-        check(now_lm.get(loc_, "9999") <= _dt.date.today().isoformat(), f"sitemap.xml: lastmod for {route} is in the future")
+        check(now_lm.get(loc_, "9999") <= today, f"sitemap.xml: lastmod for {route} is in the future")
 
 # 8f. Sitemap: exactly the five pages, each with an ISO lastmod, and the home
 #     entry keeps its image extension entry for the doctor's photo.
@@ -460,8 +472,17 @@ expected_locs = {gen.SITE + "/"} | {f"{gen.SITE}/{p['slug']}" for p in gen.PAGES
 check(set(sm_urls) == expected_locs, f"sitemap.xml lists {sorted(set(sm_urls) ^ expected_locs)} unexpectedly")
 for loc_, entry in sm_urls.items():
     check(re.search(r"<lastmod>\d{4}-\d{2}-\d{2}</lastmod>", entry) is not None, f"sitemap.xml: {loc_} has no ISO lastmod")
-check('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"' in sitemap
-      and f"<image:loc>{gen.SITE}/doctor-photo.jpg</image:loc>" in home_entry, "sitemap.xml: home image entry missing")
+import xml.etree.ElementTree as ET
+_NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9", "image": "http://www.google.com/schemas/sitemap-image/1.1"}
+try:
+    _tree = ET.fromstring(sitemap.encode("utf-8"))
+except ET.ParseError as e:
+    _tree = None
+    check(False, f"sitemap.xml does not parse ({e})")
+if _tree is not None:
+    home_url = [u for u in _tree.findall("sm:url", _NS) if (u.findtext("sm:loc", "", _NS) or "").strip() == gen.SITE + "/"]
+    images = [i.findtext("image:loc", "", _NS).strip() for u in home_url for i in u.findall("image:image", _NS)]
+    check(f"{gen.SITE}/doctor-photo.jpg" in images, "sitemap.xml: home url lacks an image:image entry for the doctor's photo")
 
 if failures:
     print("\n".join(f"FAIL {f}" for f in failures))
