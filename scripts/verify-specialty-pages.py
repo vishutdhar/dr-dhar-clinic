@@ -427,21 +427,32 @@ PUBLISHED_HOURS = [
 check([(s_["dayOfWeek"], s_["opens"], s_["closes"]) for s_ in home_clinic["openingHoursSpecification"]] == PUBLISHED_HOURS,
       "index.html: openingHoursSpecification differs from the published schedule")
 
-# 8e3. Dates are not older than the content they describe: each sitemap lastmod
-#      and the home dateModified are on or after the file's last commit date.
-import subprocess
-def last_commit_date(name):
-    out = subprocess.run(["git", "-C", str(ROOT), "log", "-1", "--format=%cs", "--", name], capture_output=True, text=True)
-    return out.stdout.strip()
-route_file = {"/": "index.html", **{f"/{p['slug']}": f"{p['slug']}.html" for p in gen.PAGES}}
-for route, name in route_file.items():
-    committed = last_commit_date(name)
-    lm = re.search(r"<lastmod>([^<]+)</lastmod>", sm_urls.get(gen.SITE + route, ""))
-    check(committed == "" or (lm is not None and lm.group(1) >= committed),
-          f"sitemap.xml: lastmod for {route} is older than {name}'s last commit {committed}")
-    if route == "/":
-        check(committed == "" or str(home_wp.get("dateModified", "")) >= committed,
-              f"index.html: dateModified is older than its last commit {committed}")
+# 8e3. Dates track content. For each page: a file that differs from its state
+#      at the last commit touching sitemap.xml must carry a newer lastmod than
+#      it had there; no lastmod may move backwards from the committed sitemap;
+#      and none may be in the future. (The home dateModified equals the home
+#      lastmod, pinned in 8e.) Comparisons are against git, so they hold across
+#      a squash merge made on a later day.
+import subprocess, datetime as _dt
+def git(*args):
+    return subprocess.run(["git", "-C", str(ROOT), *args], capture_output=True, text=True)
+def lastmods(xml):
+    return {m.group(1): m.group(2) for m in re.finditer(r"<loc>([^<]+)</loc>\s*<lastmod>([^<]+)</lastmod>", xml)}
+now_lm = lastmods(sitemap)
+sm_commit = git("log", "-1", "--format=%H", "--", "sitemap.xml").stdout.strip()
+check(sm_commit != "", "git history for sitemap.xml unavailable")
+if sm_commit:
+    at_sm = lastmods(git("show", f"{sm_commit}:sitemap.xml").stdout)
+    at_head = lastmods(git("show", "HEAD:sitemap.xml").stdout)
+    route_file = {"/": "index.html", **{f"/{p['slug']}": f"{p['slug']}.html" for p in gen.PAGES}}
+    for route, name in route_file.items():
+        loc_ = gen.SITE + route
+        changed = git("diff", "--quiet", sm_commit, "--", name).returncode == 1
+        check(not changed or (loc_ in at_sm and now_lm.get(loc_, "") > at_sm[loc_]),
+              f"sitemap.xml: {name} changed since the sitemap was last committed but its lastmod did not move forward")
+        check(loc_ not in at_head or now_lm.get(loc_, "") >= at_head[loc_],
+              f"sitemap.xml: lastmod for {route} moved backwards from the committed {at_head.get(loc_)}")
+        check(now_lm.get(loc_, "9999") <= _dt.date.today().isoformat(), f"sitemap.xml: lastmod for {route} is in the future")
 
 # 8f. Sitemap: exactly the five pages, each with an ISO lastmod, and the home
 #     entry keeps its image extension entry for the doctor's photo.
