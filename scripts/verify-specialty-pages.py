@@ -394,6 +394,9 @@ for route, html in SITE_PAGES.items():
     for prop in ("og:description", "twitter:description"):
         m = re.search(r'(?:property|name)="' + prop + r'" content="([^"]*)"', html)
         check(m is not None and len(_h.unescape(m.group(1))) <= 160, f"{route}: {prop} missing or over 160 chars")
+    for prop in ("og:title", "twitter:title"):
+        m = re.search(r'(?:property|name)="' + prop + r'" content="([^"]*)"', html)
+        check(m is not None and len(_h.unescape(m.group(1))) <= 63, f"{route}: {prop} missing or over 63 chars")
     loc = re.search(r'<meta property="og:locale" content="([^"]*)"', html)
     check(loc is not None and loc.group(1) == "en_IN", f"{route}: og:locale is not en_IN")
     site_name = re.search(r'<meta property="og:site_name" content="([^"]*)"', html)
