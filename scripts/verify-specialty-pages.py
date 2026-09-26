@@ -18,8 +18,11 @@ exec(compile((ROOT / "scripts" / "build-specialty-pages.py").read_text(encoding=
 
 index = (ROOT / "index.html").read_text(encoding="utf-8")
 failures = []
+checks = 0
 
 def check(cond, msg):
+    global checks
+    checks += 1
     if not cond:
         failures.append(msg)
 
@@ -267,6 +270,139 @@ for d in _days:
     expected = sorted((mins(o), mins(c)) for o, c in home_schedule[d])
     check(sorted(js_sched.get(js_day[d], [])) == expected, f"script.js schedule for {d} differs from the home OpeningHoursSpecification")
 
+
+# 8. Site-wide search signals, checked on the committed files of all five
+#    indexable pages (the home page and the four specialty pages).
+SITE_PAGES = {"/": index}
+for page in gen.PAGES:
+    path = ROOT / f"{page['slug']}.html"
+    SITE_PAGES[f"/{page['slug']}"] = path.read_text(encoding="utf-8") if path.exists() else ""
+text_of = lambda frag: re.sub(r"\s+", " ", _h.unescape(re.sub(r"<[^>]+>", " ", frag))).strip()
+GENERIC_ANCHORS = {"learn more", "read more", "click here", "here", "more", "details"}
+
+def ld_nodes(obj, out):
+    """Every dict in a JSON-LD tree, depth first."""
+    if isinstance(obj, dict):
+        out.append(obj)
+        for v in obj.values():
+            ld_nodes(v, out)
+    elif isinstance(obj, list):
+        for v in obj:
+            ld_nodes(v, out)
+    return out
+
+# 8a. The clinic phone is visible as text in the home hero, next to the Call
+#     and WhatsApp buttons, in the same obfuscated form the rest of the page uses.
+hero = re.search(r'<section class="hero".*?</section>', index, re.S)
+check(hero is not None, "index.html: hero section missing")
+if hero:
+    h = hero.group(0)
+    check('data-obf-href="tel"' in h and 'data-obf-href="wa"' in h, "index.html: hero lost its Call or WhatsApp button")
+    shown = [text_of(m) for m in re.findall(r'data-obf="phone"[^>]*>([^<]*)<', h)]
+    check(home_display in shown, f"index.html: hero does not show the phone number {home_display} as text")
+    check(ent(home_display) in h, "index.html: hero phone is not entity-encoded like the rest of the page")
+    actions_to_phone = re.search(r'class="hero-actions".*?</div>\s*<p class="hero-phone">.*?data-obf="phone"', h, re.S)
+    check(actions_to_phone is not None, "index.html: hero phone text does not sit directly under the hero buttons")
+
+# 8b. Home links every specialty page from the services section and from the
+#     footer, each with descriptive anchor text.
+services = re.search(r'<section class="services" id="services">.*?</section>', index, re.S)
+footer = re.search(r"<footer>.*?</footer>", index, re.S)
+check(services is not None and footer is not None, "index.html: services section or footer missing")
+for page in gen.PAGES:
+    for label, block in (("services section", services), ("footer", footer)):
+        if not block:
+            continue
+        anchors = [text_of(t) for t in re.findall(r'<a [^>]*href="/' + page["slug"] + r'"[^>]*>(.*?)</a>', block.group(0), re.S)]
+        check(anchors, f"index.html: {label} does not link /{page['slug']}")
+        for a in anchors:
+            check(a.lower() not in GENERIC_ANCHORS and len(a.split()) >= 2, f"index.html: {label} anchor '{a}' for /{page['slug']} is not descriptive")
+
+# 8c. Every specialty page links the other three from a Related care block in
+#     the article body, with the target page's H1 as anchor text, and not itself.
+for page in gen.PAGES:
+    html = SITE_PAGES[f"/{page['slug']}"]
+    related = re.search(r'<section class="article-section related-care" aria-labelledby="related-heading">.*?</section>', html, re.S)
+    check(related is not None, f"{page['slug']}: no Related care block")
+    if not related:
+        continue
+    block = related.group(0)
+    check(f'href="/{page["slug"]}"' not in block, f"{page['slug']}: Related care links the page to itself")
+    for other in gen.PAGES:
+        if other is page:
+            continue
+        anchors = [text_of(t) for t in re.findall(r'<a [^>]*href="/' + other["slug"] + r'"[^>]*>(.*?)</a>', block, re.S)]
+        check(other["h1"] in anchors, f"{page['slug']}: Related care does not link /{other['slug']} as '{other['h1']}'")
+    check(block.count("<a ") == len(gen.PAGES) - 1, f"{page['slug']}: Related care has links other than the three sibling pages")
+
+# 8d. Per-page metadata and structured data on all five pages.
+ROBOTS_REQUIRED = {"index", "follow", "max-image-preview:large", "max-snippet:-1"}
+for route, html in SITE_PAGES.items():
+    url = gen.SITE + route
+    check(html != "", f"{route}: page missing")
+    if not html:
+        continue
+    title = _h.unescape(re.search(r"<title>(.*?)</title>", html).group(1))
+    desc = _h.unescape(re.search(r'<meta name="description" content="([^"]*)"', html).group(1))
+    check(len(title) <= 63, f"{route}: title {len(title)} chars (max 63)")
+    check(len(desc) <= 160, f"{route}: description {len(desc)} chars (max 160)")
+    for prop in ("og:description", "twitter:description"):
+        m = re.search(r'(?:property|name)="' + prop + r'" content="([^"]*)"', html)
+        check(m is not None and len(_h.unescape(m.group(1))) <= 160, f"{route}: {prop} missing or over 160 chars")
+    loc = re.search(r'<meta property="og:locale" content="([^"]*)"', html)
+    check(loc is not None and loc.group(1) == "en_IN", f"{route}: og:locale is not en_IN")
+    site_name = re.search(r'<meta property="og:site_name" content="([^"]*)"', html)
+    check(site_name is not None and site_name.group(1).strip() != "", f"{route}: og:site_name missing")
+    robots = re.search(r'<meta name="robots" content="([^"]*)"', html)
+    check(robots is not None and ROBOTS_REQUIRED <= {d.strip() for d in robots.group(1).split(",")},
+          f"{route}: robots meta lacks {sorted(ROBOTS_REQUIRED)}")
+    canon = re.search(r'<link rel="canonical" href="([^"]*)"', html)
+    ogurl = re.search(r'<meta property="og:url" content="([^"]*)"', html)
+    check(canon is not None and ogurl is not None and canon.group(1) == ogurl.group(1) and canon.group(1).startswith(gen.SITE),
+          f"{route}: canonical and og:url differ or are not absolute")
+    check(len(re.findall(r"<h1[\s>]", html)) == 1, f"{route}: not exactly one H1")
+    # Structured data: every block parses and every bare {"@id": ...} reference
+    # resolves to a node defined on this same page.
+    defined, refs = set(), []
+    for raw in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S):
+        try:
+            data = json.loads(raw)
+        except ValueError as e:
+            check(False, f"{route}: JSON-LD does not parse ({e})")
+            continue
+        for node in ld_nodes(data, []):
+            if "@id" in node and len(node) == 1:
+                refs.append(node["@id"])
+            elif "@id" in node:
+                defined.add(node["@id"])
+    check(defined, f"{route}: no JSON-LD nodes")
+    for r in refs:
+        check(r in defined, f"{route}: JSON-LD reference {r} is not defined on this page")
+    check('"priceRange": "$' not in html and '"priceRange":"$' not in html, f"{route}: priceRange uses a dollar sign")
+
+# 8e. Home structured data: dateModified is the home page's sitemap lastmod,
+#     and priceRange, if present, is stated in rupees.
+home_nodes = ld_nodes(home_ld, [])
+home_wp = next(n for n in home_nodes if n.get("@type") == "MedicalWebPage")
+sm_urls = {m.group(1): m.group(0) for m in re.finditer(r"<url>\s*<loc>([^<]+)</loc>.*?</url>", sitemap, re.S)}
+home_entry = sm_urls.get(gen.SITE + "/", "")
+home_lastmod = re.search(r"<lastmod>([^<]+)</lastmod>", home_entry)
+check(home_lastmod is not None and home_wp.get("dateModified") == home_lastmod.group(1),
+      f"index.html: MedicalWebPage dateModified {home_wp.get('dateModified')} is not the sitemap lastmod")
+for n in home_nodes:
+    if "priceRange" in n:
+        check(re.search(r"₹|INR|Rs", n["priceRange"]) is not None, f"index.html: priceRange '{n['priceRange']}' is not in rupees")
+
+# 8f. Sitemap: exactly the five pages, each with an ISO lastmod, and the home
+#     entry keeps its image extension entry for the doctor's photo.
+expected_locs = {gen.SITE + "/"} | {f"{gen.SITE}/{p['slug']}" for p in gen.PAGES}
+check(set(sm_urls) == expected_locs, f"sitemap.xml lists {sorted(set(sm_urls) ^ expected_locs)} unexpectedly")
+for loc_, entry in sm_urls.items():
+    check(re.search(r"<lastmod>\d{4}-\d{2}-\d{2}</lastmod>", entry) is not None, f"sitemap.xml: {loc_} has no ISO lastmod")
+check('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"' in sitemap
+      and f"<image:loc>{gen.SITE}/doctor-photo.jpg</image:loc>" in home_entry, "sitemap.xml: home image entry missing")
+
 if failures:
-    print("\n".join(f"FAIL {f}" for f in failures)); sys.exit(1)
-print(f"ok: {len(gen.PAGES)} pages verified against index.html")
+    print("\n".join(f"FAIL {f}" for f in failures))
+    print(f"{len(failures)} of {checks} checks failed"); sys.exit(1)
+print(f"ok: {checks} checks passed; {len(gen.PAGES)} specialty pages and the home page verified against index.html")

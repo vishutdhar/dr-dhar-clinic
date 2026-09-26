@@ -10,7 +10,7 @@ import json, html, pathlib, datetime, re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = "https://dranilkumardhar.com"
-CSS_VERSION = "20260915"
+CSS_VERSION = "20260926"
 TODAY = datetime.date.today().isoformat()
 
 # ---- Facts come from index.html, never from this file ----------------------
@@ -103,6 +103,9 @@ CLINIC = {
     "address": {"@type": "PostalAddress", **{k: v for k, v in ADDRESS.items() if k != "@type"}},
 }
 PHYSICIAN = {"@type": "Physician", "@id": _HOME_PHYSICIAN["@id"], "name": _HOME_PHYSICIAN["name"], "url": SITE}
+# The WebSite node each page's MedicalWebPage is part of, defined on the page
+# itself so the reference resolves without the home page's graph.
+WEBSITE = {k: _HOME_WEBSITE[k] for k in ("@type", "@id", "url", "name", "publisher", "inLanguage")}
 
 PAGES = [
     {
@@ -222,6 +225,7 @@ def json_ld(page: dict) -> str:
             "inLanguage": "en-IN",
             "medicalAudience": {"@type": "MedicalAudience", "audienceType": "Patient"},
         },
+        WEBSITE,
         CLINIC,
         PHYSICIAN,
         {
@@ -259,6 +263,10 @@ def render(page: dict) -> str:
     sections = "\n".join(
         f'            <section class="article-section">\n                <h2>{esc(h)}</h2>\n                {b}\n            </section>'
         for h, b in page["sections"]
+    )
+    related = "\n".join(
+        f'                    <li><a href="/{other["slug"]}">{esc(other["h1"])}</a></li>'
+        for other in PAGES if other["slug"] != page["slug"]
     )
     faqs = "\n".join(
         f'            <details class="faq-item">\n                <summary class="faq-question">{esc(q)}</summary>\n                <div class="faq-answer"><p>{esc(a)}</p></div>\n            </details>'
@@ -353,6 +361,13 @@ def render(page: dict) -> str:
                 </div>
             </section>
 
+            <section class="article-section related-care" aria-labelledby="related-heading">
+                <h2 id="related-heading">Related care at the clinic</h2>
+                <ul class="related-links">
+{related}
+                </ul>
+            </section>
+
             <p class="disclaimer">This page describes the services of Dr. Anil Kumar Dhar's clinic and is general information, not medical advice for your situation. For advice about your own health, consult the doctor.</p>
         </article>
     </main>
@@ -378,7 +393,7 @@ def render(page: dict) -> str:
                         <li><a href="/general-physician-jammu">General Physician</a></li>
                         <li><a href="/diabetes-doctor-jammu">Diabetes Care</a></li>
                         <li><a href="/bp-and-heart-care-jammu">Heart &amp; BP Care</a></li>
-                        <li><a href="/vaccination-jammu">Vaccination</a></li>
+                        <li><a href="/vaccination-jammu">Adult Vaccination</a></li>
                         <li><a href="/#services">Longevity Care</a></li>
                         <li><a href="/#services">In-house Pharmacy</a></li>
                     </ul>
