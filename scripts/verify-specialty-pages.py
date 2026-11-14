@@ -186,24 +186,36 @@ for page in gen.PAGES:
 # 6. Every page loads exactly one styles.css and exactly one script.js, each at
 #    the generator's version, from live markup. The tags are read with an HTML
 #    parser, so a tag inside a comment or a <template>, or text that only looks
-#    like a tag inside an attribute value, does not count, and a second copy at
-#    another version is caught.
+#    like a tag inside an attribute value, does not count. Each tag must carry
+#    exactly the expected attributes, in order, once each: an extra attribute
+#    (async, nomodule, media, disabled), a duplicate, or a second copy at
+#    another version fails. The script element must be empty and closed.
 from html.parser import HTMLParser
 
 class _Assets(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.inert = 0          # depth inside <template> / <noscript>
-        self.styles, self.scripts = [], []
+        self.styles, self.scripts, self.problems = [], [], []
+        self.open_script = False
     def handle_starttag(self, tag, attrs):
-        a = dict(attrs)
         if tag in ("template", "noscript"):
             self.inert += 1
-        elif self.inert == 0 and tag == "link" and "stylesheet" in (a.get("rel") or "").lower().split():
-            self.styles.append(a.get("href") or "")
-        elif self.inert == 0 and tag == "script" and a.get("src") is not None:
-            self.scripts.append((a.get("src") or "", "defer" in a, a.get("type")))
+        elif self.inert == 0 and tag == "link" and any(k == "rel" and "stylesheet" in (v or "").lower().split() for k, v in attrs):
+            self.styles.append(list(attrs))
+        elif self.inert == 0 and tag == "script" and any(k == "src" for k, _ in attrs):
+            self.scripts.append(list(attrs))
+            self.open_script = True
+    def handle_startendtag(self, tag, attrs):
+        if tag == "script":
+            self.problems.append("self-closing <script />, which browsers treat as unclosed")
+        self.handle_starttag(tag, attrs)
+    def handle_data(self, data):
+        if self.open_script and data.strip():
+            self.problems.append("external script element is not empty")
     def handle_endtag(self, tag):
+        if tag == "script":
+            self.open_script = False
         if tag in ("template", "noscript") and self.inert:
             self.inert -= 1
 
@@ -211,14 +223,17 @@ def assets(markup):
     parser = _Assets()
     parser.feed(markup)
     parser.close()
+    if parser.open_script:
+        parser.problems.append("external script element is never closed")
     return parser
 
 def check_assets(label, markup, prefix):
     got = assets(markup)
-    want_css = f"{prefix}styles.css?v={gen.CSS_VERSION}"
-    want_js = (f"{prefix}script.js?v={gen.JS_VERSION}", True, None)
-    check(got.styles == [want_css], f"{label}: live stylesheets are {got.styles}, expected only {want_css}")
-    check(got.scripts == [want_js], f"{label}: live scripts are {got.scripts}, expected only {want_js[0]} with defer")
+    want_css = [[("rel", "stylesheet"), ("href", f"{prefix}styles.css?v={gen.CSS_VERSION}")]]
+    want_js = [[("src", f"{prefix}script.js?v={gen.JS_VERSION}"), ("defer", None)]]
+    check(got.styles == want_css, f"{label}: live stylesheet tags are {got.styles}, expected exactly {want_css}")
+    check(got.scripts == want_js, f"{label}: live script tags are {got.scripts}, expected exactly {want_js}")
+    check(not got.problems, f"{label}: {'; '.join(got.problems)}")
 
 check_assets("index.html", index, "")
 for page in gen.PAGES:
