@@ -187,7 +187,8 @@ for page in gen.PAGES:
 # 6. The stylesheet version the pages request is the one index.html requests.
 v_index = re.search(r'styles\.css\?v=(\d+)', index).group(1)
 check(v_index == gen.CSS_VERSION, f"CSS version differs: index.html {v_index}, generator {gen.CSS_VERSION}")
-js_index = re.search(r'<script src="script\.js\?v=(\d+)" defer></script>', index)
+# Comments are stripped first: a commented-out tag loads nothing.
+js_index = re.search(r'<script src="script\.js\?v=(\d+)" defer></script>', re.sub(r"<!--.*?-->", "", index, flags=re.S))
 check(js_index is not None and js_index.group(1) == gen.JS_VERSION,
       f"script.js version differs: index.html {js_index.group(1) if js_index else 'none'}, generator {gen.JS_VERSION}")
 
