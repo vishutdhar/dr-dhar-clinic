@@ -99,7 +99,6 @@ for page in gen.PAGES:
 # 5c. Elements and script that script.js depends on at runtime.
 for page in gen.PAGES:
     html = gen.render(page)
-    check('<script src="/script.js" defer></script>' in html, f"{page['slug']}: script.js not loaded")
     badge = re.search(r'<div class="status-badge" id="clinic-status">(.*?)</div>', html, re.S)
     check(badge is not None and 'class="status-dot"' in badge.group(1) and 'class="status-text"' in badge.group(1),
           f"{page['slug']}: status badge lacks .status-dot or .status-text (updateClinicStatus throws)")
@@ -184,9 +183,66 @@ for page in gen.PAGES:
     block = re.search(r'<h3 class="footer-heading">Clinic Hours</h3>(.*?)</div>', html, re.S).group(1).strip()
     check(block == home_hours_block, f"{page['slug']}: footer hours block differs from index.html")
 
-# 6. The stylesheet version the pages request is the one index.html requests.
-v_index = re.search(r'styles\.css\?v=(\d+)', index).group(1)
-check(v_index == gen.CSS_VERSION, f"CSS version differs: index.html {v_index}, generator {gen.CSS_VERSION}")
+# 6. Every page loads exactly one styles.css and exactly one script.js, each at
+#    the generator's version, from live markup. The tags are read with an HTML
+#    parser, so a tag inside a comment or a <template>, or text that only looks
+#    like a tag inside an attribute value, does not count. Each tag must carry
+#    exactly the expected attributes, in order, once each: an extra attribute
+#    (async, nomodule, media, disabled), a duplicate, or a second copy at
+#    another version fails. The script element must be empty and closed.
+#    The exact list is deliberate: an equivalent spelling (defer="defer") or
+#    a new attribute fails until the expected list below is changed with it.
+#    No page may carry a <base> element, which would re-point both files.
+from html.parser import HTMLParser
+
+class _Assets(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.inert = 0          # depth inside <template> / <noscript>
+        self.styles, self.scripts, self.problems = [], [], []
+        self.open_script = False
+    def handle_starttag(self, tag, attrs):
+        if tag == "base":
+            self.problems.append("<base> element present; it would change where styles.css and script.js load from")
+        if tag in ("template", "noscript"):
+            self.inert += 1
+        elif self.inert == 0 and tag == "link" and any(k == "rel" and "stylesheet" in (v or "").lower().split() for k, v in attrs):
+            self.styles.append(list(attrs))
+        elif self.inert == 0 and tag == "script" and any(k == "src" for k, _ in attrs):
+            self.scripts.append(list(attrs))
+            self.open_script = True
+    def handle_startendtag(self, tag, attrs):
+        if tag == "script":
+            self.problems.append("self-closing <script />, which browsers treat as unclosed")
+        self.handle_starttag(tag, attrs)
+    def handle_data(self, data):
+        if self.open_script and data.strip():
+            self.problems.append("external script element is not empty")
+    def handle_endtag(self, tag):
+        if tag == "script":
+            self.open_script = False
+        if tag in ("template", "noscript") and self.inert:
+            self.inert -= 1
+
+def assets(markup):
+    parser = _Assets()
+    parser.feed(markup)
+    parser.close()
+    if parser.open_script:
+        parser.problems.append("external script element is never closed")
+    return parser
+
+def check_assets(label, markup, prefix):
+    got = assets(markup)
+    want_css = [[("rel", "stylesheet"), ("href", f"{prefix}styles.css?v={gen.CSS_VERSION}")]]
+    want_js = [[("src", f"{prefix}script.js?v={gen.JS_VERSION}"), ("defer", None)]]
+    check(got.styles == want_css, f"{label}: live stylesheet tags are {got.styles}, expected exactly {want_css}")
+    check(got.scripts == want_js, f"{label}: live script tags are {got.scripts}, expected exactly {want_js}")
+    check(not got.problems, f"{label}: {'; '.join(got.problems)}")
+
+check_assets("index.html", index, "")
+for page in gen.PAGES:
+    check_assets(page["slug"], gen.render(page), "/")
 
 # 7. Expectations derived from the home page alone, never from the generator.
 #    (a) fee: the check-up Offer price; (b) schedule: OpeningHoursSpecification;
