@@ -214,7 +214,7 @@ PAGES = [
         "about_condition": "Thyroid disease",
         "sections": [
             ("How thyroid problems are found and treated",
-             "<p>The thyroid is a small gland in the neck that sets the pace of the body. Too little thyroid hormone slows things down; too much speeds them up. Neither can be judged from symptoms alone; a thyroid problem is confirmed by a blood test, read together with the symptoms.</p><p>Treatment is usually long term, and the right dose can change with time. That is why thyroid care is a matter of regular follow-up rather than a single visit, and why it helps to see one doctor who knows your earlier reports.</p>"),
+             "<p>The thyroid is a small gland in the neck that sets the pace of the body. Too little thyroid hormone slows things down; too much speeds them up. Neither can be judged from symptoms alone; the level of thyroid hormone is measured with a blood test, read together with the symptoms. A swelling or lump in the neck is a separate matter: it may need a scan even when the blood test is normal.</p><p>Treatment is usually long term, and the right dose can change with time. That is why thyroid care is a matter of regular follow-up rather than a single visit, and why it helps to see one doctor who knows your earlier reports.</p>"),
             ("Who should come",
              "<p>Anyone already on thyroid medicine who wants it reviewed. Anyone with complaints that can point to the thyroid: tiredness that does not lift, a change in weight without a reason, feeling cold or hot when others do not, hair fall, a swelling in the neck, or a fast or irregular heartbeat. And anyone with thyroid disease in the family who has not been tested.</p>"),
             ("What to bring",
@@ -222,7 +222,7 @@ PAGES = [
             ("Thyroid with diabetes or blood pressure",
              "<p>Many patients have more than one long-term condition. An internal medicine physician looks at them together, so that the treatment for one does not work against another. The clinic also provides <a href=\"/diabetes-doctor-jammu\">diabetes care</a> and <a href=\"/bp-and-heart-care-jammu\">blood pressure and heart care</a>.</p>"),
             ("Tests and medicines",
-             "<p>The doctor tells you which blood tests you need. The clinic offers lab collection on site, and prescribed medicines are available from the in-house pharmacy immediately after the consultation.</p>"),
+             "<p>Which blood tests are needed depends on your symptoms and your earlier reports. The clinic offers lab collection on site, and prescribed medicines are available from the in-house pharmacy immediately after the consultation.</p>"),
         ],
         "faqs": [
             ("Is Dr. Dhar a thyroid specialist?", "He is an internal medicine physician (MBBS, MD, DNB). Thyroid disorders are among the conditions he treats at the clinic."),
@@ -253,7 +253,7 @@ PAGES = [
              "<p>Confusion or unusual drowsiness, severe breathlessness, chest pain, a fit, a stiff neck with a severe headache, or bleeding are emergencies, whether the fever is high or mild. Go to the nearest hospital emergency department rather than waiting for a clinic slot.</p>"),
         ],
         "faqs": [
-            ("Do I need a blood test for a fever?", "Not always. The doctor decides after examining you. If a test is needed, the clinic offers lab collection on site."),
+            ("Do I need a blood test for a fever?", "Not always. It depends on your symptoms and the examination. If a test is needed, the clinic offers lab collection on site."),
             ("Can I get the typhoid vaccine at the clinic?", "Yes. The clinic offers the typhoid vaccine for adults. Book by phone, WhatsApp or SMS on [[PHONE]]."),
             ("How do I book a consultation?", "By phone, WhatsApp or SMS on [[PHONE]], with your name and preferred time. The clinic staff confirm the appointment."),
             ("Which days is the clinic open?", "[[HOURS]]"),

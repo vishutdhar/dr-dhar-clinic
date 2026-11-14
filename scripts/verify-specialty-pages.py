@@ -64,6 +64,10 @@ for name in ["General Check-up", "Diabetes Care", "Heart & BP Care", "Vaccinatio
 #     guards against the home page changing under a page; it cannot prove that
 #     free prose invents nothing, which is what review of new copy is for.
 _index_text = re.sub(r"\s+", " ", _h.unescape(re.sub(r"<[^>]+>", " ", re.sub(r"<!--.*?-->", "", index, flags=re.S)))).lower()
+# Every page states the doctor's degrees, field and years of practice.
+for phrase in ["MBBS", "MD", "DNB", "Internal Medicine", "30+ years"]:
+    check(re.search(r"\b" + re.escape(phrase.lower()) + r"(?!\w)", _index_text) is not None,
+          f"index.html no longer states '{phrase}', which every specialty page repeats")
 CARD_PAGES = {"general-physician-jammu", "diabetes-doctor-jammu", "bp-and-heart-care-jammu", "vaccination-jammu"}
 for page in gen.PAGES:
     if page["slug"] in CARD_PAGES:
@@ -585,20 +589,43 @@ if _tree is not None:
 #     (b) the footer of every page links every specialty page (the footer
 #         alone, so the Related care block cannot stand in for it);
 #     (c) the visible breadcrumb and the BreadcrumbList both end in the H1.
+class _Anchors(HTMLParser):
+    """href of every <a>, and separately of those inside <footer>."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.in_footer = 0
+        self.all, self.footer = [], []
+    def handle_starttag(self, tag, attrs):
+        if tag == "footer":
+            self.in_footer += 1
+        elif tag == "a":
+            href = dict(attrs).get("href")
+            if href is not None:
+                self.all.append(href)
+                if self.in_footer:
+                    self.footer.append(href)
+    def handle_endtag(self, tag):
+        if tag == "footer" and self.in_footer:
+            self.in_footer -= 1
+
 _ids = {route: set(re.findall(r'\bid="([^"]+)"', markup)) for route, markup in SITE_PAGES.items()}
 for route, markup in SITE_PAGES.items():
-    for href in set(re.findall(r'<a (?:[^>]*\s)?href="([^"]*)"', markup)):
-        if re.match(r"(?:https?:|tel:|sms:|mailto:)", href):
-            continue
-        path, _, frag = href.partition("#")
+    anchors = _Anchors(); anchors.feed(markup); anchors.close()
+    for href in set(anchors.all):
+        local = href
+        for origin in (gen.SITE, gen.SITE.replace("https://", "https://www."), gen.SITE.replace("https://", "http://")):
+            if href == origin or href.startswith(origin + "/") or href.startswith(origin + "#"):
+                local = href[len(origin):] or "/"
+        if re.match(r"[a-zA-Z][a-zA-Z0-9+.-]*:", local) or local.startswith("//"):
+            continue                      # another site, or tel:/sms:/mailto:
+        path, _, frag = local.partition("#")
         target = route if path == "" else path
         check(target in SITE_PAGES, f"{route}: link {href} goes to a page that does not exist")
         if frag and target in SITE_PAGES:
             check(frag in _ids[target], f"{route}: link {href} names an id that {target} does not have")
-    foot = re.search(r"<footer>.*?</footer>", markup, re.S)
-    check(foot is not None, f"{route}: footer missing")
+    check(bool(anchors.footer), f"{route}: footer has no links")
     for page in gen.PAGES:
-        check(foot is not None and f'href="/{page["slug"]}"' in foot.group(0), f"{route}: footer does not link /{page['slug']}")
+        check(f"/{page['slug']}" in anchors.footer, f"{route}: footer does not link /{page['slug']}")
 for page in gen.PAGES:
     markup = SITE_PAGES[f"/{page['slug']}"]
     h1 = re.search(r"<h1>(.*?)</h1>", markup, re.S)
@@ -614,23 +641,22 @@ for page in gen.PAGES:
                 check(conds == ([page["about_condition"]] if page["about_condition"] else []),
                       f"{page['slug']}: MedicalCondition is {conds}, the page declares {page['about_condition']}")
 
-# 11. A changed styles.css or script.js carries a new version. Both files are
-#     browser-cached for a week under their version query, so new markup with
-#     an old cached file is what a returning visitor would get otherwise. The
-#     comparison is with the branch point from origin/main, which is what is
-#     deployed.
-_base = git("merge-base", "HEAD", "origin/main")
-check(_base.returncode == 0, "git merge-base with origin/main unavailable; cannot compare asset versions")
-if _base.returncode == 0:
-    _sha = _base.stdout.strip()
-    _old_index = git("show", f"{_sha}:index.html").stdout
+# 11. A styles.css or script.js that differs from the one on origin/main carries
+#     a different version. Both files are browser-cached for a week under their
+#     version query, so the same version with new content would leave returning
+#     visitors on the old file. origin/main is what is deployed; the comparison
+#     is with its current tip, so run "git fetch origin" first.
+_tip = git("rev-parse", "--verify", "origin/main")
+check(_tip.returncode == 0, "origin/main unavailable; cannot compare asset versions with what is deployed")
+if _tip.returncode == 0:
+    _live_index = git("show", "origin/main:index.html").stdout
     for asset, pattern in (("styles.css", r'styles\.css\?v=(\d+)'), ("script.js", r'script\.js\?v=(\d+)')):
-        old_file = git("show", f"{_sha}:{asset}").stdout
-        new_file = (ROOT / asset).read_text(encoding="utf-8")
-        old_v = re.search(pattern, _old_index)
-        new_v = re.search(pattern, index)
-        check(old_file == new_file or old_v is None or (new_v is not None and new_v.group(1) != old_v.group(1)),
-              f"{asset} changed since origin/main but its version is still {old_v.group(1) if old_v else None}")
+        live_file = git("show", f"origin/main:{asset}").stdout
+        here_file = (ROOT / asset).read_text(encoding="utf-8")
+        live_v = re.search(pattern, _live_index)
+        here_v = re.search(pattern, index)
+        check(live_file == here_file or live_v is None or (here_v is not None and here_v.group(1) != live_v.group(1)),
+              f"{asset} differs from origin/main but its version is still {live_v.group(1) if live_v else None}")
 
 if failures:
     print("\n".join(f"FAIL {f}" for f in failures))
