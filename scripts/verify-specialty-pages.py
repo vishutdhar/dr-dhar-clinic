@@ -58,6 +58,12 @@ check(codes("e") == home_email, "script.js email differs from index.html")
 # 3. Every service the pages describe is a service index.html lists.
 for name in ["General Check-up", "Diabetes Care", "Heart & BP Care", "Vaccination", "In-house Pharmacy"]:
     check(f"<h3>{name}</h3>" in index, f"service card '{name}' not on index.html")
+# 3b. The pages without a service card describe only what index.html states in
+#     its text: the conditions in its FAQ answer and the facilities card.
+for phrase in ["thyroid disorders", "respiratory problems", "fever, infections", "typhoid",
+               "AC Waiting Area", "Wheelchair Accessible", "Lab Collection Service", "In-house Pharmacy",
+               "Contact Reception for Parking Advice", "Bhagwati Nagar", "Canal Road"]:
+    check(phrase in index, f"index.html no longer states '{phrase}', which a specialty page relies on")
 
 # 4. Links: index.html and every page link to every specialty page; sitemap lists them.
 sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
@@ -419,7 +425,7 @@ for page in gen.PAGES:
             check(a.lower() not in GENERIC_ANCHORS and len(a.split()) >= 2 and names_target(a, page),
                   f"index.html: {label} anchor '{a}' for /{page['slug']} does not describe the page")
 
-# 8c. Every specialty page links the other three from a Related care block in
+# 8c. Every specialty page links every other one from a Related care block in
 #     the article body, with the target page's H1 as anchor text, and not itself.
 for page in gen.PAGES:
     html = SITE_PAGES[f"/{page['slug']}"]
@@ -434,7 +440,7 @@ for page in gen.PAGES:
             continue
         anchors = [text_of(t) for t in re.findall(r'<a [^>]*href="/' + other["slug"] + r'"[^>]*>(.*?)</a>', block, re.S)]
         check(other["h1"] in anchors, f"{page['slug']}: Related care does not link /{other['slug']} as '{other['h1']}'")
-    check(block.count("<a ") == len(gen.PAGES) - 1, f"{page['slug']}: Related care has links other than the three sibling pages")
+    check(block.count("<a ") == len(gen.PAGES) - 1, f"{page['slug']}: Related care has links other than the sibling pages")
 
 # 8d. Per-page metadata and structured data on all five pages.
 ROBOTS_REQUIRED = {"index", "follow", "max-image-preview:large", "max-snippet:-1"}

@@ -205,6 +205,84 @@ PAGES = [
         ],
         "specialty": "InternalMedicine",
     },
+    {
+        "slug": "thyroid-doctor-jammu",
+        "title": "Thyroid Doctor in Jammu | Dr. Anil Kumar Dhar",
+        "description": "Thyroid care in Jammu with Dr. Anil Kumar Dhar, MBBS MD DNB, internal medicine physician for 30+ years. Lab collection and pharmacy on site. Canal Road clinic.",
+        "h1": "Thyroid Treatment in Jammu",
+        "lede": "Dr. Anil Kumar Dhar is an internal medicine physician (MBBS, MD, DNB) who treats thyroid disorders at his clinic on Canal Road, Bhagwati Nagar, Jammu. Blood samples are collected at the clinic, and prescribed medicines are available from its own pharmacy.",
+        "about_condition": "Thyroid disease",
+        "sections": [
+            ("What thyroid care involves here",
+             "<p>The thyroid is a small gland in the neck that sets the pace of the body. Too little thyroid hormone slows things down; too much speeds them up. Neither can be judged from symptoms alone, so the doctor reads a blood test together with your history and an examination.</p><p>Treatment is usually long term, and the right dose changes with time. That is why thyroid care is a matter of regular follow-up with one doctor who knows your earlier reports, rather than a single visit.</p>"),
+            ("Who should come",
+             "<p>Anyone already on thyroid medicine who wants it reviewed. Anyone with complaints that can point to the thyroid: tiredness that does not lift, a change in weight without a reason, feeling cold or hot when others do not, hair fall, a swelling in the neck, or a fast or irregular heartbeat. And anyone with thyroid disease in the family who has not been tested.</p>"),
+            ("What to bring",
+             "<p>Your previous thyroid reports, in order if you can, and the thyroid medicine you take with its dose. Bring your other medicines too, because some affect the thyroid or its tests. Do not stop the medicine or change the dose on your own before the visit.</p>"),
+            ("Thyroid with diabetes or blood pressure",
+             "<p>Many patients have more than one long-term condition. An internal medicine physician looks at them together, so that the treatment for one does not work against another. The clinic also provides <a href=\"/diabetes-doctor-jammu\">diabetes care</a> and <a href=\"/bp-and-heart-care-jammu\">blood pressure and heart care</a>.</p>"),
+            ("Tests and medicines",
+             "<p>The doctor tells you which blood tests you need. The clinic offers lab collection on site, and prescribed medicines are available from the in-house pharmacy immediately after the consultation.</p>"),
+        ],
+        "faqs": [
+            ("Is Dr. Dhar a thyroid specialist?", "He is an internal medicine physician (MBBS, MD, DNB). Thyroid disorders are among the conditions he treats at the clinic."),
+            ("Can I give the blood sample at the clinic?", "The clinic offers lab collection on site. Ask when you book on [[PHONE]] which tests you need and how to prepare for them."),
+            ("What does a thyroid consultation cost?", "Ask when you book on [[PHONE]]."),
+            ("Which days is the clinic open?", "[[HOURS]]"),
+        ],
+        "specialty": "InternalMedicine",
+    },
+    {
+        "slug": "fever-doctor-jammu",
+        "title": "Fever Doctor in Jammu | Dr. Anil Kumar Dhar",
+        "description": "Fever and infection care in Jammu with Dr. Anil Kumar Dhar, MBBS MD DNB, internal medicine physician for 30+ years. Lab collection on site. Canal Road clinic.",
+        "h1": "Fever and Infection Treatment in Jammu",
+        "lede": "Most fevers settle in a few days. Some do not, and those need a doctor to find the cause. Dr. Anil Kumar Dhar, an internal medicine physician (MBBS, MD, DNB), sees adults with fever and infections at his clinic on Canal Road, Bhagwati Nagar, Jammu.",
+        "about_condition": "Fever",
+        "sections": [
+            ("What fever care involves here",
+             "<p>Fever is a sign, not a diagnosis. The doctor asks how long it has lasted, how it rises and falls, and what else you feel, then examines you. If the cause is not clear, he tells you which tests are needed; the clinic offers lab collection on site.</p><p>Treatment depends on the cause. Antibiotics work only against bacteria, so not every fever needs one. Prescribed medicines are available from the clinic's own pharmacy immediately after the consultation.</p>"),
+            ("When to see the doctor",
+             "<p>A fever that lasts more than two or three days, or one that goes and comes back. Fever with a cough or breathlessness, burning when you pass urine, a rash, or severe headache and body pain. And any fever in an older adult or in someone with diabetes, heart disease or lung disease, for whom an infection can turn serious faster.</p>"),
+            ("What to bring",
+             "<p>A note of your temperature readings and when you took them, the medicines you have already taken for the fever, and any recent reports. Bring the list of medicines you take regularly as well.</p>"),
+            ("Vaccines against typhoid and flu",
+             "<p>Some fevers can be prevented. The clinic offers the typhoid vaccine and the annual flu vaccine for adults; see <a href=\"/vaccination-jammu\">adult vaccination</a>.</p>"),
+            ("When not to wait for an appointment",
+             "<p>A very high fever with confusion, severe breathlessness, chest pain, a fit, or bleeding are emergencies. Go to the nearest hospital emergency department rather than waiting for a clinic slot.</p>"),
+        ],
+        "faqs": [
+            ("Do I need a blood test for a fever?", "Not always. The doctor decides after examining you. If a test is needed, the clinic offers lab collection on site."),
+            ("Can I get the typhoid vaccine at the clinic?", "Yes. The clinic offers the typhoid vaccine for adults. Book by phone, WhatsApp or SMS on [[PHONE]]."),
+            ("How do I book a consultation?", "By phone, WhatsApp or SMS on [[PHONE]], with your name and preferred time. The clinic staff confirm the appointment."),
+            ("Which days is the clinic open?", "[[HOURS]]"),
+        ],
+        "specialty": "InternalMedicine",
+    },
+    {
+        "slug": "physician-near-talab-tillo-jammu",
+        "title": "Physician near Talab Tillo, Jammu | Dr. Anil Kumar Dhar",
+        "description": "Dr. Anil Kumar Dhar, MBBS MD DNB, internal medicine physician on Canal Road, Bhagwati Nagar, near Talab Tillo, Jammu. Check-ups, diabetes, BP, thyroid, fever.",
+        "h1": "Physician near Talab Tillo, Jammu",
+        "lede": "Dr. Anil Kumar Dhar's clinic is on Canal Road in Bhagwati Nagar, close to Talab Tillo. He is an internal medicine physician (MBBS, MD, DNB) who has practised in Jammu for more than 30 years and sees adults for everyday illness, long-term conditions and health check-ups.",
+        "about_condition": None,
+        "sections": [
+            ("Where the clinic is",
+             "<p>The address is <strong>[[ADDRESS]]</strong>. Bhagwati Nagar adjoins Talab Tillo, and the clinic is on the Canal Road side. If you are coming for the first time, call [[PHONE]] and the clinic staff will guide you, including where to park.</p>"),
+            ("What the physician treats",
+             "<p>An internal medicine physician looks after the health of adults as a whole. At this clinic that covers <a href=\"/general-physician-jammu\">general physician care and check-ups</a>, <a href=\"/diabetes-doctor-jammu\">diabetes</a>, <a href=\"/bp-and-heart-care-jammu\">blood pressure and heart care</a>, <a href=\"/thyroid-doctor-jammu\">thyroid disorders</a>, <a href=\"/fever-doctor-jammu\">fever and infections</a>, respiratory problems such as cough and breathlessness, and <a href=\"/vaccination-jammu\">adult vaccination</a>.</p>"),
+            ("The general check-up",
+             "<p>The clinic's general check-up costs <strong>[[FEE]]</strong> and includes a physical examination, blood pressure measurement, fasting and post-meal blood sugar testing, cholesterol screening and a detailed consultation with personalised advice.</p>"),
+            ("At the clinic",
+             "<p>An air-conditioned waiting area, wheelchair access, an in-house pharmacy and a lab collection service, so the consultation, the tests and the medicines are in one place. The clinic accepts cash and all UPI apps.</p>"),
+        ],
+        "faqs": [
+            ("Is the clinic open today?", "[[HOURS]] The badge at the top of this page shows whether the clinic is open now."),
+            ("How do I book a consultation?", "By phone, WhatsApp or SMS on [[PHONE]], with your name and preferred time. The clinic staff confirm the appointment."),
+            ("Is the clinic wheelchair accessible?", "Yes. The clinic is wheelchair accessible."),
+        ],
+        "specialty": "InternalMedicine",
+    },
 ]
 
 
@@ -252,7 +330,7 @@ def json_ld(page: dict) -> str:
 
 
 def fill(text: str) -> str:
-    return text.replace("[[FEE]]", FEE).replace("[[PHONE]]", PHONE_DISPLAY).replace("[[HOURS]]", HOURS)
+    return text.replace("[[FEE]]", FEE).replace("[[PHONE]]", PHONE_DISPLAY).replace("[[HOURS]]", HOURS).replace("[[ADDRESS]]", html.escape(ADDRESS_LINE))
 
 
 def render(page: dict) -> str:
@@ -395,6 +473,9 @@ def render(page: dict) -> str:
                         <li><a href="/diabetes-doctor-jammu">Diabetes Care</a></li>
                         <li><a href="/bp-and-heart-care-jammu">Heart &amp; BP Care</a></li>
                         <li><a href="/vaccination-jammu">Adult Vaccination</a></li>
+                        <li><a href="/thyroid-doctor-jammu">Thyroid Treatment</a></li>
+                        <li><a href="/fever-doctor-jammu">Fever &amp; Infections</a></li>
+                        <li><a href="/physician-near-talab-tillo-jammu">Physician near Talab Tillo</a></li>
                         <li><a href="/#services">Longevity Care</a></li>
                         <li><a href="/#services">In-house Pharmacy</a></li>
                     </ul>
