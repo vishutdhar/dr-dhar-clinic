@@ -608,21 +608,20 @@ class _Anchors(HTMLParser):
         if tag == "footer" and self.in_footer:
             self.in_footer -= 1
 
+from urllib.parse import urljoin, urlsplit
+_SITE_HOSTS = {urlsplit(gen.SITE).hostname, "www." + urlsplit(gen.SITE).hostname}
 _ids = {route: set(re.findall(r'\bid="([^"]+)"', markup)) for route, markup in SITE_PAGES.items()}
 for route, markup in SITE_PAGES.items():
     anchors = _Anchors(); anchors.feed(markup); anchors.close()
     for href in set(anchors.all):
-        local = href
-        for origin in (gen.SITE, gen.SITE.replace("https://", "https://www."), gen.SITE.replace("https://", "http://")):
-            if href == origin or href.startswith(origin + "/") or href.startswith(origin + "#"):
-                local = href[len(origin):] or "/"
-        if re.match(r"[a-zA-Z][a-zA-Z0-9+.-]*:", local) or local.startswith("//"):
+        # Resolved as a browser resolves it: against this page's own URL.
+        url = urlsplit(urljoin(gen.SITE + route, href))
+        if url.scheme not in ("http", "https") or url.hostname not in _SITE_HOSTS:
             continue                      # another site, or tel:/sms:/mailto:
-        path, _, frag = local.partition("#")
-        target = route if path == "" else path
+        target = url.path or "/"
         check(target in SITE_PAGES, f"{route}: link {href} goes to a page that does not exist")
-        if frag and target in SITE_PAGES:
-            check(frag in _ids[target], f"{route}: link {href} names an id that {target} does not have")
+        if url.fragment and target in SITE_PAGES:
+            check(url.fragment in _ids[target], f"{route}: link {href} names an id that {target} does not have")
     check(bool(anchors.footer), f"{route}: footer has no links")
     for page in gen.PAGES:
         check(f"/{page['slug']}" in anchors.footer, f"{route}: footer does not link /{page['slug']}")
