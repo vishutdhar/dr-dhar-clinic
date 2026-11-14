@@ -99,7 +99,6 @@ for page in gen.PAGES:
 # 5c. Elements and script that script.js depends on at runtime.
 for page in gen.PAGES:
     html = gen.render(page)
-    check(f'<script src="/script.js?v={gen.JS_VERSION}" defer></script>' in html, f"{page['slug']}: script.js not loaded")
     badge = re.search(r'<div class="status-badge" id="clinic-status">(.*?)</div>', html, re.S)
     check(badge is not None and 'class="status-dot"' in badge.group(1) and 'class="status-text"' in badge.group(1),
           f"{page['slug']}: status badge lacks .status-dot or .status-text (updateClinicStatus throws)")
@@ -184,13 +183,46 @@ for page in gen.PAGES:
     block = re.search(r'<h3 class="footer-heading">Clinic Hours</h3>(.*?)</div>', html, re.S).group(1).strip()
     check(block == home_hours_block, f"{page['slug']}: footer hours block differs from index.html")
 
-# 6. The stylesheet version the pages request is the one index.html requests.
-v_index = re.search(r'styles\.css\?v=(\d+)', index).group(1)
-check(v_index == gen.CSS_VERSION, f"CSS version differs: index.html {v_index}, generator {gen.CSS_VERSION}")
-# Comments are stripped first: a commented-out tag loads nothing.
-js_index = re.search(r'<script src="script\.js\?v=(\d+)" defer></script>', re.sub(r"<!--.*?-->", "", index, flags=re.S))
-check(js_index is not None and js_index.group(1) == gen.JS_VERSION,
-      f"script.js version differs: index.html {js_index.group(1) if js_index else 'none'}, generator {gen.JS_VERSION}")
+# 6. Every page loads exactly one styles.css and exactly one script.js, each at
+#    the generator's version, from live markup. The tags are read with an HTML
+#    parser, so a tag inside a comment or a <template>, or text that only looks
+#    like a tag inside an attribute value, does not count, and a second copy at
+#    another version is caught.
+from html.parser import HTMLParser
+
+class _Assets(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.inert = 0          # depth inside <template> / <noscript>
+        self.styles, self.scripts = [], []
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if tag in ("template", "noscript"):
+            self.inert += 1
+        elif self.inert == 0 and tag == "link" and "stylesheet" in (a.get("rel") or "").lower().split():
+            self.styles.append(a.get("href") or "")
+        elif self.inert == 0 and tag == "script" and a.get("src") is not None:
+            self.scripts.append((a.get("src") or "", "defer" in a, a.get("type")))
+    def handle_endtag(self, tag):
+        if tag in ("template", "noscript") and self.inert:
+            self.inert -= 1
+
+def assets(markup):
+    parser = _Assets()
+    parser.feed(markup)
+    parser.close()
+    return parser
+
+def check_assets(label, markup, prefix):
+    got = assets(markup)
+    want_css = f"{prefix}styles.css?v={gen.CSS_VERSION}"
+    want_js = (f"{prefix}script.js?v={gen.JS_VERSION}", True, None)
+    check(got.styles == [want_css], f"{label}: live stylesheets are {got.styles}, expected only {want_css}")
+    check(got.scripts == [want_js], f"{label}: live scripts are {got.scripts}, expected only {want_js[0]} with defer")
+
+check_assets("index.html", index, "")
+for page in gen.PAGES:
+    check_assets(page["slug"], gen.render(page), "/")
 
 # 7. Expectations derived from the home page alone, never from the generator.
 #    (a) fee: the check-up Offer price; (b) schedule: OpeningHoursSpecification;
