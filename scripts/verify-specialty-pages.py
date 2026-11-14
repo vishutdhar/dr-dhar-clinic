@@ -99,7 +99,7 @@ for page in gen.PAGES:
 # 5c. Elements and script that script.js depends on at runtime.
 for page in gen.PAGES:
     html = gen.render(page)
-    check('<script src="/script.js" defer></script>' in html, f"{page['slug']}: script.js not loaded")
+    check(f'<script src="/script.js?v={gen.JS_VERSION}" defer></script>' in html, f"{page['slug']}: script.js not loaded")
     badge = re.search(r'<div class="status-badge" id="clinic-status">(.*?)</div>', html, re.S)
     check(badge is not None and 'class="status-dot"' in badge.group(1) and 'class="status-text"' in badge.group(1),
           f"{page['slug']}: status badge lacks .status-dot or .status-text (updateClinicStatus throws)")
@@ -187,6 +187,9 @@ for page in gen.PAGES:
 # 6. The stylesheet version the pages request is the one index.html requests.
 v_index = re.search(r'styles\.css\?v=(\d+)', index).group(1)
 check(v_index == gen.CSS_VERSION, f"CSS version differs: index.html {v_index}, generator {gen.CSS_VERSION}")
+js_index = re.search(r'<script src="script\.js\?v=(\d+)" defer></script>', index)
+check(js_index is not None and js_index.group(1) == gen.JS_VERSION,
+      f"script.js version differs: index.html {js_index.group(1) if js_index else 'none'}, generator {gen.JS_VERSION}")
 
 # 7. Expectations derived from the home page alone, never from the generator.
 #    (a) fee: the check-up Offer price; (b) schedule: OpeningHoursSpecification;

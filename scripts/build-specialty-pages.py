@@ -10,7 +10,8 @@ import json, html, pathlib, datetime, re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = "https://dranilkumardhar.com"
-CSS_VERSION = "20260926"
+CSS_VERSION = "20261114"
+JS_VERSION = "20261114"   # script.js is browser-cached for a week, like styles.css
 TODAY = datetime.date.today().isoformat()
 
 # ---- Facts come from index.html, never from this file ----------------------
@@ -426,7 +427,7 @@ def render(page: dict) -> str:
         </svg>
     </button>
 
-    <script src="/script.js" defer></script>
+    <script src="/script.js?v={JS_VERSION}" defer></script>
     <noscript>
         <div class="noscript-banner">
             To book an appointment, call <strong>{PHONE_DISPLAY}</strong> or email <strong>{EMAIL}</strong>

@@ -167,6 +167,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 16px;
 }
 
 .logo {
@@ -177,6 +178,8 @@ body {
     align-items: center;
     gap: 10px;
     letter-spacing: -0.02em;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .logo-icon { opacity: 0.6; }
@@ -190,6 +193,7 @@ body {
 
 .header-nav a {
     color: rgba(255, 255, 255, 0.6);
+    white-space: nowrap;
     text-decoration: none;
     font-size: 0.84rem;
     font-weight: 500;
@@ -210,7 +214,14 @@ body {
     padding: 8px 18px;
     border-radius: 100px;
     border: 1px solid rgba(255, 255, 255, 0.08);
+    /* The badge text is written by script.js after first paint. The badge may
+       shrink and clip its text, but it never wraps, so the sticky header keeps
+       one height whatever the text says. */
+    min-width: 0;
+    max-width: 100%;
 }
+
+.status-dot { flex-shrink: 0; }
 
 .status-dot {
     width: 7px;
@@ -233,6 +244,10 @@ body {
     color: rgba(255, 255, 255, 0.75);
     font-size: 0.8rem;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
 }
 
 /* ===========================
@@ -1551,13 +1566,27 @@ footer {
     .strip-item { font-size: 0.72rem; }
 }
 
-@media (max-width: 480px) {
+/* Below 960px the logo, the four links and the longest "Closed" text do not fit
+   on one row: the links wrapped and the header grew when script.js wrote the
+   text. The links go, so the row always fits. */
+@media (max-width: 960px) {
+    .header-nav { display: none; }
+}
+
+/* Phones: the logo and the status badge always sit on two rows. The row count
+   is fixed in CSS and does not depend on the badge text, which script.js fills
+   in late; a header that wrapped only for the longer "Closed" text pushed the
+   whole page down after it had painted. */
+@media (max-width: 600px) {
     .header-content {
-        flex-wrap: wrap;
-        gap: 10px;
+        flex-direction: column;
         justify-content: center;
-        padding: 0 16px;
+        gap: 10px;
     }
+}
+
+@media (max-width: 480px) {
+    .header-content { padding: 0 16px; }
 
     .logo { font-size: 1.05rem; }
     .status-text { font-size: 0.72rem; }
