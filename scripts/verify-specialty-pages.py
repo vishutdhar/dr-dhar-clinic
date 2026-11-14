@@ -190,6 +190,9 @@ for page in gen.PAGES:
 #    exactly the expected attributes, in order, once each: an extra attribute
 #    (async, nomodule, media, disabled), a duplicate, or a second copy at
 #    another version fails. The script element must be empty and closed.
+#    The exact list is deliberate: an equivalent spelling (defer="defer") or
+#    a new attribute fails until the expected list below is changed with it.
+#    No page may carry a <base> element, which would re-point both files.
 from html.parser import HTMLParser
 
 class _Assets(HTMLParser):
@@ -199,6 +202,8 @@ class _Assets(HTMLParser):
         self.styles, self.scripts, self.problems = [], [], []
         self.open_script = False
     def handle_starttag(self, tag, attrs):
+        if tag == "base":
+            self.problems.append("<base> element present; it would change where styles.css and script.js load from")
         if tag in ("template", "noscript"):
             self.inert += 1
         elif self.inert == 0 and tag == "link" and any(k == "rel" and "stylesheet" in (v or "").lower().split() for k, v in attrs):
