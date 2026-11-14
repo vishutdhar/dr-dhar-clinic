@@ -10,7 +10,7 @@ import json, html, pathlib, datetime, re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = "https://dranilkumardhar.com"
-CSS_VERSION = "20261114"
+CSS_VERSION = "202611142"
 JS_VERSION = "20261114"   # script.js is browser-cached for a week, like styles.css
 TODAY = datetime.date.today().isoformat()
 
@@ -124,7 +124,7 @@ PAGES = [
             ("What to bring",
              "<p>Any previous medical reports, a list of the medicines you take (or the strips themselves), and, if you have them, recent blood test results. If your check-up includes a fasting blood sugar test, ask the clinic when you book how long to fast and what to do about any medicines you take that morning; do not stop a medicine on your own.</p>"),
             ("When not to wait for an appointment",
-             "<p>Chest pain, sudden weakness or numbness on one side, difficulty speaking, severe breathlessness, or a very high fever with confusion are emergencies. Go to the nearest hospital emergency department rather than waiting for a clinic slot.</p>"),
+             "<p>Chest pain, sudden weakness or numbness on one side, difficulty speaking, severe breathlessness, or confusion with a fever are emergencies. Go to the nearest hospital emergency department rather than waiting for a clinic slot.</p>"),
         ],
         "faqs": [
             ("How do I book a consultation?", "By phone, WhatsApp or SMS on [[PHONE]], with your name and preferred time. The clinic staff confirm the appointment."),
@@ -213,8 +213,8 @@ PAGES = [
         "lede": "Dr. Anil Kumar Dhar is an internal medicine physician (MBBS, MD, DNB) who treats thyroid disorders at his clinic on Canal Road, Bhagwati Nagar, Jammu. Blood samples are collected at the clinic, and prescribed medicines are available from its own pharmacy.",
         "about_condition": "Thyroid disease",
         "sections": [
-            ("What thyroid care involves here",
-             "<p>The thyroid is a small gland in the neck that sets the pace of the body. Too little thyroid hormone slows things down; too much speeds them up. Neither can be judged from symptoms alone, so the doctor reads a blood test together with your history and an examination.</p><p>Treatment is usually long term, and the right dose changes with time. That is why thyroid care is a matter of regular follow-up with one doctor who knows your earlier reports, rather than a single visit.</p>"),
+            ("How thyroid problems are found and treated",
+             "<p>The thyroid is a small gland in the neck that sets the pace of the body. Too little thyroid hormone slows things down; too much speeds them up. Neither can be judged from symptoms alone; a thyroid problem is confirmed by a blood test, read together with the symptoms.</p><p>Treatment is usually long term, and the right dose can change with time. That is why thyroid care is a matter of regular follow-up rather than a single visit, and why it helps to see one doctor who knows your earlier reports.</p>"),
             ("Who should come",
              "<p>Anyone already on thyroid medicine who wants it reviewed. Anyone with complaints that can point to the thyroid: tiredness that does not lift, a change in weight without a reason, feeling cold or hot when others do not, hair fall, a swelling in the neck, or a fast or irregular heartbeat. And anyone with thyroid disease in the family who has not been tested.</p>"),
             ("What to bring",
@@ -231,6 +231,7 @@ PAGES = [
             ("Which days is the clinic open?", "[[HOURS]]"),
         ],
         "specialty": "InternalMedicine",
+        "relies_on": ["thyroid disorders", "Lab Collection Service", "In-house Pharmacy", "diabetes", "hypertension"],
     },
     {
         "slug": "fever-doctor-jammu",
@@ -240,8 +241,8 @@ PAGES = [
         "lede": "Most fevers settle in a few days. Some do not, and those need a doctor to find the cause. Dr. Anil Kumar Dhar, an internal medicine physician (MBBS, MD, DNB), sees adults with fever and infections at his clinic on Canal Road, Bhagwati Nagar, Jammu.",
         "about_condition": "Fever",
         "sections": [
-            ("What fever care involves here",
-             "<p>Fever is a sign, not a diagnosis. The doctor asks how long it has lasted, how it rises and falls, and what else you feel, then examines you. If the cause is not clear, he tells you which tests are needed; the clinic offers lab collection on site.</p><p>Treatment depends on the cause. Antibiotics work only against bacteria, so not every fever needs one. Prescribed medicines are available from the clinic's own pharmacy immediately after the consultation.</p>"),
+            ("How a fever is assessed",
+             "<p>Fever is a sign, not a diagnosis. What matters is how long it has lasted, how it rises and falls, and what else you feel. When the cause is not clear from that, blood or urine tests may be needed; the clinic offers lab collection on site.</p><p>Treatment depends on the cause. Antibiotics work only against bacteria, so not every fever needs one. Prescribed medicines are available from the clinic's own pharmacy immediately after the consultation.</p>"),
             ("When to see the doctor",
              "<p>A fever that lasts more than two or three days, or one that goes and comes back. Fever with a cough or breathlessness, burning when you pass urine, a rash, or severe headache and body pain. And any fever in an older adult or in someone with diabetes, heart disease or lung disease, for whom an infection can turn serious faster.</p>"),
             ("What to bring",
@@ -249,7 +250,7 @@ PAGES = [
             ("Vaccines against typhoid and flu",
              "<p>Some fevers can be prevented. The clinic offers the typhoid vaccine and the annual flu vaccine for adults; see <a href=\"/vaccination-jammu\">adult vaccination</a>.</p>"),
             ("When not to wait for an appointment",
-             "<p>A very high fever with confusion, severe breathlessness, chest pain, a fit, or bleeding are emergencies. Go to the nearest hospital emergency department rather than waiting for a clinic slot.</p>"),
+             "<p>Confusion or unusual drowsiness, severe breathlessness, chest pain, a fit, a stiff neck with a severe headache, or bleeding are emergencies, whether the fever is high or mild. Go to the nearest hospital emergency department rather than waiting for a clinic slot.</p>"),
         ],
         "faqs": [
             ("Do I need a blood test for a fever?", "Not always. The doctor decides after examining you. If a test is needed, the clinic offers lab collection on site."),
@@ -258,6 +259,7 @@ PAGES = [
             ("Which days is the clinic open?", "[[HOURS]]"),
         ],
         "specialty": "InternalMedicine",
+        "relies_on": ["fever, infections", "Lab Collection Service", "In-house Pharmacy", "annual flu vaccine", "typhoid", "healthcare for adults"],
     },
     {
         "slug": "physician-near-talab-tillo-jammu",
@@ -268,11 +270,11 @@ PAGES = [
         "about_condition": None,
         "sections": [
             ("Where the clinic is",
-             "<p>The address is <strong>[[ADDRESS]]</strong>. Bhagwati Nagar adjoins Talab Tillo, and the clinic is on the Canal Road side. If you are coming for the first time, call [[PHONE]] and the clinic staff will guide you, including where to park.</p>"),
+             "<p>The address is <strong>[[ADDRESS]]</strong>. If you are coming from Talab Tillo for the first time, call [[PHONE]] for directions; the reception also advises on parking.</p>"),
             ("What the physician treats",
              "<p>An internal medicine physician looks after the health of adults as a whole. At this clinic that covers <a href=\"/general-physician-jammu\">general physician care and check-ups</a>, <a href=\"/diabetes-doctor-jammu\">diabetes</a>, <a href=\"/bp-and-heart-care-jammu\">blood pressure and heart care</a>, <a href=\"/thyroid-doctor-jammu\">thyroid disorders</a>, <a href=\"/fever-doctor-jammu\">fever and infections</a>, respiratory problems such as cough and breathlessness, and <a href=\"/vaccination-jammu\">adult vaccination</a>.</p>"),
-            ("The general check-up",
-             "<p>The clinic's general check-up costs <strong>[[FEE]]</strong> and includes a physical examination, blood pressure measurement, fasting and post-meal blood sugar testing, cholesterol screening and a detailed consultation with personalised advice.</p>"),
+            ("Check-ups",
+             "<p>The clinic's general check-up costs <strong>[[FEE]]</strong>. The <a href=\"/general-physician-jammu\">general physician page</a> lists what it covers and what to bring.</p>"),
             ("At the clinic",
              "<p>An air-conditioned waiting area, wheelchair access, an in-house pharmacy and a lab collection service, so the consultation, the tests and the medicines are in one place. The clinic accepts cash and all UPI apps.</p>"),
         ],
@@ -282,6 +284,9 @@ PAGES = [
             ("Is the clinic wheelchair accessible?", "Yes. The clinic is wheelchair accessible."),
         ],
         "specialty": "InternalMedicine",
+        "relies_on": ["Bhagwati Nagar", "Canal Road", "30+ years", "thyroid disorders", "respiratory problems", "fever, infections",
+                      "AC Waiting Area", "Wheelchair Accessible", "In-house Pharmacy", "Lab Collection Service",
+                      "Contact Reception for Parking Advice", "cash payment and all UPI apps"],
     },
 ]
 

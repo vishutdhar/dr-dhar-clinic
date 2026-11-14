@@ -58,12 +58,19 @@ check(codes("e") == home_email, "script.js email differs from index.html")
 # 3. Every service the pages describe is a service index.html lists.
 for name in ["General Check-up", "Diabetes Care", "Heart & BP Care", "Vaccination", "In-house Pharmacy"]:
     check(f"<h3>{name}</h3>" in index, f"service card '{name}' not on index.html")
-# 3b. The pages without a service card describe only what index.html states in
-#     its text: the conditions in its FAQ answer and the facilities card.
-for phrase in ["thyroid disorders", "respiratory problems", "fever, infections", "typhoid",
-               "AC Waiting Area", "Wheelchair Accessible", "Lab Collection Service", "In-house Pharmacy",
-               "Contact Reception for Parking Advice", "Bhagwati Nagar", "Canal Road"]:
-    check(phrase in index, f"index.html no longer states '{phrase}', which a specialty page relies on")
+# 3b. A page that has no service card on index.html declares, in "relies_on",
+#     the home page phrases its clinic claims rest on. Each must still be on
+#     the home page, so removing a service or facility there fails here. This
+#     guards against the home page changing under a page; it cannot prove that
+#     free prose invents nothing, which is what review of new copy is for.
+_index_text = re.sub(r"\s+", " ", _h.unescape(re.sub(r"<[^>]+>", " ", re.sub(r"<!--.*?-->", "", index, flags=re.S)))).lower()
+CARD_PAGES = {"general-physician-jammu", "diabetes-doctor-jammu", "bp-and-heart-care-jammu", "vaccination-jammu"}
+for page in gen.PAGES:
+    if page["slug"] in CARD_PAGES:
+        continue
+    check(bool(page.get("relies_on")), f"{page['slug']}: has no service card and declares no relies_on phrases")
+    for phrase in page.get("relies_on", []):
+        check(phrase.lower() in _index_text, f"{page['slug']}: relies on '{phrase}', which index.html no longer states")
 
 # 4. Links: index.html and every page link to every specialty page; sitemap lists them.
 sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
@@ -571,6 +578,59 @@ if _tree is not None:
     home_url = [u for u in _tree.findall("sm:url", _NS) if (u.findtext("sm:loc", "", _NS) or "").strip() == gen.SITE + "/"]
     images = [i.findtext("image:loc", "", _NS).strip() for u in home_url for i in u.findall("image:image", _NS)]
     check(f"{gen.SITE}/doctor-photo.jpg" in images, "sitemap.xml: home url lacks an image:image entry for the doctor's photo")
+
+# 10. Internal links, footers and breadcrumbs on every page.
+#     (a) every internal href resolves: "/" or "/<slug>" of a page, with an
+#         optional "#fragment" that is an id on the target page;
+#     (b) the footer of every page links every specialty page (the footer
+#         alone, so the Related care block cannot stand in for it);
+#     (c) the visible breadcrumb and the BreadcrumbList both end in the H1.
+_ids = {route: set(re.findall(r'\bid="([^"]+)"', markup)) for route, markup in SITE_PAGES.items()}
+for route, markup in SITE_PAGES.items():
+    for href in set(re.findall(r'<a (?:[^>]*\s)?href="([^"]*)"', markup)):
+        if re.match(r"(?:https?:|tel:|sms:|mailto:)", href):
+            continue
+        path, _, frag = href.partition("#")
+        target = route if path == "" else path
+        check(target in SITE_PAGES, f"{route}: link {href} goes to a page that does not exist")
+        if frag and target in SITE_PAGES:
+            check(frag in _ids[target], f"{route}: link {href} names an id that {target} does not have")
+    foot = re.search(r"<footer>.*?</footer>", markup, re.S)
+    check(foot is not None, f"{route}: footer missing")
+    for page in gen.PAGES:
+        check(foot is not None and f'href="/{page["slug"]}"' in foot.group(0), f"{route}: footer does not link /{page['slug']}")
+for page in gen.PAGES:
+    markup = SITE_PAGES[f"/{page['slug']}"]
+    h1 = re.search(r"<h1>(.*?)</h1>", markup, re.S)
+    crumb = re.search(r'<span aria-current="page">(.*?)</span>', markup, re.S)
+    check(h1 is not None and crumb is not None and text_of(crumb.group(1)) == text_of(h1.group(1)) == page["h1"],
+          f"{page['slug']}: visible breadcrumb or H1 is not '{page['h1']}'")
+    for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', markup, re.S):
+        for node in json.loads(block)["@graph"]:
+            if node["@type"] == "BreadcrumbList":
+                check(node["itemListElement"][-1]["name"] == page["h1"], f"{page['slug']}: BreadcrumbList does not end in the H1")
+            if node["@type"] == "MedicalWebPage":
+                conds = [a["name"] for a in (node["about"] if isinstance(node["about"], list) else [node["about"]]) if a.get("@type") == "MedicalCondition"]
+                check(conds == ([page["about_condition"]] if page["about_condition"] else []),
+                      f"{page['slug']}: MedicalCondition is {conds}, the page declares {page['about_condition']}")
+
+# 11. A changed styles.css or script.js carries a new version. Both files are
+#     browser-cached for a week under their version query, so new markup with
+#     an old cached file is what a returning visitor would get otherwise. The
+#     comparison is with the branch point from origin/main, which is what is
+#     deployed.
+_base = git("merge-base", "HEAD", "origin/main")
+check(_base.returncode == 0, "git merge-base with origin/main unavailable; cannot compare asset versions")
+if _base.returncode == 0:
+    _sha = _base.stdout.strip()
+    _old_index = git("show", f"{_sha}:index.html").stdout
+    for asset, pattern in (("styles.css", r'styles\.css\?v=(\d+)'), ("script.js", r'script\.js\?v=(\d+)')):
+        old_file = git("show", f"{_sha}:{asset}").stdout
+        new_file = (ROOT / asset).read_text(encoding="utf-8")
+        old_v = re.search(pattern, _old_index)
+        new_v = re.search(pattern, index)
+        check(old_file == new_file or old_v is None or (new_v is not None and new_v.group(1) != old_v.group(1)),
+              f"{asset} changed since origin/main but its version is still {old_v.group(1) if old_v else None}")
 
 if failures:
     print("\n".join(f"FAIL {f}" for f in failures))
