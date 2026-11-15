@@ -407,8 +407,8 @@ def render(page: dict) -> str:
             <nav class="header-nav" aria-label="Main navigation">
                 <a href="/#services">Specialties</a>
                 <a href="/#about">Our Team</a>
-                <a href="/#faq">FAQ</a>
                 <a href="/#booking">Book Appointment</a>
+                <a href="/#faq">FAQ</a>
             </nav>
             <div class="status-badge" id="clinic-status">
                 <span class="status-dot"></span>
