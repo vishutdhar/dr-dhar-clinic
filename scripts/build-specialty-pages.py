@@ -264,7 +264,7 @@ PAGES = [
     {
         "slug": "internal-medicine-physician-jammu-kashmir",
         "title": "Internal Medicine Doctor, Jammu & Kashmir | Dr. Anil Kumar Dhar",
-        "description": "Dr. Anil Kumar Dhar, MBBS MD DNB, internal medicine physician in Jammu for 30+ years. Patients visit from across Jammu and Kashmir. Lab and pharmacy on site.",
+        "description": "Dr. Anil Kumar Dhar, MBBS MD DNB, internal medicine physician in Jammu for 30+ years. Patients visit from across Jammu and Kashmir. Lab collection, pharmacy.",
         "h1": "Internal Medicine Physician in Jammu and Kashmir",
         "lede": "Dr. Anil Kumar Dhar is an internal medicine physician (MBBS, MD, DNB) who has practised in Jammu for more than 30 years. Patients come to his clinic on Canal Road from Jammu city and from across Jammu and Kashmir, for everyday illness, long-term conditions and health check-ups.",
         "about_condition": None,
@@ -272,7 +272,7 @@ PAGES = [
             ("What an internal medicine physician treats",
              "<p>An internal medicine physician looks after the health of adults as a whole. At this clinic that covers <a href=\"/general-physician-jammu\">general physician care and check-ups</a>, <a href=\"/diabetes-doctor-jammu\">diabetes</a>, <a href=\"/bp-and-heart-care-jammu\">blood pressure and heart care</a>, <a href=\"/thyroid-doctor-jammu\">thyroid disorders</a>, <a href=\"/fever-doctor-jammu\">fever and infections</a>, respiratory problems such as cough and breathlessness, and <a href=\"/vaccination-jammu\">adult vaccination</a>.</p>"),
             ("If you are travelling to the clinic",
-             "<p>Book before you set out: call or WhatsApp [[PHONE]] with your name and preferred time, and the clinic staff confirm the appointment. Bring your previous reports and the medicines you take, so that nothing has to wait for a second trip.</p><p>The clinic has a lab collection service and its own pharmacy, so the consultation, the tests and the medicines are in one place. The opening hours include a weekend day, which suits patients who cannot travel on a working day.</p>"),
+             "<p>Book before you set out: call or WhatsApp [[PHONE]] with your name and preferred time, and the clinic staff confirm the appointment. Bring your previous reports and the medicines you take, so that the doctor has your full history at the visit.</p><p>The clinic has a lab collection service and its own pharmacy, so a blood sample can be given and prescribed medicines collected at the clinic. The opening hours include a weekend day, which suits patients who cannot travel on a working day.</p>"),
             ("Where the clinic is",
              "<p>The address is <strong>[[ADDRESS]]</strong>. If you are coming for the first time, call [[PHONE]] for directions; the reception also advises on parking.</p>"),
             ("Check-ups",
