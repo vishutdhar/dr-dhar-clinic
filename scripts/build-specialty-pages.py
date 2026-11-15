@@ -262,25 +262,28 @@ PAGES = [
         "relies_on": ["fever, infections", "Lab Collection Service", "In-house Pharmacy", "annual flu vaccine", "typhoid", "healthcare for adults"],
     },
     {
-        "slug": "physician-near-talab-tillo-jammu",
-        "title": "Physician near Talab Tillo, Jammu | Dr. Anil Kumar Dhar",
-        "description": "Dr. Anil Kumar Dhar, MBBS MD DNB, internal medicine physician on Canal Road, Bhagwati Nagar, near Talab Tillo, Jammu. Check-ups, diabetes, BP, thyroid, fever.",
-        "h1": "Physician near Talab Tillo, Jammu",
-        "lede": "Dr. Anil Kumar Dhar's clinic is on Canal Road in Bhagwati Nagar, close to Talab Tillo. He is an internal medicine physician (MBBS, MD, DNB) who has practised in Jammu for more than 30 years and sees adults for everyday illness, long-term conditions and health check-ups.",
+        "slug": "internal-medicine-physician-jammu-kashmir",
+        "title": "Internal Medicine Doctor, Jammu & Kashmir | Dr. Anil Kumar Dhar",
+        "description": "Dr. Anil Kumar Dhar, MBBS MD DNB, internal medicine physician in Jammu for 30+ years. Patients visit from across Jammu and Kashmir. Lab and pharmacy on site.",
+        "h1": "Internal Medicine Physician in Jammu and Kashmir",
+        "lede": "Dr. Anil Kumar Dhar is an internal medicine physician (MBBS, MD, DNB) who has practised in Jammu for more than 30 years. Patients come to his clinic on Canal Road from Jammu city and from across Jammu and Kashmir, for everyday illness, long-term conditions and health check-ups.",
         "about_condition": None,
         "sections": [
-            ("Where the clinic is",
-             "<p>The address is <strong>[[ADDRESS]]</strong>. If you are coming from Talab Tillo for the first time, call [[PHONE]] for directions; the reception also advises on parking.</p>"),
-            ("What the physician treats",
+            ("What an internal medicine physician treats",
              "<p>An internal medicine physician looks after the health of adults as a whole. At this clinic that covers <a href=\"/general-physician-jammu\">general physician care and check-ups</a>, <a href=\"/diabetes-doctor-jammu\">diabetes</a>, <a href=\"/bp-and-heart-care-jammu\">blood pressure and heart care</a>, <a href=\"/thyroid-doctor-jammu\">thyroid disorders</a>, <a href=\"/fever-doctor-jammu\">fever and infections</a>, respiratory problems such as cough and breathlessness, and <a href=\"/vaccination-jammu\">adult vaccination</a>.</p>"),
+            ("If you are travelling to the clinic",
+             "<p>Book before you set out: call or WhatsApp [[PHONE]] with your name and preferred time, and the clinic staff confirm the appointment. Bring your previous reports and the medicines you take, so that nothing has to wait for a second trip.</p><p>The clinic has a lab collection service and its own pharmacy, so the consultation, the tests and the medicines are in one place. The opening hours include a weekend day, which suits patients who cannot travel on a working day.</p>"),
+            ("Where the clinic is",
+             "<p>The address is <strong>[[ADDRESS]]</strong>. If you are coming for the first time, call [[PHONE]] for directions; the reception also advises on parking.</p>"),
             ("Check-ups",
              "<p>The clinic's general check-up costs <strong>[[FEE]]</strong>. The <a href=\"/general-physician-jammu\">general physician page</a> lists what it covers and what to bring.</p>"),
             ("At the clinic",
-             "<p>An air-conditioned waiting area, wheelchair access, an in-house pharmacy and a lab collection service, so the consultation, the tests and the medicines are in one place. The clinic accepts cash and all UPI apps.</p>"),
+             "<p>An air-conditioned waiting area, wheelchair access, an in-house pharmacy and a lab collection service. The clinic accepts cash and all UPI apps.</p>"),
         ],
         "faqs": [
-            ("Is the clinic open today?", "[[HOURS]] The badge at the top of this page shows whether the clinic is open now."),
-            ("How do I book a consultation?", "By phone, WhatsApp or SMS on [[PHONE]], with your name and preferred time. The clinic staff confirm the appointment."),
+            ("Do I need an appointment if I am coming from outside Jammu city?", "Book before you travel, by phone, WhatsApp or SMS on [[PHONE]]. The clinic staff confirm the appointment."),
+            ("Which days is the clinic open?", "[[HOURS]]"),
+            ("Can I get tests and medicines on the same visit?", "The clinic offers lab collection on site, and prescribed medicines are available from the in-house pharmacy after the consultation."),
             ("Is the clinic wheelchair accessible?", "Yes. The clinic is wheelchair accessible."),
         ],
         "specialty": "InternalMedicine",
@@ -480,7 +483,7 @@ def render(page: dict) -> str:
                         <li><a href="/vaccination-jammu">Adult Vaccination</a></li>
                         <li><a href="/thyroid-doctor-jammu">Thyroid Treatment</a></li>
                         <li><a href="/fever-doctor-jammu">Fever &amp; Infections</a></li>
-                        <li><a href="/physician-near-talab-tillo-jammu">Physician near Talab Tillo</a></li>
+                        <li><a href="/internal-medicine-physician-jammu-kashmir">Physician for Jammu and Kashmir</a></li>
                         <li><a href="/#services">Longevity Care</a></li>
                         <li><a href="/#services">In-house Pharmacy</a></li>
                     </ul>
