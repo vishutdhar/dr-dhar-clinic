@@ -291,6 +291,64 @@ PAGES = [
                       "AC Waiting Area", "Wheelchair Accessible", "In-house Pharmacy", "Lab Collection Service",
                       "Contact Reception for Parking Advice", "cash payment and all UPI apps"],
     },
+    {
+        "slug": "longevity-care-jammu",
+        "title": "Longevity Doctor in Jammu | Dr. Anil Kumar Dhar",
+        "description": "Longevity and preventive care in Jammu with Dr. Anil Kumar Dhar, MBBS MD DNB, internal medicine physician for 30+ years. Healthy ageing, check-ups, vaccines.",
+        "h1": "Longevity and Preventive Care in Jammu",
+        "lede": "Longevity care is preventive medicine with a long view: finding the risks to your health early and keeping them under control for years. Dr. Anil Kumar Dhar, an internal medicine physician (MBBS, MD, DNB) with more than 30 years of practice, provides it at his clinic on Canal Road, Bhagwati Nagar, Jammu.",
+        "about_condition": None,
+        "sections": [
+            ("What longevity care means at this clinic",
+             "<p>The clinic's longevity care focuses on healthy ageing, metabolic health, nutritional guidance and stress management. It is not one treatment. It is a way of looking after an adult over many years, so that the common long-term conditions are prevented where they can be, found early where they cannot, and kept under control once they are found.</p><p>No doctor can promise a longer life. What medicine can do is lower the known risks, and that is the aim.</p>"),
+            ("The conditions that matter most",
+             "<p>For most adults the largest risks build up without symptoms: raised blood pressure, raised blood sugar and raised cholesterol. Each can be measured, and each can be treated. The clinic provides <a href=\"/bp-and-heart-care-jammu\">blood pressure and heart care</a>, <a href=\"/diabetes-doctor-jammu\">diabetes care</a> and <a href=\"/thyroid-doctor-jammu\">thyroid treatment</a>, and one physician looks at them together.</p>"),
+            ("Where to start",
+             "<p>A baseline comes first. The clinic's general check-up costs <strong>[[FEE]]</strong>; the <a href=\"/general-physician-jammu\">general physician page</a> lists what it covers and what to bring. From the results, the doctor advises what to change, what to treat and when to come back.</p>"),
+            ("Food, activity, sleep and stress",
+             "<p>Medicines are one part of the plan. What you eat, how much you move, how you sleep and how you handle stress affect blood pressure, sugar and weight, and the consultation covers them. The advice is fitted to your reports, your age and your routine.</p>"),
+            ("Vaccines for adults",
+             "<p>Preventing infections is part of ageing well, more so for older adults and for people with diabetes, heart disease or lung disease. The clinic offers <a href=\"/vaccination-jammu\">adult vaccination</a>, including the annual flu vaccine and the pneumonia vaccine.</p>"),
+        ],
+        "faqs": [
+            ("Who is longevity care for?", "Any adult who wants to look after their long-term health, with or without an existing condition. It is useful if you have a family history of diabetes or heart disease, or have not had a check-up in a while."),
+            ("Is longevity care a separate treatment?", "No. It is preventive care by an internal medicine physician: check-ups, control of blood pressure, sugar and cholesterol, advice on food and stress, and vaccination."),
+            ("How do I book a consultation?", "By phone, WhatsApp or SMS on [[PHONE]], with your name and preferred time. The clinic staff confirm the appointment."),
+            ("Which days is the clinic open?", "[[HOURS]]"),
+        ],
+        "specialty": "InternalMedicine",
+        "relies_on": ["Longevity Care", "healthy aging", "nutritional guidance", "stress management", "cholesterol screening",
+                      "pneumonia vaccine", "annual flu vaccine", "30+ years"],
+    },
+    {
+        "slug": "in-house-pharmacy-jammu",
+        "title": "Clinic with In-house Pharmacy in Jammu | Dr. Anil Kumar Dhar",
+        "description": "Dr. Anil Kumar Dhar's clinic on Canal Road, Jammu, has its own pharmacy. Prescribed medicines are available immediately after your consultation.",
+        "h1": "In-house Pharmacy at the Clinic in Jammu",
+        "lede": "Dr. Anil Kumar Dhar's clinic on Canal Road, Bhagwati Nagar, Jammu, has its own pharmacy. The medicines the doctor prescribes are available immediately after your consultation, which saves an extra trip to an outside chemist.",
+        "about_condition": None,
+        "sections": [
+            ("How it works",
+             "<p>You see the doctor, and the pharmacy at the clinic dispenses the medicines on your prescription before you leave. If anything about a medicine is not clear, such as when to take it or for how long, you can ask at the clinic while you are still there.</p>"),
+            ("Why it helps",
+             "<p>Treatment starts the same day, which matters with a fever or an infection. It also helps patients who find a second stop difficult: older adults, people who are unwell, and people who have travelled to reach the clinic.</p>"),
+            ("Long-term medicines",
+             "<p>Patients with <a href=\"/diabetes-doctor-jammu\">diabetes</a>, <a href=\"/bp-and-heart-care-jammu\">blood pressure</a> or <a href=\"/thyroid-doctor-jammu\">thyroid</a> conditions take medicines for years, and the dose can change at a follow-up visit. Bring the medicines you take now, or their strips, so that the doctor can check them against the new prescription.</p>"),
+            ("Tests at the clinic",
+             "<p>The clinic also offers a lab collection service, so a blood sample can be given at the clinic when the doctor asks for a test.</p>"),
+            ("Paying",
+             "<p>The clinic accepts cash and all UPI apps.</p>"),
+        ],
+        "faqs": [
+            ("Are all prescribed medicines available at the clinic?", "The pharmacy stocks the medicines the doctor prescribes, and they are available immediately after your consultation."),
+            ("Can I buy medicines without seeing the doctor?", "The pharmacy dispenses medicines prescribed at the clinic. For anything else, ask the clinic on [[PHONE]]."),
+            ("How can I pay?", "The clinic accepts cash and all UPI apps."),
+            ("Which days is the clinic open?", "[[HOURS]]"),
+        ],
+        "specialty": "InternalMedicine",
+        "relies_on": ["In-house Pharmacy", "Fully stocked on-site pharmacy", "immediately after your consultation",
+                      "outside chemist", "Lab Collection Service", "cash payment and all UPI apps"],
+    },
 ]
 
 
@@ -484,8 +542,8 @@ def render(page: dict) -> str:
                         <li><a href="/thyroid-doctor-jammu">Thyroid Treatment</a></li>
                         <li><a href="/fever-doctor-jammu">Fever &amp; Infections</a></li>
                         <li><a href="/internal-medicine-physician-jammu-kashmir">Physician for Jammu and Kashmir</a></li>
-                        <li><a href="/#services">Longevity Care</a></li>
-                        <li><a href="/#services">In-house Pharmacy</a></li>
+                        <li><a href="/longevity-care-jammu">Longevity Care</a></li>
+                        <li><a href="/in-house-pharmacy-jammu">In-house Pharmacy</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
