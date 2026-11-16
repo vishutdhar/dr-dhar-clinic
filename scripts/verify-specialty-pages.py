@@ -58,6 +58,23 @@ check(codes("e") == home_email, "script.js email differs from index.html")
 # 3. Every service the pages describe is a service index.html lists.
 for name in ["General Check-up", "Diabetes Care", "Heart & BP Care", "Vaccination", "In-house Pharmacy"]:
     check(f"<h3>{name}</h3>" in index, f"service card '{name}' not on index.html")
+# 3b. A page that has no service card on index.html declares, in "relies_on",
+#     the home page phrases its clinic claims rest on. Each must still be on
+#     the home page, so removing a service or facility there fails here. This
+#     guards against the home page changing under a page; it cannot prove that
+#     free prose invents nothing, which is what review of new copy is for.
+_index_text = re.sub(r"\s+", " ", _h.unescape(re.sub(r"<[^>]+>", " ", re.sub(r"<!--.*?-->", "", index, flags=re.S)))).lower()
+# Every page states the doctor's degrees, field and years of practice.
+for phrase in ["MBBS", "MD", "DNB", "Internal Medicine", "30+ years"]:
+    check(re.search(r"\b" + re.escape(phrase.lower()) + r"(?!\w)", _index_text) is not None,
+          f"index.html no longer states '{phrase}', which every specialty page repeats")
+CARD_PAGES = {"general-physician-jammu", "diabetes-doctor-jammu", "bp-and-heart-care-jammu", "vaccination-jammu"}
+for page in gen.PAGES:
+    if page["slug"] in CARD_PAGES:
+        continue
+    check(bool(page.get("relies_on")), f"{page['slug']}: has no service card and declares no relies_on phrases")
+    for phrase in page.get("relies_on", []):
+        check(phrase.lower() in _index_text, f"{page['slug']}: relies on '{phrase}', which index.html no longer states")
 
 # 4. Links: index.html and every page link to every specialty page; sitemap lists them.
 sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
@@ -419,7 +436,7 @@ for page in gen.PAGES:
             check(a.lower() not in GENERIC_ANCHORS and len(a.split()) >= 2 and names_target(a, page),
                   f"index.html: {label} anchor '{a}' for /{page['slug']} does not describe the page")
 
-# 8c. Every specialty page links the other three from a Related care block in
+# 8c. Every specialty page links every other one from a Related care block in
 #     the article body, with the target page's H1 as anchor text, and not itself.
 for page in gen.PAGES:
     html = SITE_PAGES[f"/{page['slug']}"]
@@ -434,7 +451,7 @@ for page in gen.PAGES:
             continue
         anchors = [text_of(t) for t in re.findall(r'<a [^>]*href="/' + other["slug"] + r'"[^>]*>(.*?)</a>', block, re.S)]
         check(other["h1"] in anchors, f"{page['slug']}: Related care does not link /{other['slug']} as '{other['h1']}'")
-    check(block.count("<a ") == len(gen.PAGES) - 1, f"{page['slug']}: Related care has links other than the three sibling pages")
+    check(block.count("<a ") == len(gen.PAGES) - 1, f"{page['slug']}: Related care has links other than the sibling pages")
 
 # 8d. Per-page metadata and structured data on all five pages.
 ROBOTS_REQUIRED = {"index", "follow", "max-image-preview:large", "max-snippet:-1"}
@@ -565,6 +582,80 @@ if _tree is not None:
     home_url = [u for u in _tree.findall("sm:url", _NS) if (u.findtext("sm:loc", "", _NS) or "").strip() == gen.SITE + "/"]
     images = [i.findtext("image:loc", "", _NS).strip() for u in home_url for i in u.findall("image:image", _NS)]
     check(f"{gen.SITE}/doctor-photo.jpg" in images, "sitemap.xml: home url lacks an image:image entry for the doctor's photo")
+
+# 10. Internal links, footers and breadcrumbs on every page.
+#     (a) every internal href resolves: "/" or "/<slug>" of a page, with an
+#         optional "#fragment" that is an id on the target page;
+#     (b) the footer of every page links every specialty page (the footer
+#         alone, so the Related care block cannot stand in for it);
+#     (c) the visible breadcrumb and the BreadcrumbList both end in the H1.
+class _Anchors(HTMLParser):
+    """href of every <a>, and separately of those inside <footer>."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.in_footer = 0
+        self.all, self.footer = [], []
+    def handle_starttag(self, tag, attrs):
+        if tag == "footer":
+            self.in_footer += 1
+        elif tag == "a":
+            href = dict(attrs).get("href")
+            if href is not None:
+                self.all.append(href)
+                if self.in_footer:
+                    self.footer.append(href)
+    def handle_endtag(self, tag):
+        if tag == "footer" and self.in_footer:
+            self.in_footer -= 1
+
+from urllib.parse import urljoin, urlsplit
+_SITE_HOSTS = {urlsplit(gen.SITE).hostname, "www." + urlsplit(gen.SITE).hostname}
+_ids = {route: set(re.findall(r'\bid="([^"]+)"', markup)) for route, markup in SITE_PAGES.items()}
+for route, markup in SITE_PAGES.items():
+    anchors = _Anchors(); anchors.feed(markup); anchors.close()
+    for href in set(anchors.all):
+        # Resolved as a browser resolves it: against this page's own URL.
+        url = urlsplit(urljoin(gen.SITE + route, href))
+        if url.scheme not in ("http", "https") or url.hostname not in _SITE_HOSTS:
+            continue                      # another site, or tel:/sms:/mailto:
+        target = url.path or "/"
+        check(target in SITE_PAGES, f"{route}: link {href} goes to a page that does not exist")
+        if url.fragment and target in SITE_PAGES:
+            check(url.fragment in _ids[target], f"{route}: link {href} names an id that {target} does not have")
+    check(bool(anchors.footer), f"{route}: footer has no links")
+    for page in gen.PAGES:
+        check(f"/{page['slug']}" in anchors.footer, f"{route}: footer does not link /{page['slug']}")
+for page in gen.PAGES:
+    markup = SITE_PAGES[f"/{page['slug']}"]
+    h1 = re.search(r"<h1>(.*?)</h1>", markup, re.S)
+    crumb = re.search(r'<span aria-current="page">(.*?)</span>', markup, re.S)
+    check(h1 is not None and crumb is not None and text_of(crumb.group(1)) == text_of(h1.group(1)) == page["h1"],
+          f"{page['slug']}: visible breadcrumb or H1 is not '{page['h1']}'")
+    for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', markup, re.S):
+        for node in json.loads(block)["@graph"]:
+            if node["@type"] == "BreadcrumbList":
+                check(node["itemListElement"][-1]["name"] == page["h1"], f"{page['slug']}: BreadcrumbList does not end in the H1")
+            if node["@type"] == "MedicalWebPage":
+                conds = [a["name"] for a in (node["about"] if isinstance(node["about"], list) else [node["about"]]) if a.get("@type") == "MedicalCondition"]
+                check(conds == ([page["about_condition"]] if page["about_condition"] else []),
+                      f"{page['slug']}: MedicalCondition is {conds}, the page declares {page['about_condition']}")
+
+# 11. A styles.css or script.js that differs from the one on origin/main carries
+#     a different version. Both files are browser-cached for a week under their
+#     version query, so the same version with new content would leave returning
+#     visitors on the old file. origin/main is what is deployed; the comparison
+#     is with its current tip, so run "git fetch origin" first.
+_tip = git("rev-parse", "--verify", "origin/main")
+check(_tip.returncode == 0, "origin/main unavailable; cannot compare asset versions with what is deployed")
+if _tip.returncode == 0:
+    _live_index = git("show", "origin/main:index.html").stdout
+    for asset, pattern in (("styles.css", r'styles\.css\?v=(\d+)'), ("script.js", r'script\.js\?v=(\d+)')):
+        live_file = git("show", f"origin/main:{asset}").stdout
+        here_file = (ROOT / asset).read_text(encoding="utf-8")
+        live_v = re.search(pattern, _live_index)
+        here_v = re.search(pattern, index)
+        check(live_file == here_file or live_v is None or (here_v is not None and here_v.group(1) != live_v.group(1)),
+              f"{asset} differs from origin/main but its version is still {live_v.group(1) if live_v else None}")
 
 if failures:
     print("\n".join(f"FAIL {f}" for f in failures))
